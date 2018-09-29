@@ -1,0 +1,24 @@
+.wall{
+    -fx-background-color: black;
+}
+.box{
+    -fx-background-color: brown;
+}
+.target{
+    -fx-background-color: blue;
+}
+.floor,.player{
+    -fx-background-color: grey;
+}
+.playerBody{
+    -fx-background-color: #1e90ff;
+}
+.playerHead{
+    -fx-background-color: #ff7b1f;
+}
+.playerEyes{
+    -fx-background-color: black;
+}
+.playerArms{
+    -fx-background-color: #F4A460;
+}

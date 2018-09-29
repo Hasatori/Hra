@@ -1,0 +1,13 @@
+wall=x
+floor=*
+player=-
+box=+
+target=/
+size=6x6
+Level2
+xxxxxx
+x**-*x
+x****x
+x*+**x
+x**/*x
+xxxxxx

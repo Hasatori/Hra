@@ -6,9 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import jdk.nashorn.internal.scripts.JO;
 import root.client.controller.Controller;
-import root.client.model.FileLoader;
+import root.client.util.ResourceLoader;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +19,7 @@ public class MultiplayerLobbyView extends Scene {
     private ListView<String> openedLobbiesListView;
 
     public MultiplayerLobbyView(Controller lobbyController) throws IOException {
-        super(FXMLLoader.load(FileLoader.loadFileURL("fxml/start/lobbies.fxml")));
+        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/lobbies.fxml")));
         this.lobbyController = lobbyController;
 
         joinLobbyButton = (Button) this.lookup("#joinLobbyButton");

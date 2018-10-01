@@ -1,6 +1,6 @@
 package root.client.model.map;
 
-import root.client.model.FileLoader;
+import root.client.util.ResourceLoader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +20,7 @@ class LevelLoader {
 
     MapPart[][] load(String path) {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(FileLoader.loadFileInputStream(path)));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsInputStream(path)));
             String line;
             wallSign = this.getSign(reader.readLine());
             floorSing = this.getSign(reader.readLine());

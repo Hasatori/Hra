@@ -20,15 +20,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Main extends Application {
-    private GridPane gridPane;
-    private Pane wall, floor, player, box, target;
-
     public static void main(String[] args) {
         Application.launch();
         Platform.exit();
 
     }
-
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setResizable(false);
         primaryStage.setX(100);

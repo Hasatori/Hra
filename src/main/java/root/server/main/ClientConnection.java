@@ -49,7 +49,7 @@ public class ClientConnection implements Runnable {
             ClientManager.getInstance().add(client);
             writer.println("Hello " + clientIdentifier);
         } else {
-            ClientManager.getInstance().sendMessageToAll(message);
+           writer.write("Lobby1,Lobby2");
         }
     }
 

@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import root.client.controller.Controller;
-import root.client.model.FileLoader;
+import root.client.util.ResourceLoader;
 
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.io.IOException;
 public class StartView extends Scene {
 private Controller mapController;
     public StartView(Controller mapController) throws IOException {
-        super(FXMLLoader.load(FileLoader.loadFileURL("fxml/start/start.fxml")));
+        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/start.fxml")));
         this.mapController = mapController;
         Button singlePlayer=(Button)this.lookup("#singleplayerButton");
         Button multiplayerButton=(Button)this.lookup("#multiplayerButton");

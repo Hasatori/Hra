@@ -2,7 +2,7 @@ package root.client.model.map;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import root.client.model.FileLoader;
+import root.client.util.ResourceLoader;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import java.io.IOException;
     @Override
     public Node getSource() {
         try {
-            return FXMLLoader.load(FileLoader.loadFileURL("fxml/parts/target.fxml"));
+            return FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/target.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }

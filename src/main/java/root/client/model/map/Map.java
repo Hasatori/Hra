@@ -53,15 +53,14 @@ public class Map {
     public void movePlayer(KeyCode keyCode) {
         this.movePart(keyCode, player);
         player.setDirectionn(Direction.valueOf(keyCode.toString()));
-        System.out.println("Position by player is " + player.getPosition().toString());
+       /* System.out.println("Position by player is " + player.getPosition().toString());
         System.out.println("Position by map is " + getPlayerPosition().toString());
         System.out.println("Map part is" + player.getClass().getSimpleName());
         System.out.println("By map left neighbour is " + mapParts[getPlayerPosition().row][getPlayerPosition().column - 1].getClass().getSimpleName());
         System.out.println("By map right neighbour is " + mapParts[getPlayerPosition().row][getPlayerPosition().column + 1].getClass().getSimpleName());
         System.out.println("By player left neighbour is " + player.getLeft().getClass().getSimpleName());
-        System.out.println("By player right neighbour is " + player.getRight().getClass().getSimpleName());
+        System.out.println("By player right neighbour is " + player.getRight().getClass().getSimpleName());*/
 
-        mapToString();
     }
 
     private void movePart(KeyCode keyCode, MapPart mapPart) {
@@ -151,13 +150,4 @@ public class Map {
 
     }
 
-    private void mapToString() {
-        for (int rowNum = 0; rowNum < mapParts.length; rowNum++) {
-            for (int column = 0; column < mapParts[rowNum].length; column++) {
-
-                System.out.print(mapParts[rowNum][column].getClass().getSimpleName() + ",");
-            }
-            System.out.println("\n");
-        }
-    }
 }

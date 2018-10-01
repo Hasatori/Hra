@@ -7,12 +7,16 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.internal.bind.ObjectTypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.sun.javafx.UnmodifiableArrayList;
+import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import root.client.model.map.*;
+import root.client.view.DialogView;
 import root.client.view.MapView;
+import root.client.view.StartView;
 import root.server.main.Server;
 
 import java.io.IOException;
@@ -21,6 +25,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class Controller {
     private Stage stage;
@@ -31,6 +36,14 @@ public class Controller {
 
     public Controller(Stage stage) {
         this.stage = stage;
+        stage.setOnCloseRequest(a -> {
+            a.consume();
+            Optional<ButtonType> result = new DialogView("Quiting application", "Do you really want to close the application?", "").showAndWait();
+            if (result.get() == ButtonType.OK) {
+                Platform.exit();
+            } else {
+            }
+        });
         openConnection();
     }
 
@@ -66,7 +79,7 @@ public class Controller {
 
     public void movePlayer(KeyCode keyCode) {
         scene = new Scene(new Pane());
-        List<List<MapPart>> mapParts=map.getMapParts();
+        List<List<MapPart>> mapParts = map.getMapParts();
         map.movePlayer(keyCode);
         loadMap(map.getName());
 

@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.apache.commons.io.FilenameUtils;
 import root.client.controller.Controller;
-import root.client.model.FileLoader;
+import root.client.util.ResourceLoader;
 import root.client.model.map.MapPart;
 
 import java.io.File;
@@ -32,7 +32,7 @@ public class MapView extends Scene {
         VBox vBox = new VBox();
         vBox.getChildren().add(getMenu());
 
-        Label heading = (Label) FXMLLoader.load(FileLoader.loadFileURL("fxml/parts/mapHeading.fxml"));
+        Label heading = (Label) FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/mapHeading.fxml"));
         heading.setText(mapName);
         vBox.getChildren().add(heading);
         vBox.getChildren().add(setMap(mapParts));
@@ -45,7 +45,7 @@ public class MapView extends Scene {
         for (int row = 0; row < mapParts.size(); row++) {
             for (int column = 0; column < mapParts.get(row).size(); column++) {
                 // System.out.println("Column: "+column+" Rows: "+row);
-                System.out.println(mapParts.get(row).get(column).getClass().getName());
+                //System.out.println(mapParts.get(row).get(column).getClass().getName());
                 try {
                     gridPane.add(mapParts.get(row).get(column).getSource(), column, row);
                 } catch (IOException e) {
@@ -63,7 +63,7 @@ public class MapView extends Scene {
         // --- Menu File
         Menu maps = new Menu("Maps");
 
-        File[] mapFiles = FileLoader.loadFile("plans").listFiles();
+        File[] mapFiles = ResourceLoader.getResourceAsFile("plans").listFiles();
         Arrays.stream(mapFiles).forEach(file -> {
             String mapName = FilenameUtils.removeExtension(file.getName());
 

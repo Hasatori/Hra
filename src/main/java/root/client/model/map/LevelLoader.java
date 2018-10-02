@@ -14,7 +14,7 @@ class LevelLoader {
     private MapPart[][] mapParts;
     private String levelName;
 
-    public LevelLoader() {
+     LevelLoader() {
 
     }
 

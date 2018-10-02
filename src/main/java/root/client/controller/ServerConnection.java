@@ -1,28 +1,27 @@
 package root.client.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Collections;
 
 class ServerConnection implements Runnable {
     private static final String ENCODING = "UTF-8";
-    public static final String IDENTIFIER="OLDRICH";
-
+    private final Logger LOGGER = LoggerFactory.getLogger(ServerConnection.class);
+    public static final String IDENTIFIER = "OLDRICH";
     private Socket socket;
-
-    private Controller controller;
-
+    private MapController controller;
     private PrintWriter writer;
     private BufferedReader reader;
 
-    ServerConnection(Controller controller) {
+    ServerConnection(MapController controller) {
 
         this.controller = controller;
 
     }
-
     @Override
     public void run() {
         try {
@@ -32,7 +31,7 @@ class ServerConnection implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), ENCODING));
             this.reader = reader;
             this.writer = writer;
-            sendMessage("Hello:"+IDENTIFIER);
+            sendMessage("Hello:" + IDENTIFIER);
             this.reader.readLine();
             String line;
             writer.println("ok");
@@ -41,9 +40,9 @@ class ServerConnection implements Runnable {
                 controller.processMessage(line);
             }
         } catch (UnknownHostException | InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e.fillInStackTrace());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }
     }
 
@@ -56,7 +55,7 @@ class ServerConnection implements Runnable {
             System.out.println(reply);
             return reply;
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }
         return null;
     }
@@ -67,12 +66,12 @@ class ServerConnection implements Runnable {
             final InetAddress address = InetAddress.getLocalHost();
             socket = new Socket(address, 8002);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e.fillInStackTrace());
             try {
                 Thread.sleep(5000);
                 //  connect();
             } catch (InterruptedException e1) {
-                e1.printStackTrace();
+                LOGGER.error(e.getMessage(),e.fillInStackTrace());
             }
         }
     }

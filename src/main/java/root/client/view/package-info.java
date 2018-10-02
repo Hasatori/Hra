@@ -1,5 +1,5 @@
 /**
- * View classes used to display given content. Classes communicate only with the {@code Controller} class.
+ * View classes used to display given content. Classes communicate only with the {@code MapController} class.
  * @author Oldrich Hradil
  * @version 1.0
  */

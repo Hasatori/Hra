@@ -6,7 +6,7 @@ import root.client.util.ResourceLoader;
 
 import java.io.IOException;
 
- class Target extends MapPart {
+ class Target extends MapPart implements Overlaid {
     public Target(Position position) {
         super(position);
     }

@@ -21,7 +21,7 @@ public class ClientManager {
     }
 
     public synchronized void remove(Client client) {
-        System.out.println("Client " + client.IDENTIFIER + " left");
+        System.out.println("Client " + client.IDENTIFIER + " tryMoveLeft");
         clients.remove(client);
         System.out.println(this.toString());
     }

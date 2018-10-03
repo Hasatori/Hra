@@ -6,7 +6,9 @@ import root.client.util.ResourceLoader;
 
 import java.io.IOException;
 
-public class Floor extends MapPart {
+public class Floor extends MapPart implements Overlaid {
+    private Movable movable;
+
     public Floor(Position position) {
         super(position);
     }
@@ -20,4 +22,15 @@ public class Floor extends MapPart {
         }
         return null;
     }
+
+    @Override
+    public boolean isCovered() {
+        return false;
+    }
+
+    @Override
+    public void setMovable(Movable movable) {
+        this.movable=movable;
+    }
+
 }

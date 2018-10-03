@@ -1,11 +1,7 @@
 package root.client.model.map;
 
-import com.sun.javafx.UnmodifiableArrayList;
 import com.sun.javafx.scene.traversal.Direction;
-import javafx.scene.input.KeyCode;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,10 +29,12 @@ public class Map {
     private final MapPart[][] mapParts;
     private Player player;
 
+
     public Map(String name) {
         this.mapParts = new LevelLoader().load("plans/" + name + ".txt");
         this.name = name;
         this.player = (Player) mapParts[getPlayerPosition().row][getPlayerPosition().column];
+        loadNeighbours();
     }
 
     private Position getPlayerPosition() {
@@ -50,9 +48,10 @@ public class Map {
         throw new IllegalStateException("Player is not defined on the map");
     }
 
-    public void movePlayer(KeyCode keyCode) {
-        this.movePart(keyCode, player);
-        player.setDirection(Direction.valueOf(keyCode.toString()));
+    public void movePlayer(Direction direction) {
+        System.out.println("Moving to " + direction.toString());
+        player.setDirection(direction);
+        this.movePart(direction, player);
        /* System.out.println("Position by player is " + player.getPosition().toString());
         System.out.println("Position by map is " + getPlayerPosition().toString());
         System.out.println("Map part is" + player.getClass().getSimpleName());
@@ -63,62 +62,33 @@ public class Map {
 
     }
 
-    private void movePart(KeyCode keyCode, MapPart mapPart) {
-        switch (keyCode) {
-            case DOWN:
-                MapPart bottomPart = mapPart.getBottom();
-                if (bottomPart instanceof Box) {
-                    movePart(keyCode, bottomPart);
-                }
-                bottomPart = mapPart.getBottom();
-                if (bottomPart instanceof Floor) {
-                    mapParts[mapPart.getPosition().row + 1][mapPart.getPosition().column] = mapPart;
-                    mapParts[mapPart.getPosition().row][mapPart.getPosition().column] = bottomPart;
-                    switchPositions(mapPart, bottomPart);
-                }
-                break;
-            case UP:
-                MapPart topPart = mapPart.getTop();
-                if (topPart instanceof Box) {
-                    movePart(keyCode, topPart);
-                }
-                topPart = mapPart.getTop();
-                if (mapPart.getTop() instanceof Floor) {
-                    mapParts[mapPart.getPosition().row - 1][mapPart.getPosition().column] = mapPart;
-                    mapParts[mapPart.getPosition().row][mapPart.getPosition().column] = topPart;
-                    switchPositions(mapPart, topPart);
-                }
-
-                break;
-            case LEFT:
-                MapPart leftPart = mapPart.getLeft();
-
-                if (leftPart instanceof Box) {
-                    movePart(keyCode, leftPart);
-                }
-                leftPart = mapPart.getLeft();
-                if (mapPart.getLeft() instanceof Floor) {
-                    mapParts[mapPart.getPosition().row][mapPart.getPosition().column - 1] = mapPart;
-                    mapParts[mapPart.getPosition().row][mapPart.getPosition().column] = leftPart;
-                    switchPositions(mapPart, leftPart);
-                }
-                break;
-            case RIGHT:
-                MapPart rightPart = mapPart.getRight();
-
-                if (rightPart instanceof Box) {
-                    movePart(keyCode, rightPart);
-                }
-                rightPart = mapPart.getRight();
-                if (mapPart.getRight() instanceof Floor) {
-
-                    mapParts[mapPart.getPosition().row][mapPart.getPosition().column + 1] = mapPart;
-                    mapParts[mapPart.getPosition().row][mapPart.getPosition().column] = rightPart;
-                    switchPositions(mapPart, rightPart);
-                }
-                break;
+    private void movePart(Direction direction, MapPart mapPart) {
+        MapPart neighbour = mapPart.getNeighbour(direction);
+        if (neighbour instanceof Box) {
+            System.out.println("Neighbour is box");
+            movePart(direction, neighbour);
         }
-        reloadNeighbours();
+        neighbour = mapPart.getNeighbour(direction);
+        if (neighbour instanceof Floor) {
+            System.out.println("Neighbour is floor");
+            switch (direction) {
+                case DOWN:
+                    mapParts[mapPart.getPosition().row + 1][mapPart.getPosition().column] = mapPart;
+                    break;
+                case UP:
+                    mapParts[mapPart.getPosition().row - 1][mapPart.getPosition().column] = mapPart;
+                    break;
+                case LEFT:
+                    mapParts[mapPart.getPosition().row][mapPart.getPosition().column - 1] = mapPart;
+                    break;
+                case RIGHT:
+                    mapParts[mapPart.getPosition().row][mapPart.getPosition().column + 1] = mapPart;
+                    break;
+            }
+            mapParts[mapPart.getPosition().row][mapPart.getPosition().column] = neighbour;
+            switchPositions(mapPart, neighbour);
+        }
+        loadNeighbours();
     }
 
     private void switchPositions(MapPart firstPart, MapPart secondPart) {
@@ -128,7 +98,7 @@ public class Map {
         secondPart.setPosition(firstPartPosition);
     }
 
-    private void reloadNeighbours() {
+    private void loadNeighbours() {
         for (int rowNum = 0; rowNum < mapParts.length; rowNum++) {
             for (int column = 0; column < mapParts[rowNum].length; column++) {
 

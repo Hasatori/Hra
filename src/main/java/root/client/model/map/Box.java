@@ -6,11 +6,11 @@ import root.client.util.ResourceLoader;
 
 import java.io.IOException;
 
- public class Box extends MapPart implements Movable{
-     private Overlaid overlaid;
+public class Box extends MapPart {
 
-     public Box(Position position, Overlaid overlaid) {
-        super(position);        this.overlaid=overlaid;
+
+    public Box(Position position) {
+        super(position);
     }
 
     @Override
@@ -22,26 +22,6 @@ import java.io.IOException;
         }
         return null;
     }
+}
 
 
-     @Override
-     public void tryMoveLeft() {
-
-     }
-
-     @Override
-     public void tryMoveRight() {
-
-     }
-
-     @Override
-     public void tryMoveup() {
-
-     }
-
-     @Override
-     public void tryMoveDown() {
-
-     }
-
- }

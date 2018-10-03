@@ -15,31 +15,34 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class MapView extends View {
     private MapController mapController;
     private GridPane gridPane;
     private static Pane pane;
+    private List<List<MapPart>> mapParts;
+    private VBox vBox;
 
     public MapView(MapController mapController, List<List<MapPart>> mapParts, String mapName) throws IOException {
         super((pane = new Pane()), mapController);
         pane.getChildren().clear();
         this.mapController = mapController;
+        this.mapParts = mapParts;
         this.addEventFilter(KeyEvent.KEY_PRESSED,
                 event -> mapController.movePlayer(event.getCode()));
-        VBox vBox = new VBox();
+       this.vBox = new VBox();
         vBox.getChildren().add(getMenu());
 
         Label heading = (Label) FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/mapHeading.fxml"));
         heading.setText(mapName);
         vBox.getChildren().add(heading);
-        vBox.getChildren().add(getMap(mapParts));
+        vBox.getChildren().add(createMap(this.mapParts));
+
         pane.getChildren().add(vBox);
 
     }
 
-    private GridPane getMap(List<List<MapPart>> mapParts) {
+    private GridPane createMap(List<List<MapPart>> mapParts) {
         gridPane = new GridPane();
         for (int row = 0; row < mapParts.size(); row++) {
             for (int column = 0; column < mapParts.get(row).size(); column++) {
@@ -76,7 +79,7 @@ public class MapView extends View {
         Menu general = new Menu("General");
         MenuItem quit = new MenuItem("Quit");
         quit.setOnAction(a -> {
-                    mapController.quitMap();
+            mapController.quitMap();
         });
         MenuItem restart = new MenuItem("Restart");
         restart.setOnAction(a -> {
@@ -92,6 +95,7 @@ public class MapView extends View {
 
     @Override
     public void reload() {
-
+        vBox.getChildren().remove(gridPane);
+        vBox.getChildren().add(createMap(mapParts));
     }
 }

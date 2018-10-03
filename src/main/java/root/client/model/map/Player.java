@@ -7,20 +7,18 @@ import root.client.util.ResourceLoader;
 
 import java.io.IOException;
 
-class Player extends MapPart implements Movable {
+class Player extends MapPart {
 
-    private Overlaid overlaid;
-    private Direction directionn;
+    private Direction direction;
 
-    private Player(Position position, Overlaid overlaid) {
+    public Player(Position position) {
         super(position);
-        this.directionn = Direction.DOWN;
-        this.overlaid = overlaid;
+        this.direction = Direction.DOWN;
     }
 
     @Override
     public Node getSource() throws IOException {
-        switch (this.directionn) {
+        switch (this.direction) {
             case UP:
                 return FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/playerUp.fxml"));
             case DOWN:
@@ -35,38 +33,8 @@ class Player extends MapPart implements Movable {
 
     }
 
-    public void setDirection(Direction directionn) {
-        this.directionn = directionn;
-    }
-
-    @Override
-    public boolean tryMoveLeft() {
-        if (this.getLeft() instanceof Box) {
-            if(((Movable) this.getLeft()).tryMoveLeft()){
-
-            };
-        }
-        if (this.getLeft() instanceof Overlaid) {
-            if(!((Overlaid)this.getLeft()).isCovered()){
-                
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean tryMoveRight() {
-        return false;
-    }
-
-    @Override
-    public boolean tryMoveup() {
-        return false;
-    }
-
-    @Override
-    public boolean tryMoveDown() {
-        return false;
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
 }

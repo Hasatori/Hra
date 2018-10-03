@@ -56,21 +56,23 @@ class LevelLoader {
     private void createMatrixes(String line, int rowNum) {
         char[] signs = line.toCharArray();
         for (int i = 0; i < signs.length; i++) {
+            Position position=new Position(rowNum,i);
+            Floor covered=new Floor(position);
             if (signs[i] == boxSign) {
                 ++numberOfBoxes;
-                mapParts[rowNum][i] = new Box(new Position(rowNum,i));
+                mapParts[rowNum][i] = new Box(position);
             } else if (signs[i] == wallSign) {
                 ++numberOfWalls;
-                mapParts[rowNum][i] = new Wall(new Position(rowNum,i));
+                mapParts[rowNum][i] = new Wall(position);
 
             } else if (signs[i] == floorSing) {
                 ++numberOFFloors;
-                mapParts[rowNum][i] = new Floor(new Position(rowNum,i));
+                mapParts[rowNum][i] = new Floor(position);
             } else if (signs[i] == playerSign) {
                 ++numberOfPlayers;
-                mapParts[rowNum][i] = new Player(new Position(rowNum,i));
+                mapParts[rowNum][i] = new Player(position);
             } else if (signs[i] == targetSign) {
-                mapParts[rowNum][i] = new Target(new Position(rowNum,i));
+                mapParts[rowNum][i] = new Target(position);
                 ++numberOfTargets;
             }
 

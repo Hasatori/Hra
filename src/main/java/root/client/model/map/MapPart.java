@@ -1,5 +1,6 @@
 package root.client.model.map;
 
+import com.sun.javafx.scene.traversal.Direction;
 import javafx.scene.Node;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ public abstract class MapPart {
         return position;
     }
 
-     void setPosition(Position position) {
+    void setPosition(Position position) {
         this.position = position;
     }
 
@@ -20,40 +21,57 @@ public abstract class MapPart {
         this.position = position;
     }
 
-     MapPart getLeft() {
+    MapPart getLeft() {
         return left;
     }
 
-     MapPart getRight() {
+    MapPart getRight() {
         return right;
     }
 
-     MapPart getTop() {
+    MapPart getTop() {
         return top;
     }
 
-     MapPart getBottom() {
+    MapPart getBottom() {
         return bottom;
     }
 
     private MapPart left, right, top, bottom = null;
 
-   public  abstract Node getSource() throws IOException;
+    public abstract Node getSource() throws IOException;
 
-     void setLeft(MapPart mapPart) {
+    void setLeft(MapPart mapPart) {
         this.left = mapPart;
     }
 
-     void setRight(MapPart mapPart) {
+    void setRight(MapPart mapPart) {
         this.right = mapPart;
     }
 
-     void setTop(MapPart mapPart) {
+    void setTop(MapPart mapPart) {
         this.top = mapPart;
     }
 
-     void setBottom(MapPart mapPart) {
+    void setBottom(MapPart mapPart) {
         this.bottom = mapPart;
+    }
+
+    MapPart getNeighbour(Direction direction) {
+        switch (direction) {
+            case UP:
+                return this.top;
+
+            case DOWN:
+                return this.bottom;
+
+            case LEFT:
+                return this.left;
+
+            case RIGHT:
+                return this.right;
+        }
+        return null;
     }
 
 

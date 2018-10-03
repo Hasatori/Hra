@@ -6,9 +6,13 @@ import root.client.util.ResourceLoader;
 
 import java.io.IOException;
 
- class Target extends MapPart implements Overlaid {
+class Target extends MapPart {
+
+    private boolean covered;
+
     public Target(Position position) {
         super(position);
+        this.covered = false;
     }
 
     @Override
@@ -19,5 +23,13 @@ import java.io.IOException;
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean isCovered() {
+        return this.covered;
+    }
+
+    public void setCovered() {
+        this.covered = true;
     }
 }

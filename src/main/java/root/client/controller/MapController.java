@@ -1,5 +1,6 @@
 package root.client.controller;
 
+import com.sun.javafx.scene.traversal.Direction;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -17,56 +18,59 @@ import java.util.Optional;
 
 public class MapController extends Controller {
 
-
     private Map map;
     private MapView view;
 
     private ServerConnection serverConnection;
     private final Logger LOGGER = LoggerFactory.getLogger(MapController.class);
 
-    public MapController(Stage stage, Map map) {
+    public MapController(Stage stage) {
         super(stage);
-        this.map = map;
+        this.map = new Map("level1");
         try {
             this.view = new MapView(this, this.map.getMapParts(), this.map.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        openConnection();
+        // openConnection();
     }
 
     @Override
     public void updateView() {
 
     }
+
     @Override
     public void loadView() {
         this.stage.setScene(this.view);
         this.stage.show();
     }
 
-    public void loadMap(String name) {
-
-    }
 
     public void switchToMap(String name) {
-        map = null;
-        loadMap(name);
+        map = new Map(name);
+        loadView();
+
     }
 
     public void reloadScene() {
     }
 
     public void movePlayer(KeyCode keyCode) {
-        map.movePlayer(keyCode);
-        loadMap(map.getName());
+        try {
+            Direction direction = Direction.valueOf(keyCode.toString());
+            map.movePlayer(direction);
+            view.reload();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     public void joinLobby(String name) {
         map = null;
         System.out.println("Joining lobby " + name);
         sendMessage("Wanna join lobby " + name);
-        loadMap("level1M");
+
     }
 
     public void restartMap() {

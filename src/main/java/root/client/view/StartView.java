@@ -19,5 +19,8 @@ public class StartView extends Scene {
         multiplayerButton.setOnAction((a) -> {
             startController.loadMultiplayer();
         });
+        singlePlayer.setOnAction((a)->{
+            startController.loadMap();
+        });
     }
 }

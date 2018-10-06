@@ -1,6 +1,7 @@
 package root.client.controller;
 
 import com.sun.javafx.scene.traversal.Direction;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -16,23 +17,29 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class MapController extends Controller {
+public class SingleplayerMapController extends Controller {
 
     private Map map;
     private MapView view;
-
+    private String mapName;
+    private String playerName;
     private ServerConnection serverConnection;
-    private final Logger LOGGER = LoggerFactory.getLogger(MapController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(SingleplayerMapController.class);
 
-    public MapController(Stage stage) {
+    public SingleplayerMapController(Stage stage, String mapName, String playerName) {
         super(stage);
-        this.map = new Map("level1");
+        this.mapName = mapName;
+        this.playerName = playerName;
+        createMap();
+    }
+
+    private void createMap() {
+        this.map = new Map(mapName, false, 0, playerName);
         try {
             this.view = new MapView(this, this.map.getMapParts(), this.map.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // openConnection();
     }
 
     @Override
@@ -46,13 +53,6 @@ public class MapController extends Controller {
         this.stage.show();
     }
 
-
-    public void switchToMap(String name) {
-        map = new Map(name);
-        loadView();
-
-    }
-
     public void reloadScene() {
     }
 
@@ -60,43 +60,22 @@ public class MapController extends Controller {
         try {
             Direction direction = Direction.valueOf(keyCode.toString());
             map.movePlayer(direction);
-            view.reload();
+            view.reload(map.getMapParts());
+            if (map.checkWinCondition()) {
+                DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();
+                new StartController(stage).loadView();
+            }
+
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void joinLobby(String name) {
-        map = null;
-        System.out.println("Joining lobby " + name);
-        sendMessage("Wanna join lobby " + name);
-
-    }
-
     public void restartMap() {
-        System.out.println("Restarting map " + map.getName());
-        switchToMap(map.getName());
-    }
-
-    private void openConnection() {
-
-        new Thread(this.serverConnection = new ServerConnection(this)).start();
-    }
-
-    public void sendMessage(String sendMessage) {
-        serverConnection.sendMessage(sendMessage);
-    }
-
-    public void processMessage(String json) throws IOException {
-    }
-
-
-    public List<String> getOpenedLobbies() {
-        String reply = serverConnection.sendMessage("Get me opened lobbies");
-        List<String> lobbies = new LinkedList<>();
-        lobbies.add(reply.split(",")[0]);
-        lobbies.add(reply.split(",")[1]);
-        return lobbies;
+        createMap();
+        loadView();
     }
 
     public void quitMap() {

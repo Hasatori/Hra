@@ -3,7 +3,6 @@ package root.client.view;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import root.client.controller.MapController;
 import root.client.controller.StartController;
 import root.client.util.ResourceLoader;
 

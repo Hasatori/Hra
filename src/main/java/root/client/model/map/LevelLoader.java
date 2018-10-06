@@ -1,5 +1,7 @@
 package root.client.model.map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import root.client.util.ResourceLoader;
 
 import java.io.BufferedReader;
@@ -7,19 +9,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 class LevelLoader {
-
+    private final Logger LOGGER = LoggerFactory.getLogger(LevelLoader.class);
     private int numberOfWalls, numberOfPlayers, numberOfBoxes, numberOfTargets, numberOFFloors = 0;
     private char wallSign, floorSing, playerSign, boxSign, targetSign;
     private int columns, rows;
     private MapPart[][] mapParts;
     private String levelName;
 
-     LevelLoader() {
+    LevelLoader() {
 
     }
 
     MapPart[][] load(String path) {
         try {
+            LOGGER.info("Loading map {}", path);
             BufferedReader reader = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsInputStream(path)));
             String line;
             wallSign = this.getSign(reader.readLine());
@@ -56,8 +59,8 @@ class LevelLoader {
     private void createMatrixes(String line, int rowNum) {
         char[] signs = line.toCharArray();
         for (int i = 0; i < signs.length; i++) {
-            Position position=new Position(rowNum,i);
-            Floor covered=new Floor(position);
+            Position position = new Position(rowNum, i);
+            Floor covered = new Floor(position);
             if (signs[i] == boxSign) {
                 ++numberOfBoxes;
                 mapParts[rowNum][i] = new Box(position);
@@ -72,7 +75,11 @@ class LevelLoader {
                 ++numberOfPlayers;
                 mapParts[rowNum][i] = new Player(position);
             } else if (signs[i] == targetSign) {
-                mapParts[rowNum][i] = new Target(position);
+                try {
+                    mapParts[rowNum][i] = new Target(position);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 ++numberOfTargets;
             }
 

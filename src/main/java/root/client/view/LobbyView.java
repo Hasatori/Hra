@@ -13,8 +13,4 @@ public class LobbyView extends View {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobby.fxml")), controller);
     }
 
-    @Override
-    public void reload() {
-
-    }
 }

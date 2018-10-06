@@ -37,4 +37,5 @@ public class MultiplayerController extends Controller {
     public void loadLobby(String lobbyName) {
         new LobbyController(stage,lobbyName).loadView();
     }
+
 }

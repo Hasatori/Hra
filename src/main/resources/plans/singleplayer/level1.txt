@@ -7,7 +7,7 @@ size=10x6
 Level1
 xxxxxxxxxx
 x******-*x
-x********x
-x*+******x
+x**+*****x
+x*+****/*x
 x**/*****x
 xxxxxxxxxx

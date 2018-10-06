@@ -13,11 +13,11 @@ class ServerConnection implements Runnable {
     private final Logger LOGGER = LoggerFactory.getLogger(ServerConnection.class);
     public static final String IDENTIFIER = "OLDRICH";
     private Socket socket;
-    private MapController controller;
+    private SingleplayerMapController controller;
     private PrintWriter writer;
     private BufferedReader reader;
 
-    ServerConnection(MapController controller) {
+    ServerConnection(SingleplayerMapController controller) {
 
         this.controller = controller;
 
@@ -37,7 +37,7 @@ class ServerConnection implements Runnable {
             writer.println("ok");
             while ((line = this.reader.readLine()) != null) {
                 System.out.println(line);
-                controller.processMessage(line);
+
             }
         } catch (UnknownHostException | InterruptedException e) {
             LOGGER.error(e.getMessage(),e.fillInStackTrace());

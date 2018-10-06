@@ -27,25 +27,41 @@ public class Map {
     }
 
     private final MapPart[][] mapParts;
+    private final List<Player> players = new LinkedList<>();
     private Player player;
 
+    private final List<Target> targets = new LinkedList<>();
 
-    public Map(String name) {
-        this.mapParts = new LevelLoader().load("plans/" + name + ".txt");
+    public Map(String name, boolean multiplayer, int playerNumber, String playerName) {
+        String mapPath;
+        if (multiplayer) {
+            mapPath = "plans/multiplayer/";
+        } else {
+            mapPath = "plans/singleplayer/";
+        }
+        this.mapParts = new LevelLoader().load(mapPath + name + ".txt");
+        fillLists();
+        setPlayer(playerNumber, playerName);
         this.name = name;
-        this.player = (Player) mapParts[getPlayerPosition().row][getPlayerPosition().column];
         loadNeighbours();
     }
 
-    private Position getPlayerPosition() {
+    private void fillLists() {
         for (int row = 0; row < mapParts.length; row++) {
             for (int column = 0; column < mapParts[row].length; column++) {
                 if (mapParts[row][column] instanceof Player) {
-                    return mapParts[row][column].getPosition();
+                    players.add((Player) mapParts[row][column]);
+                }
+                if (mapParts[row][column] instanceof Target) {
+                    targets.add((Target) mapParts[row][column]);
                 }
             }
         }
-        throw new IllegalStateException("Player is not defined on the map");
+    }
+
+    private void setPlayer(int index, String name) {
+        this.player = players.get(index);
+        player.setName(name);
     }
 
     public void movePlayer(Direction direction) {
@@ -62,6 +78,15 @@ public class Map {
 
     }
 
+    public boolean checkWinCondition() {
+        for (Target target : targets) {
+            if (!target.isCovered()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void movePart(Direction direction, MapPart mapPart) {
         MapPart neighbour = mapPart.getNeighbour(direction);
         if (neighbour instanceof Box) {
@@ -69,7 +94,8 @@ public class Map {
             movePart(direction, neighbour);
         }
         neighbour = mapPart.getNeighbour(direction);
-        if (neighbour instanceof Floor) {
+
+        if (neighbour instanceof Floor || neighbour instanceof Target) {
             System.out.println("Neighbour is floor");
             switch (direction) {
                 case DOWN:
@@ -87,7 +113,20 @@ public class Map {
             }
             mapParts[mapPart.getPosition().row][mapPart.getPosition().column] = neighbour;
             switchPositions(mapPart, neighbour);
+            if (neighbour instanceof Target) {
+                ((Target) neighbour).setCovered(mapPart);
+            }
+            for (Target target : targets) {
+                if (neighbour.getPosition().equals(target.getInitialPosition())) {
+                    switchParts(neighbour, target);
+                    target.setUncovered();
+                    break;
+                }
+            }
+
         }
+
+
         loadNeighbours();
     }
 
@@ -96,6 +135,13 @@ public class Map {
         Position secondPartPosition = secondPart.getPosition();
         firstPart.setPosition(secondPartPosition);
         secondPart.setPosition(firstPartPosition);
+    }
+
+    private void switchParts(MapPart firstPart, MapPart secondPart) {
+        mapParts[firstPart.getPosition().row][firstPart.getPosition().column] = secondPart;
+        mapParts[secondPart.getPosition().row][secondPart.getPosition().column] = firstPart;
+        switchPositions(firstPart, secondPart);
+
     }
 
     private void loadNeighbours() {

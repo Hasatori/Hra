@@ -54,10 +54,6 @@ public class MultiplayerView extends View {
         });
     }
 
-    @Override
-    public void reload() {
-
-    }
 
 
     private EventHandler<ActionEvent> createLobbyHandler = event -> {

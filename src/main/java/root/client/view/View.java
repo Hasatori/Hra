@@ -14,7 +14,6 @@ public  abstract class View extends Scene {
     }
 
 
-    public abstract void reload();
 
 
 }

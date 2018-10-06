@@ -11,9 +11,20 @@ class Player extends MapPart {
 
     private Direction direction;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private String name;
+
     public Player(Position position) {
         super(position);
         this.direction = Direction.DOWN;
+
     }
 
     @Override

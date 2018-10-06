@@ -18,7 +18,6 @@ public class DialogFactory {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setContentText(content);
-        alert.showAndWait();
         return alert;
     }
 

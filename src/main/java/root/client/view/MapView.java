@@ -7,7 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.apache.commons.io.FilenameUtils;
-import root.client.controller.MapController;
+import root.client.controller.SingleplayerMapController;
 import root.client.util.ResourceLoader;
 import root.client.model.map.MapPart;
 
@@ -17,13 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MapView extends View {
-    private MapController mapController;
+    private SingleplayerMapController mapController;
     private GridPane gridPane;
     private static Pane pane;
     private List<List<MapPart>> mapParts;
     private VBox vBox;
 
-    public MapView(MapController mapController, List<List<MapPart>> mapParts, String mapName) throws IOException {
+    public MapView(SingleplayerMapController mapController, List<List<MapPart>> mapParts, String mapName) throws IOException {
         super((pane = new Pane()), mapController);
         pane.getChildren().clear();
         this.mapController = mapController;
@@ -62,20 +62,6 @@ public class MapView extends View {
     private MenuBar getMenu() {
         MenuBar menuBar = new MenuBar();
 
-        // --- Menu File
-        Menu maps = new Menu("Maps");
-
-        File[] mapFiles = ResourceLoader.getResourceAsFile("plans").listFiles();
-        Arrays.stream(mapFiles).forEach(file -> {
-            String mapName = FilenameUtils.removeExtension(file.getName());
-
-            MenuItem menuItem = new MenuItem(mapName);
-            menuItem.setOnAction(a -> {
-                System.out.println("Trying to load map " + mapName);
-                mapController.switchToMap(mapName);
-            });
-            maps.getItems().add(menuItem);
-        });
         Menu general = new Menu("General");
         MenuItem quit = new MenuItem("Quit");
         quit.setOnAction(a -> {
@@ -87,14 +73,13 @@ public class MapView extends View {
             mapController.restartMap();
 
         });
-
         general.getItems().addAll(quit, restart);
-        menuBar.getMenus().addAll(maps, general);
+        menuBar.getMenus().addAll(general);
         return menuBar;
     }
 
-    @Override
-    public void reload() {
+
+    public void reload(List<List<MapPart>> mapParts) {
         vBox.getChildren().remove(gridPane);
         vBox.getChildren().add(createMap(mapParts));
     }

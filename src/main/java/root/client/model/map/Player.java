@@ -7,7 +7,7 @@ import root.client.util.ResourceLoader;
 
 import java.io.IOException;
 
-class Player extends MapPart {
+public class Player extends MapPart {
 
     private Direction direction;
 

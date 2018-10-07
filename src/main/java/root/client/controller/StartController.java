@@ -16,7 +16,8 @@ public class StartController extends Controller {
     }
 
     public void loadMultiplayer() {
-            new MultiplayerController(this.stage).loadView();
+
+        new MultiplayerController(this.stage).loadView();
     }
 
     public void loadSingleplayer(){

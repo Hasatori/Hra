@@ -1,6 +1,7 @@
 package root.client.view;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -8,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.apache.commons.io.FilenameUtils;
 import root.client.controller.*;
+import root.client.model.map.Player;
 import root.client.util.ResourceLoader;
 import root.client.model.map.MapPart;
 
@@ -31,27 +33,35 @@ public class MapView extends View {
         this.mapParts = mapParts;
         this.addEventFilter(KeyEvent.KEY_PRESSED,
                 event -> mapController.movePlayer(event.getCode()));
-       this.vBox = new VBox();
+        this.vBox = new VBox();
         vBox.getChildren().add(getMenu());
 
         Label heading = (Label) FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/mapHeading.fxml"));
         heading.setText(mapName);
         vBox.getChildren().add(heading);
         vBox.getChildren().add(createMap(this.mapParts));
-
         pane.getChildren().add(vBox);
-    }
 
+    }
 
 
     private GridPane createMap(List<List<MapPart>> mapParts) {
         gridPane = new GridPane();
         for (int row = 0; row < mapParts.size(); row++) {
             for (int column = 0; column < mapParts.get(row).size(); column++) {
-                // System.out.println("Column: "+column+" Rows: "+row);
-                //System.out.println(mapParts.get(row).get(column).getClass().getName());
+
                 try {
-                    gridPane.add(mapParts.get(row).get(column).getSource(), column, row);
+
+                    MapPart part = mapParts.get(row).get(column);
+                    Node node = part.getSource();
+                    gridPane.add(node, column, row);
+                    if (mapParts.get(row).get(column) instanceof Player) {
+                        MapPart player = (Player) part;
+                        System.out.println("Setting name " + ((Player) player).getName());
+                        ((Label) node.lookup(".playerName")).setText(((Player) player).getName());
+                        System.out.println(((Label) node.lookup(".playerName")).getText());
+
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

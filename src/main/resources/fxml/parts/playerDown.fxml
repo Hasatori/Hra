@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Polygon?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="78.0" prefWidth="66.0" styleClass="player" stylesheets="@../../css/main.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -16,5 +18,7 @@
             <Pane layoutX="3.0" layoutY="49.0" prefHeight="6.0" prefWidth="27.0" styleClass="playerArms" />
          </children>
       </Pane>
+      <Label fx:id="nameLabel" layoutX="-3.0" layoutY="-28.0" prefHeight="38.0" prefWidth="73.0" styleClass="playerName" text="ddd" textFill="WHITE" wrapText="true" />
+      <Polygon fill="#333333" layoutX="59.0" layoutY="24.0" points="-27.800006866455078, -13.999994277954102, -18.999988555908203, -5.200006484985352, -11.999988555908203, -13.999994277954102" stroke="BLACK" strokeType="INSIDE" />
    </children>
 </Pane>

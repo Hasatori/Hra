@@ -22,3 +22,10 @@
 .playerArms{
     -fx-background-color: #F4A460;
 }
+.playerName{
+    -fx-background-color: rgba(51,51,51,1);
+    -fx-translate-z: 5;
+    -fx-text-fill:white;
+    -fx-text-alignment: center;
+    -fx-font-weight: bold;
+}

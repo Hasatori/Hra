@@ -67,6 +67,9 @@ public class Map {
     }
 
     private void setPlayers(int index, String name) {
+        if (players.size()==1){
+            player = players.get(0);
+        }else
         if (index == 0) {
             player = players.get(0);
             secondPlayer = players.get(1);
@@ -74,6 +77,7 @@ public class Map {
             player = players.get(1);
             secondPlayer = players.get(0);
         }
+        player.setName(name);
     }
 
     public synchronized void movePlayer(Direction direction) {

@@ -16,15 +16,11 @@ public class StartController extends Controller {
     }
 
     public void loadMultiplayer() {
-        try {
             new MultiplayerController(this.stage).loadView();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    public void loadMap(){
-            new SingleplayerMapController(this.stage,"level1","Oldřich").loadView();
+    public void loadSingleplayer(){
+            new SingleplayerController(stage).loadView();
     }
     @Override
     public void updateView() {

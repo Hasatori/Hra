@@ -19,7 +19,7 @@ public class StartView extends Scene {
             startController.loadMultiplayer();
         });
         singlePlayer.setOnAction((a)->{
-            startController.loadMap();
+            startController.loadSingleplayer();
         });
     }
 }

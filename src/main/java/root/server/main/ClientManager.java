@@ -21,11 +21,31 @@ public class ClientManager {
     }
 
     public synchronized void remove(Client client) {
-        System.out.println("Client " + client.IDENTIFIER + " tryMoveLeft");
         clients.remove(client);
         System.out.println(this.toString());
     }
 
+    public synchronized List<String> getLobbies() {
+        List<String> lobbies = new LinkedList<>();
+        clients.forEach(client -> {
+            Lobby lobby = client.getLobby();
+            if (lobby != null) {
+                lobbies.add(client.getLobby().getName());
+            }
+        });
+        return lobbies;
+    }
+
+    public synchronized boolean tryAddPlayerToLobby(String name, Client client) {
+        for (Client client1 : clients) {
+            Lobby lobby = client1.getLobby();
+            if (lobby != null && lobby.getName().equals(name) && !lobby.isFull()) {
+                lobby.addPlayer(client);
+                return true;
+            }
+        }
+        return false;
+    }
     public synchronized static ClientManager getInstance() {
         return INSTANCE;
     }

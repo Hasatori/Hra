@@ -33,13 +33,14 @@
             <Font name="Arial Bold" size="14.0" />
          </font>
       </Label>
-      <ListView fx:id="openedLobbiesListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <ListView fx:id="openedLobbiesListView" prefHeight="238.0" prefWidth="309.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets left="30.0" right="30.0" top="10.0" />
          </GridPane.margin>
       </ListView>
-      <Button fx:id="joinLobbyButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Join" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <Button fx:id="joinLobbyButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Join lobby" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
       <Button fx:id="createCustomLobbyButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="136.0" text="Create custom lobby" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
       <Button fx:id="back" mnemonicParsing="false" text="back" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+      <Button fx:id="refreshButton" mnemonicParsing="false" text="Refresh" GridPane.columnIndex="2" GridPane.rowIndex="2" />
    </children>
 </GridPane>

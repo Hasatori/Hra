@@ -6,9 +6,9 @@ target=/
 size=30x12
 Level2M
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-x*-***x*x*****x**x****/xxx***x
-x***x*x*x*xxxxx+*x**xxxxxx**xx
-x***x*x*x*x******x**x*******xx
+x*-***x*x*****x**x*****xxx***x
+x*+*x*x*x*xxxxx+*x**xxxxxx**xx
+x*/*x*x*x*x******x**x*******xx
 x***xxx*x*xxxx**xx*******x**xx
 x***x***************x****x**xx
 x***x***x***********xxxxxx**xx

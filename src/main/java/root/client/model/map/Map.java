@@ -1,7 +1,13 @@
 package root.client.model.map;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.javafx.scene.traversal.Direction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import root.client.controller.SingleplayerMapController;
 
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,9 +17,10 @@ public class Map {
         return name;
     }
 
+    private final Logger LOGGER = LoggerFactory.getLogger(Map.class);
     private final String name;
 
-    public List<List<MapPart>> getMapParts() {
+    public synchronized List<List<MapPart>> getMapParts() {
         List<List<MapPart>> arrayListMapParts = new LinkedList<>();
 
         for (int i = 0; i < mapParts.length; i++) {
@@ -26,10 +33,10 @@ public class Map {
         return Collections.unmodifiableList(arrayListMapParts);
     }
 
-    private final MapPart[][] mapParts;
+    public final MapPart[][] mapParts;
     private final List<Player> players = new LinkedList<>();
     private Player player;
-
+    private Player secondPlayer;
     private final List<Target> targets = new LinkedList<>();
 
     public Map(String name, boolean multiplayer, int playerNumber, String playerName) {
@@ -41,7 +48,7 @@ public class Map {
         }
         this.mapParts = new LevelLoader().load(mapPath + name + ".txt");
         fillLists();
-        setPlayer(playerNumber, playerName);
+        setPlayers(playerNumber, playerName);
         this.name = name;
         loadNeighbours();
     }
@@ -59,12 +66,17 @@ public class Map {
         }
     }
 
-    private void setPlayer(int index, String name) {
-        this.player = players.get(index);
-        player.setName(name);
+    private void setPlayers(int index, String name) {
+        if (index == 0) {
+            player = players.get(0);
+            secondPlayer = players.get(1);
+        } else {
+            player = players.get(1);
+            secondPlayer = players.get(0);
+        }
     }
 
-    public void movePlayer(Direction direction) {
+    public synchronized void movePlayer(Direction direction) {
         System.out.println("Moving to " + direction.toString());
         player.setDirection(direction);
         this.movePart(direction, player);
@@ -75,10 +87,15 @@ public class Map {
         System.out.println("By map tryMoveRight neighbour is " + mapParts[getPlayerPosition().row][getPlayerPosition().column + 1].getClass().getSimpleName());
         System.out.println("By player tryMoveLeft neighbour is " + player.getLeft().getClass().getSimpleName());
         System.out.println("By player tryMoveRight neighbour is " + player.getRight().getClass().getSimpleName());*/
-
     }
 
-    public boolean checkWinCondition() {
+    public synchronized  void moverOtherPlayer(Direction direction) {
+        System.out.println("Moving to " + direction.toString());
+        secondPlayer.setDirection(direction);
+        this.movePart(direction, secondPlayer);
+    }
+
+    public synchronized boolean checkWinCondition() {
         for (Target target : targets) {
             if (!target.isCovered()) {
                 return false;
@@ -87,7 +104,7 @@ public class Map {
         return true;
     }
 
-    private void movePart(Direction direction, MapPart mapPart) {
+    private synchronized void movePart(Direction direction, MapPart mapPart) {
         MapPart neighbour = mapPart.getNeighbour(direction);
         if (neighbour instanceof Box) {
             System.out.println("Neighbour is box");

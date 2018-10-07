@@ -7,7 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.apache.commons.io.FilenameUtils;
-import root.client.controller.SingleplayerMapController;
+import root.client.controller.*;
 import root.client.util.ResourceLoader;
 import root.client.model.map.MapPart;
 
@@ -17,14 +17,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MapView extends View {
-    private SingleplayerMapController mapController;
+    private MapController mapController;
+    private MultiplayerController multiplayerController;
     private GridPane gridPane;
     private static Pane pane;
     private List<List<MapPart>> mapParts;
     private VBox vBox;
 
-    public MapView(SingleplayerMapController mapController, List<List<MapPart>> mapParts, String mapName) throws IOException {
-        super((pane = new Pane()), mapController);
+    public MapView(MapController mapController, List<List<MapPart>> mapParts, String mapName) throws IOException {
+        super((pane = new Pane()), (Controller) mapController);
         pane.getChildren().clear();
         this.mapController = mapController;
         this.mapParts = mapParts;
@@ -39,8 +40,9 @@ public class MapView extends View {
         vBox.getChildren().add(createMap(this.mapParts));
 
         pane.getChildren().add(vBox);
-
     }
+
+
 
     private GridPane createMap(List<List<MapPart>> mapParts) {
         gridPane = new GridPane();
@@ -61,7 +63,6 @@ public class MapView extends View {
 
     private MenuBar getMenu() {
         MenuBar menuBar = new MenuBar();
-
         Menu general = new Menu("General");
         MenuItem quit = new MenuItem("Quit");
         quit.setOnAction(a -> {
@@ -69,9 +70,7 @@ public class MapView extends View {
         });
         MenuItem restart = new MenuItem("Restart");
         restart.setOnAction(a -> {
-
             mapController.restartMap();
-
         });
         general.getItems().addAll(quit, restart);
         menuBar.getMenus().addAll(general);

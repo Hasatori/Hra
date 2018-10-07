@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public class MultiplayerView extends View {
 
-    private Button joinLobbyButton, createCustomLobbyButton, back;
+    private Button joinLobbyButton, createCustomLobbyButton, back, refreshButton;
     private ListView<String> openedLobbiesListView;
     private MultiplayerController controller;
 
@@ -26,6 +26,7 @@ public class MultiplayerView extends View {
         joinLobbyButton = (Button) this.lookup("#joinLobbyButton");
         createCustomLobbyButton = (Button) this.lookup("#createCustomLobbyButton");
         openedLobbiesListView = (ListView) this.lookup("#openedLobbiesListView");
+        refreshButton = (Button) this.lookup("#refreshButton");
 
         back = (Button) this.lookup("#back");
         back.setOnAction(a -> {
@@ -35,25 +36,28 @@ public class MultiplayerView extends View {
         joinLobbyButton.setOnAction(a -> {
             ObservableList<String> selectedItems = openedLobbiesListView.getSelectionModel().getSelectedItems();
             if (selectedItems.size() > 1) {
-                DialogFactory.getAlert(Alert.AlertType.WARNING, "Joining lobby", "You can join only one lobby");
+                DialogFactory.getAlert(Alert.AlertType.WARNING, "Joining lobby", "You can join only one lobby").showAndWait();
             } else if (selectedItems.size() == 0) {
-                DialogFactory.getAlert(Alert.AlertType.WARNING, "Joining lobby", "No lobby selected");
+                DialogFactory.getAlert(Alert.AlertType.WARNING, "Joining lobby", "No lobby selected").showAndWait();
             } else {
-
+                controller.joinLobby(openedLobbiesListView.getSelectionModel().getSelectedItem());
             }
         });
         fillLobbies(lobbies);
         createCustomLobbyButton.setOnAction(createLobbyHandler);
+
+        refreshButton.setOnAction((a) -> {
+            fillLobbies(controller.loadLobbies());
+        });
     }
 
     private void fillLobbies(List<String> lobbies) {
         openedLobbiesListView.getItems().clear();
         lobbies.forEach(lobby -> {
             openedLobbiesListView.getItems().add(lobby);
-
         });
-    }
 
+    }
 
 
     private EventHandler<ActionEvent> createLobbyHandler = event -> {
@@ -67,7 +71,7 @@ public class MultiplayerView extends View {
         });
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
-            this.controller.loadLobby(name);
+            this.controller.createLobby(name);
         });
     };
 }

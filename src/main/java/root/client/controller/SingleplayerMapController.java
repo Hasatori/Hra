@@ -1,5 +1,7 @@
 package root.client.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.javafx.scene.traversal.Direction;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -13,17 +15,16 @@ import root.client.view.MapView;
 
 import java.io.IOException;
 
-import java.util.LinkedList;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
-public class SingleplayerMapController extends Controller {
+public class SingleplayerMapController extends Controller implements MapController {
 
     private Map map;
     private MapView view;
     private String mapName;
     private String playerName;
-    private ServerConnection serverConnection;
     private final Logger LOGGER = LoggerFactory.getLogger(SingleplayerMapController.class);
 
     public SingleplayerMapController(Stage stage, String mapName, String playerName) {
@@ -56,12 +57,14 @@ public class SingleplayerMapController extends Controller {
     public void reloadScene() {
     }
 
+    @Override
     public void movePlayer(KeyCode keyCode) {
         try {
             Direction direction = Direction.valueOf(keyCode.toString());
             map.movePlayer(direction);
             view.reload(map.getMapParts());
             if (map.checkWinCondition()) {
+                LOGGER.info("Game ended.{} has won", playerName);
                 DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();
                 new StartController(stage).loadView();
             }

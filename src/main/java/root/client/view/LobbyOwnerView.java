@@ -2,7 +2,7 @@ package root.client.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import root.client.controller.LobbyOwnerController;
+import root.client.controller.multiplayer.LobbyOwnerController;
 import root.client.util.ResourceLoader;
 
 import javafx.scene.control.*;
@@ -18,7 +18,7 @@ public class LobbyOwnerView extends View {
     Label ownerNameLabel, secondPlayerNameLabel;
 
     public LobbyOwnerView(LobbyOwnerController controller, List<String> maps, String ownerName) throws IOException {
-        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobby.fxml")), controller);
+        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobby.fxml")));
         this.controller = controller;
         this.multiplayerMapsComboBox = (ComboBox<String>) this.lookup("#multiplayerMapsComboBox");
         this.startGameButton = (Button) this.lookup("#startGameButton");
@@ -42,6 +42,10 @@ public class LobbyOwnerView extends View {
         });
     }
 
+    public void lobbyIsEmpty(){
+        this.secondPlayerNameLabel.setText("");
+
+    }
     public void setSecondPlayerName(String value) {
         this.secondPlayerNameLabel.setText(value);
     }

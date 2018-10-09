@@ -1,26 +1,41 @@
 package root.server.main;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.sun.javafx.scene.traversal.Direction;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import root.server.main.processors.GeneralMessageProcessor;
+import root.server.main.processors.LobbyMessageProcessor;
+import root.server.main.processors.MapMessageProcessor;
+import root.server.main.processors.MessageProcessor;
+import root.server.main.protocol.Protocol;
+import root.server.main.protocol.ProtocolType;
+
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Arrays;
-import java.util.LinkedList;
+
 
 public class ClientConnection implements Runnable {
+    private final Logger LOGGER = LoggerFactory.getLogger(ClientConnection.class);
+    private final MessageProcessor generalMessageProcessor, lobbyMessageProcessor, mapMessageProcessor;
+
+
     private Socket socket;
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     private Client client;
     private PrintWriter writer;
     private BufferedReader reader;
 
     public ClientConnection(Socket socket) {
         this.socket = socket;
-        this.client = new Client("Oldřich", this);
-        ClientManager.getInstance().add(client);
+        this.generalMessageProcessor = new GeneralMessageProcessor(this);
+        this.lobbyMessageProcessor = new LobbyMessageProcessor(this);
+        this.mapMessageProcessor = new MapMessageProcessor(this);
     }
 
     @Override
@@ -30,10 +45,10 @@ public class ClientConnection implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Server.ENCODING));
             this.reader = reader;
             this.writer = writer;
-
-            String line;
+            String line = reader.readLine();
+            getProcessor(line).processMessage(line);
             while ((line = reader.readLine()) != null) {
-                processMessage(line);
+                getProcessor(line).processMessage(line);
             }
             socket.close();
             ClientManager.getInstance().remove(client);
@@ -51,7 +66,8 @@ public class ClientConnection implements Runnable {
     }
 
     private void processMessage(String message) throws SocketException {
-        System.out.println("Incomming message " + message);
+
+      /* System.out.println("Incomming message " + message);
         String[] parts = message.split(":");
         if (parts[0].equals("LOBBY")) {
             String messageBody = parts[1];
@@ -99,16 +115,27 @@ public class ClientConnection implements Runnable {
                         client.getLobby().getOtherPlayer().getClientConnection().sendMessage("MAP:" + messageBody);
                     }
 
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+                }*/
+
+
     }
 
     public void sendMessage(String message) throws IOException {
-        System.out.println(message + " " + this.client.IDENTIFIER);
+        LOGGER.info("Outgoing message {}", message);
         writer.println(message);
+    }
 
+    private MessageProcessor getProcessor(String message) {
+        ProtocolType protocolType = Protocol.getProtocolType(message);
+        switch (protocolType) {
+            case GENERAL:
+                return generalMessageProcessor;
+            case MAP:
+                return mapMessageProcessor;
+            case LOBBY:
+                return lobbyMessageProcessor;
+            default:
+                throw new IllegalArgumentException("Unknown message type");
+        }
     }
 }

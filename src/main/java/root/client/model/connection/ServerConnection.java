@@ -2,6 +2,7 @@ package root.client.model.connection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import root.client.model.protocol.general.GeneralProtocol;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -10,22 +11,25 @@ import java.net.Socket;
 public class ServerConnection {
     private static final String ENCODING = "UTF-8";
     private final Logger LOGGER = LoggerFactory.getLogger(ServerConnection.class);
+    private final String identifier;
     private Socket socket;
 
-    private IncomingMessageProcessor incommingMessageProccessor;
+    private InputReader incommingMessageProccessor;
 
-    public IncomingMessageProcessor getIncommingMessageProccessor() {
+    public InputReader getIncommingMessageProccessor() {
         return incommingMessageProccessor;
     }
 
-    public OutgoingMessageProcessor getOutgoingMessageProccessor() {
+    public OutputWritter getOutgoingMessageProccessor() {
         return outgoingMessageProccessor;
     }
 
-    private OutgoingMessageProcessor outgoingMessageProccessor;
+    private OutputWritter outgoingMessageProccessor;
 
-    public ServerConnection() {
+    public ServerConnection(String identifier) {
+        this.identifier = identifier;
         connect();
+
     }
 
     private void connect() {
@@ -35,8 +39,9 @@ public class ServerConnection {
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), ENCODING), true);// Without autoFlush method flush has to be called after every write(printl)
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), ENCODING));
 
-            this.incommingMessageProccessor = new IncomingMessageProcessor(reader);
-            this.outgoingMessageProccessor = new OutgoingMessageProcessor(writer);
+            this.incommingMessageProccessor = new InputReader(reader);
+            this.outgoingMessageProccessor = new OutputWritter(writer);
+            outgoingMessageProccessor.sendMessage(new GeneralProtocol().send().gretting(this.identifier));
 
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e.fillInStackTrace());
@@ -51,6 +56,11 @@ public class ServerConnection {
     }
 
     public void disconnect() {
-
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
+
 }

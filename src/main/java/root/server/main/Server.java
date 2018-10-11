@@ -1,5 +1,7 @@
 package root.server.main;
 
+import root.server.clientservices.ClientConnection;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

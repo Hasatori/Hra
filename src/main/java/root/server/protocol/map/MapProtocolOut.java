@@ -1,4 +1,4 @@
-package root.server.main.protocol.map;
+package root.server.protocol.map;
 
 import com.sun.javafx.scene.traversal.Direction;
 

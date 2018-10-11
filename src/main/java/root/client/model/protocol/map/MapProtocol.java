@@ -1,8 +1,6 @@
 package root.client.model.protocol.map;
 
-import root.client.model.protocol.map.MapProtocolIn;
-import root.client.model.protocol.map.MapProtocolOut;
-import root.server.main.protocol.Protocol;
+import root.server.protocol.Protocol;
 
 public class MapProtocol  extends Protocol {
     static String messagePrefix="MAP";

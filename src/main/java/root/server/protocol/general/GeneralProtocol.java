@@ -1,7 +1,7 @@
-package root.server.main.protocol.general;
+package root.server.protocol.general;
 
 
-import root.server.main.protocol.Protocol;
+import root.server.protocol.Protocol;
 
 public class GeneralProtocol extends Protocol {
     static String messagePrefix = "GENERAL";

@@ -1,6 +1,6 @@
-package root.server.main.processors;
+package root.server.processors;
 
-import root.server.main.ClientConnection;
+import root.server.clientservices.ClientConnection;
 
 import java.io.IOException;
 

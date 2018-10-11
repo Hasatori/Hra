@@ -1,6 +1,4 @@
-package root.server.main.protocol.lobby;
-
-import root.server.main.Lobby;
+package root.server.protocol.lobby;
 
 public class LobbyProtocolIn {
 

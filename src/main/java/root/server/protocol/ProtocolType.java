@@ -1,4 +1,4 @@
-package root.server.main.protocol;
+package root.server.protocol;
 
 public enum ProtocolType {
     GENERAL,

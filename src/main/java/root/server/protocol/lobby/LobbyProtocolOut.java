@@ -1,12 +1,4 @@
-package root.server.main.protocol.lobby;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import root.server.main.protocol.general.GeneralProtocol;
-
-import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
+package root.server.protocol.lobby;
 
 public class LobbyProtocolOut {
     LobbyProtocolOut() {

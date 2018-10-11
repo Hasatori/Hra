@@ -1,4 +1,4 @@
-package root.server.main.protocol.general;
+package root.server.protocol.general;
 
 public class GeneralProtocolIn {
 

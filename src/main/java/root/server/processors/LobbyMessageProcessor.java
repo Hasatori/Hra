@@ -1,10 +1,9 @@
-package root.server.main.processors;
+package root.server.processors;
 
-import root.server.main.Client;
-import root.server.main.ClientConnection;
-import root.server.main.ClientManager;
-import root.server.main.protocol.lobby.LobbyProtocol;
-import root.server.main.protocol.lobby.LobbyProtocolIn;
+import root.server.clientservices.Client;
+import root.server.clientservices.ClientConnection;
+import root.server.protocol.lobby.LobbyProtocol;
+import root.server.protocol.lobby.LobbyProtocolIn;
 
 import java.io.IOException;
 

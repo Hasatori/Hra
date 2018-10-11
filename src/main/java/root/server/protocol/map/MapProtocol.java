@@ -1,7 +1,7 @@
-package root.server.main.protocol.map;
+package root.server.protocol.map;
 
 
-import root.server.main.protocol.Protocol;
+import root.server.protocol.Protocol;
 
 public class MapProtocol extends Protocol {
     static String messagePrefix = "MAP";

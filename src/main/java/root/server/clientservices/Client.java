@@ -1,4 +1,4 @@
-package root.server.main;
+package root.server.clientservices;
 
 public class Client {
     public final String IDENTIFIER;

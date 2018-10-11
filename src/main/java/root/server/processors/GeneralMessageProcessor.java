@@ -1,15 +1,15 @@
-package root.server.main.processors;
+package root.server.processors;
 
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import root.server.main.Client;
-import root.server.main.ClientConnection;
-import root.server.main.ClientManager;
-import root.server.main.Lobby;
-import root.server.main.protocol.general.GeneralProtocol;
-import root.server.main.protocol.general.GeneralProtocolIn;
-import root.server.main.protocol.lobby.LobbyProtocol;
+import root.server.clientservices.Client;
+import root.server.clientservices.ClientConnection;
+import root.server.clientservices.ClientManager;
+import root.server.clientservices.Lobby;
+import root.server.protocol.general.GeneralProtocol;
+import root.server.protocol.general.GeneralProtocolIn;
+import root.server.protocol.lobby.LobbyProtocol;
 
 import java.io.IOException;
 

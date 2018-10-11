@@ -1,8 +1,6 @@
 package root.client.model.protocol.lobby;
 
-import root.client.model.protocol.general.GeneralProtocolIn;
-import root.client.model.protocol.general.GeneralProtocolOut;
-import root.server.main.protocol.Protocol;
+import root.server.protocol.Protocol;
 
 public class LobbyProtocol  extends Protocol {
      static String messagePrefix="LOBBY";

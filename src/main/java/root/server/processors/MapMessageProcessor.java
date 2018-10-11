@@ -1,9 +1,9 @@
-package root.server.main.processors;
+package root.server.processors;
 
 
-import root.server.main.ClientConnection;
-import root.server.main.protocol.map.MapProtocol;
-import root.server.main.protocol.map.MapProtocolIn;
+import root.server.clientservices.ClientConnection;
+import root.server.protocol.map.MapProtocol;
+import root.server.protocol.map.MapProtocolIn;
 
 import java.io.IOException;
 

@@ -1,9 +1,11 @@
 package root.client.controller.multiplayer;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import root.client.model.connection.InputReader;
 import root.client.model.connection.OutputWritter;
+import root.client.model.map.Player;
 import root.client.model.protocol.lobby.LobbyProtocol;
 import root.client.model.protocol.lobby.LobbyProtocolIn;
 import root.client.util.ResourceLoader;
@@ -17,6 +19,7 @@ public class LobbyOwnerController extends ServerController {
     private LobbyOwnerView view;
     private String secondPlayerName;
     private boolean isFull = false;
+
 
     public LobbyOwnerController(Stage stage, String lobbyName, String playerName, InputReader incommingMessageProccessor, OutputWritter outgoingMessageProccessor) {
         super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
@@ -45,18 +48,34 @@ public class LobbyOwnerController extends ServerController {
     }
 
     private void waitForMessage() {
-        LobbyProtocolIn in = protocol.get(incommingMessageProccessor.getMessage());
-        if (in.playerConnected()) {
-            this.secondPlayerName = in.getSecondPlayerName();
-            DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Lobby", "Player " + in.getSecondPlayerName() + " has connected");
-            setSecondPlayerName(in.getSecondPlayerName());
-            isFull = true;
-        }
-        if (in.playerHasLeft()) {
-            DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Lobby", "Player " + in.getSecondPlayerName() + " has left");
-            view.lobbyIsEmpty();
-            isFull = false;
-        }
+        new Thread(() -> {
+            String message = incommingMessageProccessor.getMessage();
+            while (message != null) {
+                LobbyProtocolIn in = protocol.get(message);
+                if (in.playerConnected()) {
+                    this.secondPlayerName = in.getSecondPlayerName();
+                    Platform.runLater(() -> {
+                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Lobby", "Player " + in.getSecondPlayerName() + " has connected").showAndWait();
+                        setSecondPlayerName(in.getSecondPlayerName());
+                    });
+                    isFull = true;
+                }
+                if (in.playerHasLeft()) {
+                    Platform.runLater(() -> {
+                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Lobby", "Player " + in.getSecondPlayerName() + " has left").showAndWait();
+                        view.lobbyIsEmpty();
+                    });
+                    isFull = false;
+                }
+                if (in.lobbyDeleted()) {
+                    Platform.runLater(() ->
+                            new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView());
+                    break;
+                }
+                message = incommingMessageProccessor.getMessage();
+            }
+        }).start();
+
     }
 
     private void setSecondPlayerName(String name) {
@@ -66,7 +85,7 @@ public class LobbyOwnerController extends ServerController {
     public void startGame(String mapName) {
         if (isFull) {
             outgoingMessageProccessor.sendMessage(protocol.send().startGame());
-            new MultiplayerMapController(stage, mapName, 0, playerName, incommingMessageProccessor, outgoingMessageProccessor).loadView();
+            new MultiplayerMapController(stage, mapName, 0, playerName, secondPlayerName, incommingMessageProccessor, outgoingMessageProccessor).loadView();
         }
     }
 
@@ -76,4 +95,7 @@ public class LobbyOwnerController extends ServerController {
         view.lobbyIsEmpty();
     }
 
+    public void deleteLobby() {
+        outgoingMessageProccessor.sendMessage(protocol.send().destroyLobby());
+    }
 }

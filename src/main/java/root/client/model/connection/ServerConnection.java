@@ -41,7 +41,7 @@ public class ServerConnection {
 
             this.incommingMessageProccessor = new InputReader(reader);
             this.outgoingMessageProccessor = new OutputWritter(writer);
-            outgoingMessageProccessor.sendMessage(new GeneralProtocol().send().gretting(this.identifier));
+            outgoingMessageProccessor.sendMessage(new GeneralProtocol().send().greeting(this.identifier));
 
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e.fillInStackTrace());

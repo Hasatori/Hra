@@ -31,6 +31,10 @@ public class LobbyOwnerView extends View {
         startGameButton.setOnAction((a) -> {
             controller.startGame(multiplayerMapsComboBox.getSelectionModel().getSelectedItem());
         });
+
+        leaveLobbyButton.setOnAction((a) -> {
+            controller.deleteLobby();
+        });
     }
 
     private void fillComboBox(List<String> maps) {
@@ -42,10 +46,11 @@ public class LobbyOwnerView extends View {
         });
     }
 
-    public void lobbyIsEmpty(){
+    public void lobbyIsEmpty() {
         this.secondPlayerNameLabel.setText("");
 
     }
+
     public void setSecondPlayerName(String value) {
         this.secondPlayerNameLabel.setText(value);
     }

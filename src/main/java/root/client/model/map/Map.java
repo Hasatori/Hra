@@ -1,13 +1,9 @@
 package root.client.model.map;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.sun.javafx.scene.traversal.Direction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import root.client.controller.SingleplayerMapController;
 
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +49,11 @@ public class Map {
         loadNeighbours();
     }
 
+    public Map(String name, boolean multiplayer, int playerNumber, String playerName, String secondPlayerName) {
+        this(name, multiplayer, playerNumber, playerName);
+        this.secondPlayer.setName(secondPlayerName);
+    }
+
     private void fillLists() {
         for (int row = 0; row < mapParts.length; row++) {
             for (int column = 0; column < mapParts[row].length; column++) {
@@ -67,10 +68,9 @@ public class Map {
     }
 
     private void setPlayers(int index, String name) {
-        if (players.size()==1){
+        if (players.size() == 1) {
             player = players.get(0);
-        }else
-        if (index == 0) {
+        } else if (index == 0) {
             player = players.get(0);
             secondPlayer = players.get(1);
         } else {
@@ -93,7 +93,7 @@ public class Map {
         System.out.println("By player tryMoveRight neighbour is " + player.getRight().getClass().getSimpleName());*/
     }
 
-    public synchronized  void moverOtherPlayer(Direction direction) {
+    public synchronized void moverOtherPlayer(Direction direction) {
         System.out.println("Moving to " + direction.toString());
         secondPlayer.setDirection(direction);
         this.movePart(direction, secondPlayer);

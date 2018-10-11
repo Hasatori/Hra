@@ -9,12 +9,12 @@ public class GeneralProtocolOut {
 
     }
 
-    public String gretting(String identifier) {
+    public String greeting(String identifier) {
         return GeneralProtocol.messagePrefix + ":" + "THIS IS " + identifier;
     }
 
-    public String createLobby(String lobbyName) {
-        return GeneralProtocol.messagePrefix + ":" + "SET MAP " + lobbyName;
+    public String createLobby(String lobbyName,String mapName) {
+        return GeneralProtocol.messagePrefix + ":" + "CREATE LOBBY " + lobbyName+" "+mapName;
     }
 
     public String getLobbies() {
@@ -22,7 +22,7 @@ public class GeneralProtocolOut {
     }
 
     public String joinLobby(String lobbyName) {
-        return GeneralProtocol.messagePrefix + ":" + "JOIN " + lobbyName;
+        return GeneralProtocol.messagePrefix + ":" + "JOIN LOBBY " + lobbyName;
     }
 
 }

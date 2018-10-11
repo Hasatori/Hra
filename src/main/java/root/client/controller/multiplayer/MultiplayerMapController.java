@@ -16,18 +16,19 @@ import root.client.view.DialogFactory;
 import root.client.view.MapView;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class MultiplayerMapController extends ServerController implements MapController {
 
 
     private final Map map;
     private final MapProtocol protocol;
+    private final String secondPlayerName;
     private MapView view;
 
-    public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, InputReader incommingMessageProccessor, OutputWritter outgoingMessageProccessor) {
+    public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String secondPlayerName, InputReader incommingMessageProccessor, OutputWritter outgoingMessageProccessor) {
         super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
-        this.map = new Map(mapName, true, playerNumber, playerName);
+        this.secondPlayerName = secondPlayerName;
+        this.map = new Map(mapName, true, playerNumber, this.playerName, this.secondPlayerName);
         try {
             this.view = new MapView(this, map.getMapParts(), mapName);
         } catch (IOException e) {
@@ -72,10 +73,12 @@ public class MultiplayerMapController extends ServerController implements MapCon
     public void quitMap() {
 
     }
+
     @Override
     public void restartMap() {
 
     }
+
     public void waitForCommands() {
 
         new Thread(() -> {

@@ -1,9 +1,8 @@
 package root.client.view;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import root.client.controller.SingleplayerController;
+import root.client.controller.singleplayer.SingleplayerController;
 import root.client.util.ResourceLoader;
 ;
 import javafx.scene.control.*;
@@ -18,7 +17,7 @@ public class SingleplayerView extends View {
     private ComboBox<String> singleplayerMapsComboBox;
 
     public SingleplayerView(SingleplayerController controller, List<String> maps) throws IOException {
-        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/singleplayer.fxml")), controller);
+        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/singleplayer.fxml")));
         this.startSingleplayerButton = (Button) this.lookup("#startSingleplayerButton");
         this.nameTextField = (TextField) this.lookup("#nameTextField");
         this.singleplayerMapsComboBox = (ComboBox<String>) this.lookup("#singleplayerMapsComboBox");

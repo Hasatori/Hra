@@ -1,7 +1,5 @@
-package root.client.controller;
+package root.client.controller.singleplayer;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.sun.javafx.scene.traversal.Direction;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -9,14 +7,15 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import root.client.controller.Controller;
+import root.client.controller.MapController;
+import root.client.controller.StartController;
 import root.client.model.map.*;
 import root.client.view.DialogFactory;
 import root.client.view.MapView;
 
 import java.io.IOException;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Optional;
 
 public class SingleplayerMapController extends Controller implements MapController {

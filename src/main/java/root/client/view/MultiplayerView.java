@@ -5,7 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import root.client.controller.MultiplayerController;
+import root.client.controller.multiplayer.MultiplayerController;
 import root.client.util.ResourceLoader;
 
 
@@ -21,7 +21,7 @@ public class MultiplayerView extends View {
     private MultiplayerController controller;
 
     public MultiplayerView(MultiplayerController controller, List<String> lobbies) throws IOException {
-        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/lobbies.fxml")), controller);
+        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/lobbies.fxml")));
         this.controller = controller;
         joinLobbyButton = (Button) this.lookup("#joinLobbyButton");
         createCustomLobbyButton = (Button) this.lookup("#createCustomLobbyButton");

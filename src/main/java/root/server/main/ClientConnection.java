@@ -27,6 +27,10 @@ public class ClientConnection implements Runnable {
         this.client = client;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
     private Client client;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -48,7 +52,7 @@ public class ClientConnection implements Runnable {
             String line = reader.readLine();
             getProcessor(line).processMessage(line);
             while ((line = reader.readLine()) != null) {
-                getProcessor(line).processMessage(line);
+                processMessage(line);
             }
             socket.close();
             ClientManager.getInstance().remove(client);
@@ -66,7 +70,12 @@ public class ClientConnection implements Runnable {
     }
 
     private void processMessage(String message) throws SocketException {
-
+        LOGGER.info("Incoming message {}", message);
+        try {
+            getProcessor(message).processMessage(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
       /* System.out.println("Incomming message " + message);
         String[] parts = message.split(":");
         if (parts[0].equals("LOBBY")) {
@@ -88,7 +97,7 @@ public class ClientConnection implements Runnable {
             }
             if (messageBody.split(" ")[0].equals("JOIN")) {
                 String lobbyName = messageBody.split(" ")[1];
-                String response = ClientManager.getInstance().tryAddPlayerToLobby(lobbyName, client) ? "CONNECTED TO " + client.getLobby().getName() + " " + client.IDENTIFIER + " " + client.getLobby().getMapName() : "FULL";
+                String response = ClientManager.getInstance().addPlayerToLobby(lobbyName, client) ? "CONNECTED TO " + client.getLobby().getName() + " " + client.IDENTIFIER + " " + client.getLobby().getMapName() : "FULL";
                 writer.println("LOBBY:" + response);
             }
             if (messageBody.split(" ")[0].equals("START")) {

@@ -7,15 +7,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import org.apache.commons.io.FilenameUtils;
 import root.client.controller.*;
+import root.client.controller.multiplayer.MultiplayerController;
 import root.client.model.map.Player;
 import root.client.util.ResourceLoader;
 import root.client.model.map.MapPart;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class MapView extends View {
@@ -27,7 +25,7 @@ public class MapView extends View {
     private VBox vBox;
 
     public MapView(MapController mapController, List<List<MapPart>> mapParts, String mapName) throws IOException {
-        super((pane = new Pane()), (Controller) mapController);
+        super((pane = new Pane()));
         pane.getChildren().clear();
         this.mapController = mapController;
         this.mapParts = mapParts;
@@ -51,16 +49,14 @@ public class MapView extends View {
             for (int column = 0; column < mapParts.get(row).size(); column++) {
 
                 try {
-
                     MapPart part = mapParts.get(row).get(column);
                     Node node = part.getSource();
                     gridPane.add(node, column, row);
                     if (mapParts.get(row).get(column) instanceof Player) {
-                        MapPart player = (Player) part;
+                        MapPart player = part;
                         System.out.println("Setting name " + ((Player) player).getName());
                         ((Label) node.lookup(".playerName")).setText(((Player) player).getName());
                         System.out.println(((Label) node.lookup(".playerName")).getText());
-
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -19,6 +19,12 @@ public class Lobby {
         }
     }
 
+    private String capacity;
+
+    public String getCapacity() {
+        return this.capacity;
+    }
+
     public void start() {
         if (this.otherPlayer != null) {
             try {
@@ -53,17 +59,14 @@ public class Lobby {
         this.owner = owner;
         this.name = name;
         this.mapName = mapName;
+        this.capacity = "Opened";
     }
 
     public void addPlayer(Client client) {
         if (this.otherPlayer == null) {
             this.otherPlayer = client;
-            try {
-                otherPlayer.setLobby(this);
-                owner.getClientConnection().sendMessage("LOBBY:CONNECTED PLAYER" + otherPlayer.IDENTIFIER);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            otherPlayer.setLobby(this);
+            this.capacity = "Full";
         }
     }
 
@@ -75,6 +78,8 @@ public class Lobby {
     }
 
     public void kickOtherPlayer() {
+        this.getOtherPlayer().deleteLobby();
         this.otherPlayer = null;
+        this.capacity = "Opened";
     }
 }

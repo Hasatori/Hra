@@ -28,11 +28,20 @@ public class GeneralProtocolIn {
         return message.equals("LOBBY IS FULL") ? true : false;
     }
 
-    public String[] connectedToLobby() {
+    public boolean connectedToLobby(){
+        return message.matches("CONNECTED TO \\w+ \\w+ \\w+");
+    }
+    public String[] getLobbyCredentials() {
         return message.replace("CONNECTED TO ", "").split(" ");
     }
 
-    public boolean duplicateName() {
+    public boolean duplicateUserName() {
         return message.equals("DUPLICATE NAME");
+    }
+    public boolean duplicateLobbyName() {
+        return message.equals("DUPLICATE LOBBY NAME");
+    }
+    public boolean lobbyCreated() {
+        return message.equals("LOBBY CREATED");
     }
 }

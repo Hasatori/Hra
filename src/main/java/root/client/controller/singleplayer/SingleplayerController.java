@@ -1,9 +1,8 @@
-package root.client.controller;
+package root.client.controller.singleplayer;
 
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import root.client.controller.Controller;
 import root.client.util.ResourceLoader;
-import root.client.view.DialogFactory;
 import root.client.view.SingleplayerView;
 
 import java.io.IOException;

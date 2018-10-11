@@ -3,6 +3,7 @@ package root.server.main;
 import com.sun.xml.internal.ws.api.model.MEP;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,22 +31,63 @@ public class ClientManager {
         clients.forEach(client -> {
             Lobby lobby = client.getLobby();
             if (lobby != null) {
-                lobbies.add(client.getLobby().getName());
+                String lobbyInfo = lobby.getName() + " | Capacity " + lobby.getCapacity();
+                if (!lobbies.contains(lobbyInfo)) {
+                    lobbies.add(lobbyInfo);
+                }
+
             }
         });
         return lobbies;
     }
 
-    public synchronized boolean tryAddPlayerToLobby(String name, Client client) {
+    public synchronized boolean isUserNameUnique(String name) {
+        for (Client client : clients) {
+            if (client.IDENTIFIER.equals(name)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public synchronized boolean isLobbyNameUnique(String lobbyName) {
+        for (Client client : clients) {
+            if (client.getLobby() != null && client.getLobby().getName().equals(lobbyName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public synchronized boolean isLobbyFull(String lobbyName) {
+        for (Client client : clients) {
+            Lobby lobby = client.getLobby();
+            if (lobby != null && lobby.getName().equals(lobbyName) && !lobby.isFull()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public synchronized Lobby getLobby(String lobbyName) {
+        for (Client client : clients) {
+            Lobby lobby = client.getLobby();
+            if (lobby != null && lobby.getName().equals(lobbyName)) {
+                return lobby;
+            }
+        }
+        return null;
+    }
+
+    public synchronized void addPlayerToLobby(String name, Client client) {
         for (Client client1 : clients) {
             Lobby lobby = client1.getLobby();
             if (lobby != null && lobby.getName().equals(name) && !lobby.isFull()) {
                 lobby.addPlayer(client);
-                return true;
             }
         }
-        return false;
     }
+
     public synchronized static ClientManager getInstance() {
         return INSTANCE;
     }

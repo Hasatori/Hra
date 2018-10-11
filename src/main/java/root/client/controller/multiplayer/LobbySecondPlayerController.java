@@ -16,10 +16,9 @@ import java.io.IOException;
 
 public class LobbySecondPlayerController extends ServerController {
     private final LobbyProtocol protocol;
+    private final String secondPlayerName;
     private LobbySecondPlayerView view;
     private Stage stage;
-    private InputReader incommingMessageProccessor;
-    private OutputWritter outgoingMessageProccessor;
     private String mapName;
 
     public LobbySecondPlayerController(Stage stage, String lobbyName, String ownerName, String playerName, String selectedMap, InputReader incommingMessageProccessor, OutputWritter outgoingMessageProccessor) {
@@ -30,6 +29,7 @@ public class LobbySecondPlayerController extends ServerController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.secondPlayerName = ownerName;
         view.setOwnerName(ownerName);
         this.mapName = selectedMap;
         view.setMap(selectedMap);
@@ -52,22 +52,35 @@ public class LobbySecondPlayerController extends ServerController {
     private void waitForMessages() {
         new Thread(() -> {
             String message = incommingMessageProccessor.getMessage();
-
             while (message != null) {
                 LobbyProtocolIn in = protocol.get(message);
                 if (in.kicked()) {
-                    new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView();
-                    DialogFactory.getAlert(Alert.AlertType.WARNING, "Lobby", "You were kicked of the lobby");
+                    Platform.runLater(() -> {
+                        new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView();
+                        DialogFactory.getAlert(Alert.AlertType.WARNING, "Lobby", "You were kicked of the lobby").showAndWait();
+                    });
+                    break;
                 }
                 if (in.setMap()) {
                     this.mapName = in.getMap();
                     Platform.runLater(() -> view.setMap(in.getMap()));
                 }
                 if (in.start()) {
-                    Platform.runLater(() -> new MultiplayerMapController(stage, mapName, 1, playerName, incommingMessageProccessor, outgoingMessageProccessor).loadView());
+                    Platform.runLater(() -> new MultiplayerMapController(stage, mapName, 1, playerName, secondPlayerName, this.incommingMessageProccessor, outgoingMessageProccessor).loadView());
                     break;
                 }
+                if (in.playerHasLeft()) {
+                    Platform.runLater(() -> {
+                        new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView();
+                    });
+                    break;
+                }
+                message = incommingMessageProccessor.getMessage();
             }
         }).start();
+    }
+
+    public void leaveLobby() {
+        outgoingMessageProccessor.sendMessage(protocol.send().leaveLobby());
     }
 }

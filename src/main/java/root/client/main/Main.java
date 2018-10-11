@@ -15,6 +15,7 @@ public class Main extends Application {
         primaryStage.setResizable(false);
         primaryStage.setX(100);
         primaryStage.setY(100);
-        new StartController(primaryStage);
+        new StartController(primaryStage).loadView();
     }
 }
+

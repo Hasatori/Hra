@@ -23,11 +23,7 @@
     <RowConstraints maxHeight="320.799991607666" minHeight="10.0" prefHeight="187.7999938964844" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Button fx:id="startGameButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="208.0" text="Start game" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Button>
-      <Button fx:id="leaveLobbyButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="95.0" text="Delete lobby" GridPane.halignment="CENTER">
+      <Button fx:id="leaveLobbyButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="95.0" text="Leave Lobby" GridPane.halignment="CENTER">
          <GridPane.margin>
             <Insets left="10.0" />
          </GridPane.margin>
@@ -50,19 +46,19 @@
             <Font name="Arial Bold" size="14.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="202.0" text="Second player" GridPane.columnIndex="2">
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="202.0" text="Me" GridPane.columnIndex="2">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font>
       </Label>
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <Label alignment="CENTER_RIGHT" prefHeight="31.0" prefWidth="98.0" text="Select map:" textAlignment="CENTER">
+            <Label alignment="CENTER_RIGHT" prefHeight="28.0" prefWidth="98.0" text="Map:" textAlignment="CENTER">
                <HBox.margin>
                   <Insets right="5.0" />
                </HBox.margin>
                <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font name="Arial Bold" size="14.0" />
                </font>
             </Label>
             <ComboBox fx:id="multiplayerMapsComboBox" prefHeight="26.0" prefWidth="116.0" />

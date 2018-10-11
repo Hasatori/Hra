@@ -19,8 +19,12 @@ public class LobbyProtocolOut {
         return LobbyProtocol.messagePrefix + ":" + "START GAME";
     }
 
-    public String leaveLobby(String lobbyName) {
-        return LobbyProtocol.messagePrefix + ":" + "LEAVE LOBBY" + lobbyName;
+    public String leaveLobby() {
+        return LobbyProtocol.messagePrefix + ":" + "LEAVE LOBBY";
+    }
+
+    public String destroyLobby() {
+        return LobbyProtocol.messagePrefix + ":" + "DESTROY LOBBY";
     }
 }
 

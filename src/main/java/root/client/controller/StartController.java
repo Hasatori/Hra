@@ -69,7 +69,7 @@ public class StartController extends Controller {
                     this.serverDisconnected();
                 } else {
                     String message = serverConnection.getIncommingMessageProccessor().getMessage();
-                    if (protocol.get(message).duplicateName()) {
+                    if (protocol.get(message).duplicateUserName()) {
                         ae.consume(); //not valid
                         serverConnection.disconnect();
                         DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "This name is already used by someone. Please try to fill a different name.").showAndWait();

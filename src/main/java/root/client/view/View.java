@@ -6,11 +6,9 @@ import root.client.controller.Controller;
 
 public  abstract class View extends Scene {
 
-    private final Controller controller;
 
-    public View(Parent parent, Controller controller){
+    public View(Parent parent){
         super(parent);
-        this.controller=controller;
     }
 
 

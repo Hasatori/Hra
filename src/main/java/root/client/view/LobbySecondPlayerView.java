@@ -2,13 +2,10 @@ package root.client.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import root.client.controller.Controller;
-import root.client.controller.LobbyOwnerController;
-import root.client.controller.LobbySecondPlayerController;
+import root.client.controller.multiplayer.LobbySecondPlayerController;
 import root.client.util.ResourceLoader;
 
 import java.io.IOException;
@@ -23,15 +20,17 @@ public class LobbySecondPlayerView extends View {
 
 
     public LobbySecondPlayerView(LobbySecondPlayerController controller, List<String> maps) throws IOException {
-        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobby.fxml")), controller);
+        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobbySecondPlayer.fxml")));
         this.controller = controller;
         this.multiplayerMapsComboBox = (ComboBox<String>) this.lookup("#multiplayerMapsComboBox");
-        this.startGameButton = (Button) this.lookup("#startGameButton");
         this.leaveLobbyButton = (Button) this.lookup("#leaveLobbyButton");
         this.ownerNameLabel = (Label) this.lookup("#ownerNameLabel");
         this.secondPlayerNameLabel = (Label) this.lookup("#secondPlayerNameLabel");
         fillComboBox(maps);
 
+        leaveLobbyButton.setOnAction((a) -> {
+            controller.leaveLobby();
+        });
 
     }
 

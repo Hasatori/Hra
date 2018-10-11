@@ -60,17 +60,24 @@ public class MultiplayerController extends ServerController {
     }
 
     public void createLobby(String lobbyName) {
-        outgoingMessageProccessor.sendMessage(protocol.send().createLobby(lobbyName));
-        new LobbyOwnerController(stage, lobbyName, playerName, incommingMessageProccessor, outgoingMessageProccessor).loadView();
+        outgoingMessageProccessor.sendMessage(protocol.send().createLobby(lobbyName, ResourceLoader.getMultiplayerMaps().get(0)));
+        GeneralProtocolIn in = protocol.get(incommingMessageProccessor.getMessage());
+        if (in.duplicateLobbyName()) {
+            DialogFactory.getAlert(Alert.AlertType.WARNING, "Creating lobby", "Lobby with this name already exists.").showAndWait();
+        } else if (in.lobbyCreated()) {
+            new LobbyOwnerController(stage, lobbyName, playerName, incommingMessageProccessor, outgoingMessageProccessor).loadView();
+        }
+
     }
 
-    public void joinLobby(String lobbyName) {
+    public void joinLobby(String selectedLobby) {
+        String lobbyName = selectedLobby.split(" | ")[0];
         outgoingMessageProccessor.sendMessage(protocol.send().joinLobby(lobbyName));
         GeneralProtocolIn in = protocol.get(incommingMessageProccessor.getMessage());
         if (in.lobbyFull()) {
-            DialogFactory.getAlert(Alert.AlertType.ERROR, "Connecting lobby", "Lobby is full.").showAndWait();
-        } else {
-            String[] parts = in.connectedToLobby();
+            DialogFactory.getAlert(Alert.AlertType.WARNING, "Connecting lobby", "Lobby is full.").showAndWait();
+        } else if (in.connectedToLobby()) {
+            String[] parts = in.getLobbyCredentials();
             new LobbySecondPlayerController(stage, parts[0], parts[1], playerName, parts[2], incommingMessageProccessor, outgoingMessageProccessor).loadView();
         }
     }

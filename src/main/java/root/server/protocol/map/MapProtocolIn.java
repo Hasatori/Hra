@@ -22,4 +22,19 @@ public class MapProtocolIn {
     public Direction getDirectionToMove() {
         return Direction.valueOf(message.replace("MOVING ", ""));
     }
+
+    public boolean restartMapRequest() {
+        return message.matches("RESTART MAP");
+    }
+
+    public boolean agreed() {
+        return message.matches("OK");
+    }
+
+    public boolean disagreed() {
+        return message.matches("NO");
+    }
+    public boolean quitMap(){
+        return message.equals("QUIT MAP");
+    }
 }

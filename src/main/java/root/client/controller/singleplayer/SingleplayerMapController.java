@@ -61,7 +61,8 @@ public class SingleplayerMapController extends Controller implements MapControll
         try {
             Direction direction = Direction.valueOf(keyCode.toString());
             map.movePlayer(direction);
-            view.reload(map.getMapParts());
+            stage.setScene(new MapView(this, map.getMapParts(), map.getName()));
+            this.mapName = map.getName();
             if (map.checkWinCondition()) {
                 LOGGER.info("Game ended.{} has won", playerName);
                 DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();

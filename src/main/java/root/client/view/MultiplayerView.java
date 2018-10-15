@@ -19,15 +19,18 @@ public class MultiplayerView extends View {
     private Button joinLobbyButton, createCustomLobbyButton, back, refreshButton;
     private ListView<String> openedLobbiesListView;
     private MultiplayerController controller;
+    private Label playerNameLabel;
 
-    public MultiplayerView(MultiplayerController controller, List<String> lobbies) throws IOException {
+    public MultiplayerView(MultiplayerController controller, List<String> lobbies, String playerName) throws IOException {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/lobbies.fxml")));
         this.controller = controller;
         joinLobbyButton = (Button) this.lookup("#joinLobbyButton");
         createCustomLobbyButton = (Button) this.lookup("#createCustomLobbyButton");
         openedLobbiesListView = (ListView) this.lookup("#openedLobbiesListView");
         refreshButton = (Button) this.lookup("#refreshButton");
+        playerNameLabel = (Label) this.lookup("#playerNameLabel");
 
+        playerNameLabel.setText(playerName);
         back = (Button) this.lookup("#back");
         back.setOnAction(a -> {
             controller.back();

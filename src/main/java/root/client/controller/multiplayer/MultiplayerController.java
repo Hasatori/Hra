@@ -37,7 +37,7 @@ public class MultiplayerController extends ServerController {
     @Override
     public void loadView() {
         try {
-            this.view = new MultiplayerView(this, loadLobbies());
+            this.view = new MultiplayerView(this, loadLobbies(),playerName);
         } catch (IOException e) {
             e.printStackTrace();
         }

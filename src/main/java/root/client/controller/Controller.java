@@ -18,7 +18,7 @@ public abstract class Controller {
             Optional<ButtonType> result =DialogFactory.getConfirmDialog("Quiting application", "Do you really want to close the application?", "").showAndWait();
             if (result.get() == ButtonType.OK) {
                 Platform.exit();
-            } else {
+                System.exit(0);
             }
         });
     }

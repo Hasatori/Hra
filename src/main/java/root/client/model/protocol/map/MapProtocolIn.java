@@ -13,7 +13,7 @@ public class MapProtocolIn {
     }
 
     public boolean youHaveLost() {
-        return message.equals("YOU HAVE LOST") ;
+        return message.equals("YOU HAVE LOST");
     }
 
     public boolean moveNexPlayer() {
@@ -21,6 +21,24 @@ public class MapProtocolIn {
     }
 
     public Direction getDirectionToMoveOtherPlayer() {
-        return Direction.valueOf(message.replace("MOVING ",""));
+        return Direction.valueOf(message.replace("MOVING ", ""));
+    }
+
+    public boolean playerHasLeft() {
+        return message.matches("PLAYER HAS LEFT");
+    }
+public boolean youHaveLeft(){
+        return message.equals("YOU HAVE LEFT THE GAME");
+}
+    public boolean restartMapRequest() {
+        return message.matches("RESTART MAP");
+    }
+
+    public boolean agreed() {
+        return message.matches("OK");
+    }
+
+    public boolean disagreed() {
+        return message.matches("NO");
     }
 }

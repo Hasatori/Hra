@@ -11,10 +11,16 @@ import java.io.InputStreamReader;
 class LevelLoader {
     private final Logger LOGGER = LoggerFactory.getLogger(LevelLoader.class);
     private int numberOfWalls, numberOfPlayers, numberOfBoxes, numberOfTargets, numberOFFloors = 0;
-    private char wallSign, floorSing, playerSign, boxSign, targetSign;
+    private char wallSign = 'x';
+    private char floorSing = '*';
+    private char playerSign = '-';
+    private char boxSign = '+';
+    private char targetSign = '/';
+    private char doorSign = '^';
     private int columns, rows;
     private MapPart[][] mapParts;
     private String levelName;
+    private String toMap;
 
     LevelLoader() {
 
@@ -25,22 +31,20 @@ class LevelLoader {
             LOGGER.info("Loading map {}", path);
             BufferedReader reader = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsInputStream(path)));
             String line;
-            wallSign = this.getSign(reader.readLine());
-            floorSing = this.getSign(reader.readLine());
-            playerSign = this.getSign(reader.readLine());
-            this.boxSign = this.getSign(reader.readLine());
-            targetSign = this.getSign(reader.readLine());
-
             String size = reader.readLine().split("=")[1];
             columns = Integer.valueOf(size.split("x")[0]);
             rows = Integer.valueOf(size.split("x")[1]);
-
             mapParts = new MapPart[rows][columns];
 
-            levelName = reader.readLine();
+            line = reader.readLine();
+            String[] parts = line.split("-");
+            if (isMultilevel(line)) {
+                toMap = parts[1];
+            }
+            levelName = parts[0];
             int rowNum = 0;
             while ((line = reader.readLine()) != null) {
-                this.createMatrixes(line, rowNum);
+                this.createMatrices(line, rowNum);
                 ++rowNum;
             }
             reader.close();
@@ -51,12 +55,15 @@ class LevelLoader {
         return mapParts;
     }
 
+    private boolean isMultilevel(String line) {
+        return line.split("-").length == 2 ? true : false;
+    }
 
     private char getSign(String value) {
         return value.split("=")[1].toCharArray()[0];
     }
 
-    private void createMatrixes(String line, int rowNum) {
+    private void createMatrices(String line, int rowNum) {
         char[] signs = line.toCharArray();
         for (int i = 0; i < signs.length; i++) {
             Position position = new Position(rowNum, i);
@@ -81,6 +88,8 @@ class LevelLoader {
                     e.printStackTrace();
                 }
                 ++numberOfTargets;
+            } else if (signs[i] == doorSign) {
+                mapParts[rowNum][i] = new Door(position, this.levelName, this.toMap);
             }
 
         }

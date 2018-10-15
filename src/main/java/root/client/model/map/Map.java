@@ -9,12 +9,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Map {
+    private final String mapPath;
+    private final int playerNumber;
+    private final String playerName;
+
     public String getName() {
         return name;
     }
 
     private final Logger LOGGER = LoggerFactory.getLogger(Map.class);
-    private final String name;
+    private String name;
 
     public synchronized List<List<MapPart>> getMapParts() {
         List<List<MapPart>> arrayListMapParts = new LinkedList<>();
@@ -29,18 +33,19 @@ public class Map {
         return Collections.unmodifiableList(arrayListMapParts);
     }
 
-    public final MapPart[][] mapParts;
+    public MapPart[][] mapParts;
     private final List<Player> players = new LinkedList<>();
     private Player player;
     private Player secondPlayer;
     private final List<Target> targets = new LinkedList<>();
 
     public Map(String name, boolean multiplayer, int playerNumber, String playerName) {
-        String mapPath;
+        this.playerNumber = playerNumber;
+        this.playerName = playerName;
         if (multiplayer) {
-            mapPath = "plans/multiplayer/";
+            this.mapPath = "plans/multiplayer/";
         } else {
-            mapPath = "plans/singleplayer/";
+            this.mapPath = "plans/singleplayer/";
         }
         this.mapParts = new LevelLoader().load(mapPath + name + ".txt");
         fillLists();
@@ -84,13 +89,6 @@ public class Map {
         System.out.println("Moving to " + direction.toString());
         player.setDirection(direction);
         this.movePart(direction, player);
-       /* System.out.println("Position by player is " + player.getPosition().toString());
-        System.out.println("Position by map is " + getPlayerPosition().toString());
-        System.out.println("Map part is" + player.getClass().getSimpleName());
-        System.out.println("By map tryMoveLeft neighbour is " + mapParts[getPlayerPosition().row][getPlayerPosition().column - 1].getClass().getSimpleName());
-        System.out.println("By map tryMoveRight neighbour is " + mapParts[getPlayerPosition().row][getPlayerPosition().column + 1].getClass().getSimpleName());
-        System.out.println("By player tryMoveLeft neighbour is " + player.getLeft().getClass().getSimpleName());
-        System.out.println("By player tryMoveRight neighbour is " + player.getRight().getClass().getSimpleName());*/
     }
 
     public synchronized void moverOtherPlayer(Direction direction) {
@@ -110,6 +108,18 @@ public class Map {
 
     private synchronized void movePart(Direction direction, MapPart mapPart) {
         MapPart neighbour = mapPart.getNeighbour(direction);
+        if (neighbour instanceof Door) {
+            Door door = (Door) neighbour;
+            this.mapParts = new LevelLoader().load(mapPath + door.getToMapName() + ".txt");
+            players.clear();
+            targets.clear();
+            fillLists();
+
+            setPlayers(playerNumber, playerName);
+            this.name = door.getToMapName();
+            loadNeighbours();
+            return;
+        }
         if (neighbour instanceof Box) {
             System.out.println("Neighbour is box");
             movePart(direction, neighbour);
@@ -146,9 +156,8 @@ public class Map {
             }
 
         }
-
-
         loadNeighbours();
+
     }
 
     private void switchPositions(MapPart firstPart, MapPart secondPart) {

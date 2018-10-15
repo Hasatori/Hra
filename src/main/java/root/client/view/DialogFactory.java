@@ -34,7 +34,7 @@ public class DialogFactory {
         dialog.setTitle(title);
         dialog.setHeaderText(headerText);
         dialog.setContentText(contextText);
-
         return dialog;
     }
+
 }

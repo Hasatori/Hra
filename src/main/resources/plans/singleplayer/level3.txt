@@ -1,11 +1,6 @@
-wall=x
-floor=*
-player=-
-box=+
-target=/
 size=10x6
-Level1
-xxxxxxxxxx
+Level3-Level2
+xxxx^xxxxx
 x******-*x
 x**+*****x
 x*+****/*x

@@ -42,6 +42,7 @@ public class LobbyMessageProcessor extends MessageProcessor {
         }
         if (in.startGame()) {
             clientConnection.getClient().getLobby().getOtherPlayer().getClientConnection().sendMessage(protocol.send().startGame());
+            clientConnection.sendMessage(protocol.send().startGame());
         }
     }
 }

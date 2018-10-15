@@ -72,6 +72,9 @@ public class LobbyOwnerController extends ServerController {
                             new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView());
                     break;
                 }
+                if (in.start()){
+                    break;
+                }
                 message = incommingMessageProccessor.getMessage();
             }
         }).start();

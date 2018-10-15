@@ -87,5 +87,6 @@ public class MapView extends View {
     public void reload(List<List<MapPart>> mapParts) {
         vBox.getChildren().remove(gridPane);
         vBox.getChildren().add(createMap(mapParts));
+        
     }
 }

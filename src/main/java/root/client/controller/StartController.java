@@ -1,13 +1,17 @@
 package root.client.controller;
 
+import java.io.IOException;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import root.client.controller.multiplayer.MultiplayerController;
 import root.client.controller.singleplayer.SingleplayerController;
 import root.client.model.connection.ServerConnection;
@@ -15,9 +19,7 @@ import root.client.model.protocol.general.GeneralProtocol;
 import root.client.view.DialogFactory;
 import root.client.view.StartView;
 
-import java.io.IOException;
-import java.util.Optional;
-
+@SuppressWarnings("restriction")
 public class StartController extends Controller {
     private final Logger LOGGER = LoggerFactory.getLogger(StartController.class);
     private final GeneralProtocol protocol;

@@ -1,12 +1,9 @@
 package root.client.model.protocol.lobby;
 
-import root.client.model.protocol.general.GeneralProtocol;
-
 public class LobbyProtocolOut {
 
- LobbyProtocolOut(){
-
-}
+	LobbyProtocolOut() {}	
+	
     public String setMap(String mapName) {
         return LobbyProtocol.messagePrefix + ":" + "SET MAP " + mapName;
     }
@@ -26,6 +23,8 @@ public class LobbyProtocolOut {
     public String destroyLobby() {
         return LobbyProtocol.messagePrefix + ":" + "DESTROY LOBBY";
     }
+    
+    public String sendLobbyMessage(String msg) {
+        return LobbyProtocol.messagePrefix + ":" + "SENT MESSAGE" + msg;
+    }
 }
-
-

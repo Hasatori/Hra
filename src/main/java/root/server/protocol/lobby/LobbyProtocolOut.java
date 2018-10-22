@@ -1,8 +1,7 @@
 package root.server.protocol.lobby;
 
 public class LobbyProtocolOut {
-    LobbyProtocolOut() {
-    }
+    LobbyProtocolOut() {}
 
     public String playerHasLeft() {
         return LobbyProtocol.messagePrefix + ":PLAYER HAS LEFT";
@@ -26,5 +25,9 @@ public class LobbyProtocolOut {
 
     public String lobbyDeleted() {
         return LobbyProtocol.messagePrefix + ":LOBBY DELETED";
+    }
+    
+    public String sendLobbyMessage(String msg) {
+    	return msg;
     }
 }

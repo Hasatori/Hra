@@ -1,8 +1,17 @@
 package root.server.clientservices;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.SocketException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import root.server.main.Server;
 import root.server.processors.GeneralMessageProcessor;
 import root.server.processors.LobbyMessageProcessor;
@@ -10,11 +19,6 @@ import root.server.processors.MapMessageProcessor;
 import root.server.processors.MessageProcessor;
 import root.server.protocol.Protocol;
 import root.server.protocol.ProtocolType;
-
-
-import java.io.*;
-import java.net.Socket;
-import java.net.SocketException;
 
 
 public class ClientConnection implements Runnable {
@@ -51,6 +55,7 @@ public class ClientConnection implements Runnable {
             this.reader = reader;
             this.writer = writer;
             String line = reader.readLine();
+            line.toString();
             getProcessor(line).processMessage(line);
             while ((line = reader.readLine()) != null) {
                 processMessage(line);

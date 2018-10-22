@@ -3,7 +3,7 @@ package root.client.model.protocol.lobby;
 import root.server.protocol.Protocol;
 
 public class LobbyProtocol  extends Protocol {
-     static String messagePrefix="LOBBY";
+    public static String messagePrefix = "LOBBY";
 
     public LobbyProtocol() {
         super(messagePrefix);

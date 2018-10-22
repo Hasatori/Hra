@@ -1,14 +1,8 @@
 package root.client.model.protocol.lobby;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.LinkedList;
-
 public class LobbyProtocolIn {
     private final String message;
+    private static final String SENT_MESSAGE = "SENT MESSAGE";
 
     LobbyProtocolIn(String message) {
         this.message = message;
@@ -21,7 +15,6 @@ public class LobbyProtocolIn {
     public boolean kicked() {
         return message.equals("YOU WERE KICKED OUT OF THE LOBBY");
     }
-
 
     public boolean setMap() {
         return message.matches("SET MAP \\w+");
@@ -45,5 +38,9 @@ public class LobbyProtocolIn {
 
     public boolean lobbyDeleted() {
         return message.equals("LOBBY DELETED");
+    }
+    
+    public boolean messageSent() {
+        return message.startsWith(SENT_MESSAGE);
     }
 }

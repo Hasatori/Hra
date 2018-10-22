@@ -1,23 +1,22 @@
 package root.client.controller.multiplayer;
 
-import javafx.scene.control.Alert;
-import javafx.stage.Stage;
+import java.io.IOException;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 import root.client.controller.StartController;
 import root.client.model.connection.InputReader;
 import root.client.model.connection.OutputWritter;
 import root.client.model.protocol.general.GeneralProtocol;
 import root.client.model.protocol.general.GeneralProtocolIn;
-import root.client.model.protocol.lobby.LobbyProtocol;
 import root.client.util.ResourceLoader;
 import root.client.view.DialogFactory;
 import root.client.view.MultiplayerView;
 import root.client.view.View;
-
-
-import java.io.IOException;
-import java.util.List;
 
 public class MultiplayerController extends ServerController {
     private final Logger LOGGER = LoggerFactory.getLogger(MultiplayerController.class);

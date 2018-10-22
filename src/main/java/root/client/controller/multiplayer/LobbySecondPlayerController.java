@@ -1,5 +1,7 @@
 package root.client.controller.multiplayer;
 
+import java.io.IOException;
+
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
@@ -11,9 +13,7 @@ import root.client.util.ResourceLoader;
 import root.client.view.DialogFactory;
 import root.client.view.LobbySecondPlayerView;
 
-
-import java.io.IOException;
-
+@SuppressWarnings("restriction")
 public class LobbySecondPlayerController extends ServerController {
     private final LobbyProtocol protocol;
     private final String secondPlayerName;
@@ -57,13 +57,16 @@ public class LobbySecondPlayerController extends ServerController {
                 if (in.kicked()) {
                     Platform.runLater(() -> {
                         new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView();
-                        DialogFactory.getAlert(Alert.AlertType.WARNING, "Lobby", "You were kicked of the lobby").showAndWait();
+                        DialogFactory.getAlert(Alert.AlertType.WARNING, "Lobby", "You were kicked out of the lobby").showAndWait();
                     });
                     break;
                 }
                 if (in.setMap()) {
                     this.mapName = in.getMap();
                     Platform.runLater(() -> view.setMap(in.getMap()));
+                }
+                if (in.messageSent()) {
+                	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.messagePrefix + ":SENT MESSAGE-OWNER", ""), true);
                 }
                 if (in.start()) {
                     Platform.runLater(() -> new MultiplayerMapController(stage, mapName, 1, playerName, secondPlayerName, this.incommingMessageProccessor, outgoingMessageProccessor).loadView());
@@ -82,5 +85,13 @@ public class LobbySecondPlayerController extends ServerController {
 
     public void leaveLobby() {
         outgoingMessageProccessor.sendMessage(protocol.send().leaveLobby());
+    }
+    
+    public void sendLobbyMessage(String msg) {
+        outgoingMessageProccessor.sendMessage(protocol.send().sendLobbyMessage("-SECPLAYER" + msg));
+    }
+    
+    public String getPlayerName() {
+    	return secondPlayerName;
     }
 }

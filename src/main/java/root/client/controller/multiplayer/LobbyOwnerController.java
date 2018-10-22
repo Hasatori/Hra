@@ -1,19 +1,19 @@
 package root.client.controller.multiplayer;
 
+import java.io.IOException;
+
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import root.client.model.connection.InputReader;
 import root.client.model.connection.OutputWritter;
-import root.client.model.map.Player;
 import root.client.model.protocol.lobby.LobbyProtocol;
 import root.client.model.protocol.lobby.LobbyProtocolIn;
 import root.client.util.ResourceLoader;
 import root.client.view.DialogFactory;
 import root.client.view.LobbyOwnerView;
 
-import java.io.IOException;
-
+@SuppressWarnings("restriction")
 public class LobbyOwnerController extends ServerController {
     private final LobbyProtocol protocol;
     private LobbyOwnerView view;
@@ -67,6 +67,9 @@ public class LobbyOwnerController extends ServerController {
                     });
                     isFull = false;
                 }
+                if (in.messageSent()) {
+                	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.messagePrefix + ":SENT MESSAGE-SECPLAYER", ""), false);
+                }
                 if (in.lobbyDeleted()) {
                     Platform.runLater(() ->
                             new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView());
@@ -100,5 +103,9 @@ public class LobbyOwnerController extends ServerController {
 
     public void deleteLobby() {
         outgoingMessageProccessor.sendMessage(protocol.send().destroyLobby());
+    }
+    
+    public void sendLobbyMessage(String msg) {
+        outgoingMessageProccessor.sendMessage(protocol.send().sendLobbyMessage("-OWNER" + msg));
     }
 }

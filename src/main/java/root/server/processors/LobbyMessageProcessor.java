@@ -1,14 +1,16 @@
 package root.server.processors;
 
+import java.io.IOException;
+
 import root.server.clientservices.Client;
 import root.server.clientservices.ClientConnection;
 import root.server.protocol.lobby.LobbyProtocol;
 import root.server.protocol.lobby.LobbyProtocolIn;
 
-import java.io.IOException;
-
 public class LobbyMessageProcessor extends MessageProcessor {
     private final LobbyProtocol protocol;
+    private static final String OWNER_SENT_MESSAGE = "LOBBY:SENT MESSAGE-OWNER";
+    private static final String SECPLAYER_SENT_MESSAGE = "LOBBY:SENT MESSAGE-SECPLAYER";
 
     public LobbyMessageProcessor(ClientConnection connection) {
         super(connection);
@@ -43,6 +45,14 @@ public class LobbyMessageProcessor extends MessageProcessor {
         if (in.startGame()) {
             clientConnection.getClient().getLobby().getOtherPlayer().getClientConnection().sendMessage(protocol.send().startGame());
             clientConnection.sendMessage(protocol.send().startGame());
+        }
+        if (in.sendLobbyMessage()) {
+        	if (message.startsWith(OWNER_SENT_MESSAGE)) {
+        		clientConnection.getClient().getLobby().getOtherPlayer().getClientConnection().sendMessage(protocol.send().sendLobbyMessage(message));
+        	}
+        	else if (message.startsWith(SECPLAYER_SENT_MESSAGE)) {
+        		clientConnection.getClient().getLobby().getOwner().getClientConnection().sendMessage(protocol.send().sendLobbyMessage(message));
+        	}
         }
     }
 }

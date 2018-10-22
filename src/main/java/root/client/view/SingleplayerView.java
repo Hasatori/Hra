@@ -1,14 +1,16 @@
 package root.client.view;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import root.client.controller.singleplayer.SingleplayerController;
-import root.client.util.ResourceLoader;
-;
-import javafx.scene.control.*;
-
 import java.io.IOException;
 import java.util.List;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import root.client.controller.singleplayer.SingleplayerController;
+import root.client.util.ResourceLoader;
 
 public class SingleplayerView extends View {
     @FXML

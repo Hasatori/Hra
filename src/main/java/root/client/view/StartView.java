@@ -1,20 +1,13 @@
 package root.client.view;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import java.io.IOException;
+
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextInputDialog;
 import root.client.controller.StartController;
 import root.client.util.ResourceLoader;
 
-
-import java.io.IOException;
-import java.util.Optional;
-
+@SuppressWarnings("restriction")
 public class StartView extends View {
     private StartController controller;
 

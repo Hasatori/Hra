@@ -89,24 +89,26 @@ public class LobbyOwnerView extends View {
     public void lobbyIsEmpty() {
         this.secondPlayerNameLabel.setText("");
         this.startGameButton.setDisable(true);
+        receiveLobbyMessage(" has left the lobby", false, false);
     }
 
     public void setSecondPlayerName(String value) {
     	secondPlayerName = value;
         this.secondPlayerNameLabel.setText(value);
         this.startGameButton.setDisable(false);
+        receiveLobbyMessage(" has joined the lobby", false, false);
     }
     
     public void sendLobbyMessage () {
     	if (!lobbyChatInput.getText().trim().isEmpty()) {
     		String msg = lobbyChatInput.getText().trim();
         	controller.sendLobbyMessage(msg);
-        	receiveLobbyMessage(msg, true);
+        	receiveLobbyMessage(msg, true, true);
         	lobbyChatInput.setText("");
         }
     }
     
-    public void receiveLobbyMessage(String msg, boolean owner) {
+    public void receiveLobbyMessage(String msg, boolean owner, boolean prefix) {
     	Text playerName = new Text();
     	if (owner) {
     		playerName.setText("\n" + ownerName);
@@ -116,7 +118,8 @@ public class LobbyOwnerView extends View {
     		playerName.setText("\n" + secondPlayerName);
     		playerName.setFill(Color.RED);
     	}
-    	Text lobbyMessage = new Text(": " + msg);
+    	String pre = prefix ? ": " : "";
+    	Text lobbyMessage = new Text(pre + msg);
     	
     	Platform.runLater(new Runnable(){
 			@Override

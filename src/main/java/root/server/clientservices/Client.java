@@ -2,17 +2,16 @@ package root.server.clientservices;
 
 public class Client {
     public final String IDENTIFIER;
-
-    public ClientConnection getClientConnection() {
-        return CLIENT_CONNETION;
-    }
-
     public final ClientConnection CLIENT_CONNETION;
     private Lobby lobby = null;
 
     public Client(String identifier, ClientConnection clientConnection) {
         IDENTIFIER = identifier;
         CLIENT_CONNETION = clientConnection;
+    }
+    
+    public ClientConnection getClientConnection() {
+        return CLIENT_CONNETION;
     }
 
     public void createLobby(String name, String mapName) {
@@ -22,7 +21,7 @@ public class Client {
             this.lobby = new Lobby(this, name, mapName);
         }
     }
-
+    
     public void deleteLobby() {
         this.lobby = null;
     }
@@ -30,6 +29,7 @@ public class Client {
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
     }
+    
     public Lobby getLobby() {
         return this.lobby;
     }

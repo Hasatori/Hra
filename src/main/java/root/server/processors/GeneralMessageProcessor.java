@@ -1,8 +1,11 @@
 package root.server.processors;
 
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import root.server.clientservices.Client;
 import root.server.clientservices.ClientConnection;
 import root.server.clientservices.ClientManager;
@@ -10,8 +13,6 @@ import root.server.clientservices.Lobby;
 import root.server.protocol.general.GeneralProtocol;
 import root.server.protocol.general.GeneralProtocolIn;
 import root.server.protocol.lobby.LobbyProtocol;
-
-import java.io.IOException;
 
 public class GeneralMessageProcessor extends MessageProcessor {
     private final GeneralProtocol protocol;
@@ -40,8 +41,9 @@ public class GeneralMessageProcessor extends MessageProcessor {
             this.clientConnection.sendMessage(protocol.send().sendLobbies(ClientManager.getInstance().getLobbies()));
         }
         if (in.wannaCreateLobby()) {
-            String lobbyName = in.getLobbyAndMapName()[0];
-            String mapName = in.getLobbyAndMapName()[1];
+        	String[] lobbyInfo = in.getLobbyAndMapName();
+            String lobbyName = lobbyInfo[0];
+            String mapName = lobbyInfo[1];
             if (ClientManager.getInstance().isLobbyNameUnique(lobbyName)) {
                 this.clientConnection.getClient().createLobby(lobbyName, mapName);
                 clientConnection.sendMessage(protocol.send().lobbyCreated());

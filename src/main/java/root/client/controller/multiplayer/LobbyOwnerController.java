@@ -68,7 +68,7 @@ public class LobbyOwnerController extends ServerController {
                     isFull = false;
                 }
                 if (in.messageSent()) {
-                	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.messagePrefix + ":SENT MESSAGE-SECPLAYER", ""), false);
+                	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.messagePrefix + ":SENT MESSAGE-SECPLAYER", ""), false, true);
                 }
                 if (in.lobbyDeleted()) {
                     Platform.runLater(() ->

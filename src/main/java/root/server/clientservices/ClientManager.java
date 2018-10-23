@@ -28,7 +28,7 @@ public class ClientManager {
         clients.forEach(client -> {
             Lobby lobby = client.getLobby();
             if (lobby != null) {
-                String lobbyInfo = lobby.getName() + " | Capacity " + lobby.getCapacity();
+                String lobbyInfo = lobby.getName() + "|" + client.IDENTIFIER + "|" + lobby.getPlayerCount();
                 if (!lobbies.contains(lobbyInfo)) {
                     lobbies.add(lobbyInfo);
                 }

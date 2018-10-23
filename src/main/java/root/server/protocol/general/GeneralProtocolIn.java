@@ -21,7 +21,7 @@ public class GeneralProtocolIn {
     }
 
     public boolean wannaCreateLobby() {
-        return message.matches("CREATE LOBBY \\w+ \\w+");
+        return message.matches("CREATE LOBBY \\w+\\|\\w+");
     }
 
     public boolean wannaJoinLobby() {
@@ -33,6 +33,7 @@ public class GeneralProtocolIn {
     }
 
     public String[] getLobbyAndMapName(){
-        return message.replace("CREATE LOBBY ", "").split(" ");
+    	String [] lobbyInfo = message.replace("CREATE LOBBY ", "").split("\\|");
+        return lobbyInfo;
     }
 }

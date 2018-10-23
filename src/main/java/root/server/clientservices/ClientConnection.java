@@ -25,17 +25,7 @@ public class ClientConnection implements Runnable {
     private final Logger LOGGER = LoggerFactory.getLogger(ClientConnection.class);
     private final MessageProcessor generalMessageProcessor, lobbyMessageProcessor, mapMessageProcessor;
 
-
     private Socket socket;
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
     private Client client;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -45,6 +35,14 @@ public class ClientConnection implements Runnable {
         this.generalMessageProcessor = new GeneralMessageProcessor(this);
         this.lobbyMessageProcessor = new LobbyMessageProcessor(this);
         this.mapMessageProcessor = new MapMessageProcessor(this);
+    }
+    
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     @Override

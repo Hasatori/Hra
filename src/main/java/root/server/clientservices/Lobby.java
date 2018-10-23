@@ -3,6 +3,18 @@ package root.server.clientservices;
 import java.io.IOException;
 
 public class Lobby {
+	private int playerCount;
+	private String mapName;
+	private String name;
+	private final Client owner;
+	private Client otherPlayer;
+	
+	public Lobby(Client owner, String name, String mapName) {
+        this.owner = owner;
+        this.name = name;
+        this.mapName = mapName;
+        this.playerCount = 1;
+    }
 
     public String getMapName() {
         return mapName;
@@ -19,10 +31,8 @@ public class Lobby {
         }
     }
 
-    private String capacity;
-
-    public String getCapacity() {
-        return this.capacity;
+    public int getPlayerCount() {
+        return this.playerCount;
     }
 
     public void start() {
@@ -35,15 +45,9 @@ public class Lobby {
         }
     }
 
-    private String mapName;
-
     public String getName() {
         return name;
     }
-
-    private String name;
-
-    private final Client owner;
 
     public Client getOwner() {
         return owner;
@@ -53,20 +57,11 @@ public class Lobby {
         return otherPlayer;
     }
 
-    private Client otherPlayer;
-
-    public Lobby(Client owner, String name, String mapName) {
-        this.owner = owner;
-        this.name = name;
-        this.mapName = mapName;
-        this.capacity = "Opened";
-    }
-
-    public void addPlayer(Client client) {
+    public synchronized void addPlayer(Client client) {
         if (this.otherPlayer == null) {
             this.otherPlayer = client;
             otherPlayer.setLobby(this);
-            this.capacity = "Full";
+            this.playerCount++;
         }
     }
 
@@ -77,9 +72,9 @@ public class Lobby {
         return false;
     }
 
-    public void kickOtherPlayer() {
+    public synchronized void kickOtherPlayer() {
         this.getOtherPlayer().deleteLobby();
         this.otherPlayer = null;
-        this.capacity = "Opened";
+        this.playerCount--;
     }
 }

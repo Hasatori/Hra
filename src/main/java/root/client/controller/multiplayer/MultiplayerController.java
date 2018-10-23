@@ -1,6 +1,7 @@
 package root.client.controller.multiplayer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import root.client.util.ResourceLoader;
 import root.client.view.DialogFactory;
 import root.client.view.MultiplayerView;
 import root.client.view.View;
+import root.server.clientservices.CreatedLobby;
 
 public class MultiplayerController extends ServerController {
     private final Logger LOGGER = LoggerFactory.getLogger(MultiplayerController.class);
@@ -44,10 +46,15 @@ public class MultiplayerController extends ServerController {
         stage.show();
     }
 
-    public List<String> loadLobbies() {
+    public List<CreatedLobby> loadLobbies() {
         outgoingMessageProccessor.sendMessage(protocol.send().getLobbies());
         List<String> result = this.protocol.get(incommingMessageProccessor.getMessage()).getLobbies();
-        return result;
+        List<CreatedLobby> lobbies = new ArrayList<CreatedLobby>();
+        for (String lobby : result) {
+        	String[] data = lobby.split("\\|");
+        	lobbies.add(new CreatedLobby(data[0], data[1] , data[2]));
+        }
+        return lobbies;
     }
 
     public void back() {
@@ -69,9 +76,8 @@ public class MultiplayerController extends ServerController {
 
     }
 
-    public void joinLobby(String selectedLobby) {
-        String lobbyName = selectedLobby.split(" | ")[0];
-        outgoingMessageProccessor.sendMessage(protocol.send().joinLobby(lobbyName));
+    public void joinLobby(String name) {
+        outgoingMessageProccessor.sendMessage(protocol.send().joinLobby(name));
         GeneralProtocolIn in = protocol.get(incommingMessageProccessor.getMessage());
         if (in.lobbyFull()) {
             DialogFactory.getAlert(Alert.AlertType.WARNING, "Connecting lobby", "Lobby is full.").showAndWait();

@@ -29,14 +29,14 @@ public class LobbyMessageProcessor extends MessageProcessor {
         if (in.leaveLobby()) {
             clientConnection.getClient().getLobby().getOwner().getClientConnection().sendMessage(protocol.send().playerHasLeft());
             clientConnection.getClient().getLobby().getOtherPlayer().getClientConnection().sendMessage(protocol.send().playerHasLeft());
-            clientConnection.getClient().getLobby().kickOtherPlayer();
+            clientConnection.getClient().getLobby().removeOtherPlayer();
         }
         if (in.destroyLobby()) {
             Client otherPlayer = clientConnection.getClient().getLobby().getOtherPlayer();
             if (otherPlayer != null) {
                 otherPlayer.getClientConnection().sendMessage(protocol.send().playerKicked());
                 otherPlayer.deleteLobby();
-                clientConnection.getClient().getLobby().kickOtherPlayer();
+                clientConnection.getClient().getLobby().removeOtherPlayer();
             }
 
             clientConnection.getClient().getLobby().getOwner().deleteLobby();

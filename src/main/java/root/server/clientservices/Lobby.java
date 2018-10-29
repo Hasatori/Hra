@@ -72,7 +72,7 @@ public class Lobby {
         return false;
     }
 
-    public synchronized void kickOtherPlayer() {
+    public synchronized void removeOtherPlayer() {
         this.getOtherPlayer().deleteLobby();
         this.otherPlayer = null;
         this.playerCount--;

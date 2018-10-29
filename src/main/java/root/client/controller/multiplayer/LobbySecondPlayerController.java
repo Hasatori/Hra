@@ -16,6 +16,7 @@ import root.client.view.LobbySecondPlayerView;
 @SuppressWarnings("restriction")
 public class LobbySecondPlayerController extends ServerController {
     private final LobbyProtocol protocol;
+    private final String ownerName;
     private final String secondPlayerName;
     private LobbySecondPlayerView view;
     private Stage stage;
@@ -24,12 +25,13 @@ public class LobbySecondPlayerController extends ServerController {
     public LobbySecondPlayerController(Stage stage, String lobbyName, String ownerName, String playerName, String selectedMap, InputReader incommingMessageProccessor, OutputWritter outgoingMessageProccessor) {
         super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
         this.stage = stage;
+        this.ownerName = ownerName;
+        this.secondPlayerName = playerName;
         try {
             this.view = new LobbySecondPlayerView(this, ResourceLoader.getMultiplayerMaps());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.secondPlayerName = ownerName;
         view.setOwnerName(ownerName);
         this.mapName = selectedMap;
         view.setMap(selectedMap);

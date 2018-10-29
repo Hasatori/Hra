@@ -19,16 +19,17 @@ public class ClientManager {
     }
 
     public synchronized void remove(Client client) {
+    	client.getLobby().removeOtherPlayer();
         clients.remove(client);
         System.out.println(this.toString());
     }
 
     public synchronized List<String> getLobbies() {
-        List<String> lobbies = new LinkedList<>();
+        List<String> lobbies = new LinkedList<String>();
         clients.forEach(client -> {
-            Lobby lobby = client.getLobby();
+        	Lobby lobby = client.getLobby();
             if (lobby != null) {
-                String lobbyInfo = lobby.getName() + "|" + client.IDENTIFIER + "|" + lobby.getPlayerCount();
+                String lobbyInfo = lobby.getName() + "|" + lobby.getOwner().IDENTIFIER + "|" + lobby.getPlayerCount();
                 if (!lobbies.contains(lobbyInfo)) {
                     lobbies.add(lobbyInfo);
                 }

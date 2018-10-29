@@ -51,8 +51,8 @@ public class LobbySecondPlayerView extends View {
         lobbyChatPane.vvalueProperty().bind(lobbyChat.heightProperty());
 
         leaveLobbyButton.setText("Leave Lobby");
-        Text playerName = new Text(this.secondPlayerName);
-        playerName.setFill(Color.BLUE);
+        Text playerName = new Text(secondPlayerName);
+        playerName.setFill(Color.RED);
         Text lobbyMessage = new Text(" has joined the lobby.");
         lobbyChat.getChildren().addAll(playerName, lobbyMessage);
         mapLabel.setText("Map");

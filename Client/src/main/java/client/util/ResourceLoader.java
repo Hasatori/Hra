@@ -32,7 +32,7 @@ public class ResourceLoader {
      * @return URL to given source
      */
     public static URL gerResourceURL(String path) {
-        return ClassLoader.getSystemResource(path);
+        return ResourceLoader.class.getClassLoader().getSystemResource(path);
     }
 
     /**
@@ -40,25 +40,24 @@ public class ResourceLoader {
      * @return Input stream of resource
      */
     public static InputStream getResourceAsInputStream(String path) {
+        System.out.println(ClassLoader.getSystemResourceAsStream(path).toString());
         return ClassLoader.getSystemResourceAsStream(path);
     }
 
     public static List<String> getSingleplayerMaps() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(getResourceAsInputStream("plans/singleplayer")));
-        String name;
-        List<String> mapNames = new LinkedList<>();
-        while ((name = reader.readLine()) != null) {
-            mapNames.add(FilenameUtils.removeExtension(name));
-        }
-        reader.close();
-        return mapNames;
+        return  getMaps("plans/singleplayer/maps.txt");
     }
 
     public static List<String> getMultiplayerMaps() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(getResourceAsInputStream("plans/multiplayer")));
+        return getMaps("plans/multiplayer/maps.txt");
+    }
+
+    private static List<String> getMaps(String path) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(getResourceAsInputStream(path)));
         String name;
         List<String> mapNames = new LinkedList<>();
         while ((name = reader.readLine()) != null) {
+            System.out.println(name);
             mapNames.add(FilenameUtils.removeExtension(name));
         }
         reader.close();

@@ -1,8 +1,8 @@
 size=6x6
-Level2-Level3
+Level2
 xxxxxx
 x*+-*x
 x****x
 x*//*x
 x****x
-xx^xxx
+xxxxxx

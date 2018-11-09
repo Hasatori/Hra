@@ -2,6 +2,10 @@ package server.protocol.general;
 
 public class GeneralProtocolIn {
 
+    private static final String THIS_IS = "THIS IS";
+    private static final String GET_LOBBIES = "GET LOBBIES";
+    private static final String CREATE_LOBBY = "CREATE LOBBY ";
+    private static final String JOIN_LOBBY = "JOIN LOBBY ";
     private final String message;
 
     GeneralProtocolIn(String message) {
@@ -9,31 +13,30 @@ public class GeneralProtocolIn {
     }
 
     public boolean newUser() {
-        return message.matches("THIS IS \\w+");
+        return message.matches( THIS_IS + "\\w+");
     }
 
     public String getNewUser() {
-        return message.replace("THIS IS ", "");
+        return message.replace(THIS_IS, "");
     }
 
     public boolean wantLobbies() {
-        return message.equals("GET LOBBIES") ? true : false;
+        return message.equals(GET_LOBBIES);
     }
 
     public boolean wannaCreateLobby() {
-        return message.matches("CREATE LOBBY \\w+\\|\\w+");
+        return message.matches(CREATE_LOBBY + "\\w+\\|\\w+");
     }
 
     public boolean wannaJoinLobby() {
-        return message.matches("JOIN LOBBY \\w+");
+        return message.matches(JOIN_LOBBY + "\\w+");
     }
 
     public String getLobbyName() {
-            return message.replace("JOIN LOBBY ", "");
+            return message.replace(JOIN_LOBBY, "");
     }
 
     public String[] getLobbyAndMapName(){
-    	String [] lobbyInfo = message.replace("CREATE LOBBY ", "").split("\\|");
-        return lobbyInfo;
+        return message.replace(CREATE_LOBBY, "").split("\\|");
     }
 }

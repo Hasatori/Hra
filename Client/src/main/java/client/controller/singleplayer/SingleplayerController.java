@@ -17,11 +17,6 @@ public class SingleplayerController extends Controller {
     }
 
     @Override
-    public void updateView() {
-
-    }
-
-    @Override
     public void loadView() {
         try {
             this.view = new SingleplayerView(this,ResourceLoader.getSingleplayerMaps());
@@ -34,6 +29,5 @@ public class SingleplayerController extends Controller {
 
     public void startGame(String mapName, String playerName) {
             new SingleplayerMapController(stage, mapName, playerName).loadView();
-
     }
 }

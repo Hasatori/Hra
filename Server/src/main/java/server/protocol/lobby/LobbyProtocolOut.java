@@ -4,27 +4,27 @@ public class LobbyProtocolOut {
     LobbyProtocolOut() {}
 
     public String playerHasLeft() {
-        return LobbyProtocol.messagePrefix + ":PLAYER HAS LEFT";
+        return LobbyProtocol.MSG_PREFIX + ":PLAYER HAS LEFT";
     }
 
     public String playerKicked() {
-        return LobbyProtocol.messagePrefix + ":YOU WERE KICKED OUT OF THE LOBBY";
+        return LobbyProtocol.MSG_PREFIX + ":YOU WERE KICKED OUT OF THE LOBBY";
     }
 
     public String setMap(String mapName) {
-        return LobbyProtocol.messagePrefix + ":SET MAP " + mapName;
+        return LobbyProtocol.MSG_PREFIX + ":SET MAP " + mapName;
     }
 
     public String startGame() {
-        return LobbyProtocol.messagePrefix + ":START";
+        return LobbyProtocol.MSG_PREFIX + ":START";
     }
 
     public String connectedSecondPlayer(String secondPlayerName) {
-        return LobbyProtocol.messagePrefix + ":CONNECTED PLAYER " + secondPlayerName;
+        return LobbyProtocol.MSG_PREFIX + ":CONNECTED PLAYER " + secondPlayerName;
     }
 
     public String lobbyDeleted() {
-        return LobbyProtocol.messagePrefix + ":LOBBY DELETED";
+        return LobbyProtocol.MSG_PREFIX + ":LOBBY DELETED";
     }
     
     public String sendLobbyMessage(String msg) {

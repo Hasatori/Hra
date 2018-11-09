@@ -5,7 +5,6 @@ import javafx.scene.control.TextInputDialog;
 
 public class DialogFactory {
 
-
     private DialogFactory(){
 
     }
@@ -32,5 +31,4 @@ public class DialogFactory {
         dialog.setContentText(contextText);
         return dialog;
     }
-
 }

@@ -21,7 +21,6 @@ public class GeneralMessageProcessor extends MessageProcessor {
     public GeneralMessageProcessor(ClientConnection connection) {
         super(connection);
         this.protocol = new GeneralProtocol();
-
     }
 
     @Override
@@ -59,10 +58,9 @@ public class GeneralMessageProcessor extends MessageProcessor {
             } else {
                 ClientManager.getInstance().addPlayerToLobby(lobbyName, clientConnection.getClient());
                 Lobby lobby = ClientManager.getInstance().getLobby(lobbyName);
-                clientConnection.sendMessage(protocol.send().connectedToLobby(lobbyName, lobby.getOwner().IDENTIFIER, lobby.getMapName()));
-                lobby.getOwner().getClientConnection().sendMessage(new LobbyProtocol().send().connectedSecondPlayer(clientConnection.getClient().IDENTIFIER));
+                clientConnection.sendMessage(protocol.send().connectedToLobby(lobbyName, lobby.getOwner().getIdentifier(), lobby.getMapName()));
+                lobby.getOwner().getClientConnection().sendMessage(new LobbyProtocol().send().connectedSecondPlayer(clientConnection.getClient().getIdentifier()));
             }
         }
-
     }
 }

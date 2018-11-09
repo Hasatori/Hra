@@ -7,37 +7,36 @@ import java.io.IOException;
 
 public abstract class MapPart {
 
-    public Position getPosition() {
-        return position;
-    }
-
-    void setPosition(Position position) {
-        this.position = position;
-    }
-
+    private MapPart left, right, top, bottom = null;
     private Position position;
 
     public MapPart(Position position) {
         this.position = position;
     }
 
-    MapPart getLeft() {
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public MapPart getLeft() {
         return left;
     }
 
-    MapPart getRight() {
+    public MapPart getRight() {
         return right;
     }
 
-    MapPart getTop() {
+    public MapPart getTop() {
         return top;
     }
 
-    MapPart getBottom() {
+    public MapPart getBottom() {
         return bottom;
     }
-
-    private MapPart left, right, top, bottom = null;
 
     public abstract Node getSource() throws IOException;
 
@@ -61,18 +60,13 @@ public abstract class MapPart {
         switch (direction) {
             case UP:
                 return this.top;
-
             case DOWN:
                 return this.bottom;
-
             case LEFT:
                 return this.left;
-
             case RIGHT:
                 return this.right;
         }
         return null;
     }
-
-
 }

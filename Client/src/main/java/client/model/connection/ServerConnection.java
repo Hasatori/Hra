@@ -20,11 +20,11 @@ public class ServerConnection {
         return incommingMessageProccessor;
     }
 
-    public OutputWritter getOutgoingMessageProccessor() {
+    public OutputWriter getOutgoingMessageProccessor() {
         return outgoingMessageProccessor;
     }
 
-    private OutputWritter outgoingMessageProccessor;
+    private OutputWriter outgoingMessageProccessor;
 
     public ServerConnection(String identifier) {
         this.identifier = identifier;
@@ -40,7 +40,7 @@ public class ServerConnection {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), ENCODING));
 
             this.incommingMessageProccessor = new InputReader(reader);
-            this.outgoingMessageProccessor = new OutputWritter(writer);
+            this.outgoingMessageProccessor = new OutputWriter(writer);
             outgoingMessageProccessor.sendMessage(new GeneralProtocol().send().greeting(this.identifier));
 
         } catch (IOException e) {

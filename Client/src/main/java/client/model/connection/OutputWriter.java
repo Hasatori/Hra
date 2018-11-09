@@ -6,12 +6,12 @@ import java.io.PrintWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OutputWritter {
+public class OutputWriter {
 
     private final PrintWriter writer;
-    private final Logger LOGGER = LoggerFactory.getLogger(OutputWritter.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(OutputWriter.class);
 
-    public OutputWritter(PrintWriter writer) {
+    public OutputWriter(PrintWriter writer) {
         this.writer = writer;
     }
 

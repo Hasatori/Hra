@@ -20,17 +20,17 @@ import client.util.ResourceLoader;
 
 @SuppressWarnings("restriction")
 public class LobbySecondPlayerView extends View {
+    private static final String CHAT_DELIM = ": ";
     private final LobbySecondPlayerController controller;
     private String ownerName;
     private String secondPlayerName;
     @FXML
-    Button leaveLobbyButton, startGameButton, lobbyChatSend;
-    ComboBox<String> multiplayerMapsComboBox;
-    Label ownerNameLabel, secondPlayerNameLabel, mapLabel;
-    TextArea lobbyChatInput;
-    ScrollPane lobbyChatPane;
-    
-    TextFlow lobbyChat;
+    private Button leaveLobbyButton, startGameButton, lobbyChatSend;
+    private ComboBox<String> multiplayerMapsComboBox;
+    private Label ownerNameLabel, secondPlayerNameLabel, mapLabel;
+    private TextArea lobbyChatInput;
+    private ScrollPane lobbyChatPane;
+    private TextFlow lobbyChat;
 
     public LobbySecondPlayerView(LobbySecondPlayerController controller, List<String> maps) throws IOException {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobby.fxml")));
@@ -57,20 +57,14 @@ public class LobbySecondPlayerView extends View {
         lobbyChat.getChildren().addAll(playerName, lobbyMessage);
         mapLabel.setText("Map");
         
-        leaveLobbyButton.setOnAction((a) -> {
-            controller.leaveLobby();
-        });
-
+        leaveLobbyButton.setOnAction((a) -> controller.leaveLobby());
         lobbyChatInput.setOnKeyPressed((k) -> {
         	if (k.getCode() == KeyCode.ENTER) {
         		k.consume();
         		sendLobbyMessage();
         	}
         });
-        
-        lobbyChatSend.setOnAction((a) -> {
-        	sendLobbyMessage();
-        });
+        lobbyChatSend.setOnAction((a) -> sendLobbyMessage());
     }
 
     private void fillComboBox(List<String> maps) {
@@ -94,7 +88,7 @@ public class LobbySecondPlayerView extends View {
         secondPlayerNameLabel.setText(name);
     }
     
-    public void sendLobbyMessage () {
+    private void sendLobbyMessage () {
     	if (!lobbyChatInput.getText().trim().isEmpty()) {
     		String msg = lobbyChatInput.getText().trim();
         	controller.sendLobbyMessage(msg);
@@ -113,7 +107,7 @@ public class LobbySecondPlayerView extends View {
     		playerName.setText("\n" + secondPlayerName);
     		playerName.setFill(Color.RED);
     	}
-    	Text lobbyMessage = new Text(": " + msg);
+    	Text lobbyMessage = new Text(CHAT_DELIM + msg);
     	
     	Platform.runLater(new Runnable(){
 			@Override

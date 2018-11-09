@@ -4,9 +4,9 @@ import javafx.scene.input.KeyCode;
 
 public interface MapController {
 
-    public void movePlayer(KeyCode keyCode);
+    void movePlayer(KeyCode keyCode);
 
-    public void quitMap();
+    void quitMap();
 
-    public void restartMap();
+    void restartMap();
 }

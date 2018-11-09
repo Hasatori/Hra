@@ -8,14 +8,6 @@ import java.io.IOException;
 
 public class Door extends MapPart {
 
-    public String getToMapName() {
-        return toMapName;
-    }
-
-    public String getFromMapName() {
-        return fromMapName;
-    }
-
     private final String toMapName, fromMapName;
 
     public Door(Position position, String fromMapName, String toMapName) {
@@ -24,8 +16,16 @@ public class Door extends MapPart {
         this.toMapName = toMapName;
     }
 
+    public String getToMapName() {
+        return toMapName;
+    }
+
+    public String getFromMapName() {
+        return fromMapName;
+    }
+
     @Override
-    public Node getSource() throws IOException {
+    public Node getSource() {
         try {
             return FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/doorVertical.fxml"));
         } catch (IOException e) {

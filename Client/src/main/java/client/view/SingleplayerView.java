@@ -25,8 +25,8 @@ public class SingleplayerView extends View {
         this.singleplayerMapsComboBox = (ComboBox<String>) this.lookup("#singleplayerMapsComboBox");
         fillComboBox(maps);
 
-        startSingleplayerButton.setOnAction((a) -> {
-            if (nameTextField.getText().equals("")||nameTextField.getText()==null){
+        startSingleplayerButton.setOnAction(a -> {
+            if (nameTextField.getText().equals("") || nameTextField.getText() == null){
                 DialogFactory.getAlert(Alert.AlertType.WARNING, "Starting game", "Name must be filled").showAndWait();
             }
             controller.startGame(singleplayerMapsComboBox.getSelectionModel().getSelectedItem(), nameTextField.getText());

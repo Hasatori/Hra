@@ -1,13 +1,9 @@
 package client.model.map;
 
-/**
- * entity for tableview
- * @author david
- *
- */
 public class CreatedLobby {
 	
 	private final static int CAPACITY = 2;
+	private final static String STATUS_DELIM = "/";
 	private String name;
 	private String owner;
 	private String status;
@@ -15,7 +11,7 @@ public class CreatedLobby {
 	public CreatedLobby(String name, String owner, String status) {
 		this.name = name;
 		this.owner = owner;
-		this.status = status + "/" + CAPACITY;
+		this.status = status + STATUS_DELIM + CAPACITY;
 	}
 
 	public String getName() {
@@ -39,6 +35,6 @@ public class CreatedLobby {
 	}
 
 	public void setStatus(String status) {
-		this.status = status + "/" + CAPACITY;
+		this.status = status + STATUS_DELIM + CAPACITY;
 	}
 }

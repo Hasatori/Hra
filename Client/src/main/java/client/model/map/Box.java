@@ -8,7 +8,6 @@ import java.io.IOException;
 
 public class Box extends MapPart {
 
-
     public Box(Position position) {
         super(position);
     }
@@ -23,5 +22,3 @@ public class Box extends MapPart {
         return null;
     }
 }
-
-

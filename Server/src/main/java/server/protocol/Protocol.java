@@ -2,6 +2,7 @@ package server.protocol;
 
 public class Protocol {
 
+    private static final String PREFIX_DELIM = ":";
     private final String prefix;
 
     public Protocol(String prefix) {
@@ -9,15 +10,15 @@ public class Protocol {
     }
 
     protected boolean isRightMessageType(String message) {
-        return message.split(":")[0].equals(this.prefix) ? true : false;
+        return message.split(PREFIX_DELIM)[0].equals(this.prefix);
     }
 
     protected String stripPrefix(String message) {
-        return message.split(":")[1];
+        return message.split(PREFIX_DELIM)[1];
     }
 
     public static ProtocolType getProtocolType(String message) {
-        String prefix = message.split(":")[0];
+        String prefix = message.split(PREFIX_DELIM)[0];
         switch (prefix) {
             case "GENERAL":
                 return ProtocolType.GENERAL;

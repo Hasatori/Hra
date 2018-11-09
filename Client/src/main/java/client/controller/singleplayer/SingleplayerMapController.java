@@ -43,17 +43,9 @@ public class SingleplayerMapController extends Controller implements MapControll
     }
 
     @Override
-    public void updateView() {
-
-    }
-
-    @Override
     public void loadView() {
         this.stage.setScene(this.view);
         this.stage.show();
-    }
-
-    public void reloadScene() {
     }
 
     @Override

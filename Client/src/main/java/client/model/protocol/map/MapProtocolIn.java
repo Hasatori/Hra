@@ -4,6 +4,13 @@ import com.sun.javafx.scene.traversal.Direction;
 
 public class MapProtocolIn {
 
+    private static final String MAP_YOU_LOST = "YOU HAVE LOST";
+    private static final String MAP_MOVING = "MOVING ";
+    private static final String MAP_PLAYER_LEFT = "PLAYER HAS LEFT";
+    private static final String MAP_YOU_LEFT = "YOU HAVE LEFT THE GAME";
+    private static final String MAP_RESTART = "RESTART MAP";
+    private static final String MAP_OK = "OK";
+    private static final String MAP_NO = "NO";
     private final String message;
 
     MapProtocolIn(String message) {
@@ -11,32 +18,32 @@ public class MapProtocolIn {
     }
 
     public boolean youHaveLost() {
-        return message.equals("YOU HAVE LOST");
+        return message.equals(MAP_YOU_LOST);
     }
 
     public boolean moveNexPlayer() {
-        return message.matches("MOVING \\w+");
+        return message.matches(MAP_MOVING + "\\w+");
     }
 
     public Direction getDirectionToMoveOtherPlayer() {
-        return Direction.valueOf(message.replace("MOVING ", ""));
+        return Direction.valueOf(message.replace(MAP_MOVING, ""));
     }
 
     public boolean playerHasLeft() {
-        return message.matches("PLAYER HAS LEFT");
+        return message.matches(MAP_PLAYER_LEFT);
     }
 public boolean youHaveLeft(){
-        return message.equals("YOU HAVE LEFT THE GAME");
+        return message.equals(MAP_YOU_LEFT);
 }
     public boolean restartMapRequest() {
-        return message.matches("RESTART MAP");
+        return message.matches(MAP_RESTART);
     }
 
     public boolean agreed() {
-        return message.matches("OK");
+        return message.matches(MAP_OK);
     }
 
     public boolean disagreed() {
-        return message.matches("NO");
+        return message.matches(MAP_NO);
     }
 }

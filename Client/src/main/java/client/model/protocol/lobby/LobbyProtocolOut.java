@@ -5,26 +5,26 @@ public class LobbyProtocolOut {
 	LobbyProtocolOut() {}	
 	
     public String setMap(String mapName) {
-        return LobbyProtocol.messagePrefix + ":" + "SET MAP " + mapName;
+        return LobbyProtocol.MSG_PREFIX + ":" + "SET MAP " + mapName;
     }
 
     public String kickOtherPlayer() {
-        return LobbyProtocol.messagePrefix + ":" + "KICK OTHER PLAYER";
+        return LobbyProtocol.MSG_PREFIX + ":" + "KICK OTHER PLAYER";
     }
 
     public String startGame() {
-        return LobbyProtocol.messagePrefix + ":" + "START GAME";
+        return LobbyProtocol.MSG_PREFIX + ":" + "START GAME";
     }
 
     public String leaveLobby() {
-        return LobbyProtocol.messagePrefix + ":" + "LEAVE LOBBY";
+        return LobbyProtocol.MSG_PREFIX + ":" + "LEAVE LOBBY";
     }
 
     public String destroyLobby() {
-        return LobbyProtocol.messagePrefix + ":" + "DESTROY LOBBY";
+        return LobbyProtocol.MSG_PREFIX + ":" + "DESTROY LOBBY";
     }
     
     public String sendLobbyMessage(String msg) {
-        return LobbyProtocol.messagePrefix + ":" + "SENT MESSAGE" + msg;
+        return LobbyProtocol.MSG_PREFIX + ":" + "SENT MESSAGE" + msg;
     }
 }

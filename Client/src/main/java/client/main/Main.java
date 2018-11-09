@@ -6,16 +6,19 @@ import javafx.stage.Stage;
 import client.controller.StartController;
 
 public class Main extends Application {
+
+    private static final int WINDOW_WIDTH = 100;
+    private static final int WINDOW_HEIGHT = 100;
+
     public static void main(String[] args) {
         Application.launch();
         Platform.exit();
-
     }
+
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setResizable(false);
-        primaryStage.setX(100);
-        primaryStage.setY(100);
+        primaryStage.setX(WINDOW_WIDTH);
+        primaryStage.setY(WINDOW_HEIGHT);
         new StartController(primaryStage).loadView();
     }
 }
-

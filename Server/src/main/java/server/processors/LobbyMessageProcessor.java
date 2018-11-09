@@ -24,7 +24,6 @@ public class LobbyMessageProcessor extends MessageProcessor {
             if (clientConnection.getClient().getLobby().isFull()) {
                 clientConnection.getClient().getLobby().getOtherPlayer().getClientConnection().sendMessage(protocol.send().setMap(in.getMapName()));
             }
-
         }
         if (in.leaveLobby()) {
             clientConnection.getClient().getLobby().getOwner().getClientConnection().sendMessage(protocol.send().playerHasLeft());
@@ -38,7 +37,6 @@ public class LobbyMessageProcessor extends MessageProcessor {
                 otherPlayer.deleteLobby();
                 clientConnection.getClient().getLobby().removeOtherPlayer();
             }
-
             clientConnection.getClient().getLobby().getOwner().deleteLobby();
             clientConnection.sendMessage(protocol.send().lobbyDeleted());
         }

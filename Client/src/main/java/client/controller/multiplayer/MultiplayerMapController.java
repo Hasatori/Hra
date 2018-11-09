@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import client.controller.MapController;
 import client.controller.StartController;
 import client.model.connection.InputReader;
-import client.model.connection.OutputWritter;
+import client.model.connection.OutputWriter;
 import client.model.map.Map;
 import client.model.protocol.map.MapProtocol;
 import client.model.protocol.map.MapProtocolIn;
@@ -29,7 +29,7 @@ public class MultiplayerMapController extends ServerController implements MapCon
     private final String mapName;
     private MapView view;
 
-    public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String secondPlayerName, InputReader incommingMessageProccessor, OutputWritter outgoingMessageProccessor) {
+    public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String secondPlayerName, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor) {
         super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
         this.secondPlayerName = secondPlayerName;
         this.map = new Map(mapName, true, playerNumber, this.playerName, this.secondPlayerName);
@@ -41,11 +41,6 @@ public class MultiplayerMapController extends ServerController implements MapCon
         this.protocol = new MapProtocol();
         this.mapName = mapName;
         this.playerNumber = playerNumber;
-    }
-
-    @Override
-    public void updateView() {
-
     }
 
     @Override

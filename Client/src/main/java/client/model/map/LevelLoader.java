@@ -11,12 +11,12 @@ import java.io.InputStreamReader;
 class LevelLoader {
     private final Logger LOGGER = LoggerFactory.getLogger(LevelLoader.class);
     private int numberOfWalls, numberOfPlayers, numberOfBoxes, numberOfTargets, numberOFFloors = 0;
-    private char wallSign = 'x';
-    private char floorSing = '*';
-    private char playerSign = '-';
-    private char boxSign = '+';
-    private char targetSign = '/';
-    private char doorSign = '^';
+    private static final char WALL_SIGN = 'x';
+    private static final char FLOOR_SIGN = '*';
+    private static final char PLAYER_SIGN = '-';
+    private static final char BOX_SIGN = '+';
+    private static final char TARGET_SIGN = '/';
+    private static final char DOOR_SIGN = '^';
     private int columns, rows;
     private MapPart[][] mapParts;
     private String levelName;
@@ -56,7 +56,7 @@ class LevelLoader {
     }
 
     private boolean isMultilevel(String line) {
-        return line.split("-").length == 2 ? true : false;
+        return line.split("-").length == 2;
     }
 
     private char getSign(String value) {
@@ -67,34 +67,31 @@ class LevelLoader {
         char[] signs = line.toCharArray();
         for (int i = 0; i < signs.length; i++) {
             Position position = new Position(rowNum, i);
-            Floor covered = new Floor(position);
-            if (signs[i] == boxSign) {
+            if (signs[i] == BOX_SIGN) {
                 ++numberOfBoxes;
                 mapParts[rowNum][i] = new Box(position);
-            } else if (signs[i] == wallSign) {
+            } else if (signs[i] == WALL_SIGN) {
                 ++numberOfWalls;
                 mapParts[rowNum][i] = new Wall(position);
 
-            } else if (signs[i] == floorSing) {
+            } else if (signs[i] == FLOOR_SIGN) {
                 ++numberOFFloors;
                 mapParts[rowNum][i] = new Floor(position);
-            } else if (signs[i] == playerSign) {
+            } else if (signs[i] == PLAYER_SIGN) {
                 ++numberOfPlayers;
                 mapParts[rowNum][i] = new Player(position);
-            } else if (signs[i] == targetSign) {
+            } else if (signs[i] == TARGET_SIGN) {
                 try {
                     mapParts[rowNum][i] = new Target(position);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 ++numberOfTargets;
-            } else if (signs[i] == doorSign) {
+            } else if (signs[i] == DOOR_SIGN) {
                 mapParts[rowNum][i] = new Door(position, this.levelName, this.toMap);
             }
-
         }
     }
-
 
     @Override
     public String toString() {

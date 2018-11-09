@@ -25,7 +25,6 @@ public class StartController extends Controller {
     private final GeneralProtocol protocol;
     private StartView view;
     private ServerConnection serverConnection;
-    private String playerName;
 
     public StartController(Stage stage) throws IOException {
         super(stage);
@@ -39,11 +38,6 @@ public class StartController extends Controller {
 
     public void loadSingleplayer() {
         new SingleplayerController(stage).loadView();
-    }
-
-    @Override
-    public void updateView() {
-
     }
 
     @Override
@@ -79,9 +73,7 @@ public class StartController extends Controller {
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Conneting", "Connection sucessfull").showAndWait();
                     }
                 }
-
             }
-
         });
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {

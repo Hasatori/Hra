@@ -12,32 +12,14 @@ public class Map {
     private final String mapPath;
     private final int playerNumber;
     private final String playerName;
-
-    public String getName() {
-        return name;
-    }
-
     private final Logger LOGGER = LoggerFactory.getLogger(Map.class);
-    private String name;
-
-    public synchronized List<List<MapPart>> getMapParts() {
-        List<List<MapPart>> arrayListMapParts = new LinkedList<>();
-
-        for (int i = 0; i < mapParts.length; i++) {
-            List<MapPart> row = new LinkedList<>();
-            for (int column = 0; column < mapParts[i].length; column++) {
-                row.add(mapParts[i][column]);
-            }
-            arrayListMapParts.add(row);
-        }
-        return Collections.unmodifiableList(arrayListMapParts);
-    }
-
-    public MapPart[][] mapParts;
+    private final List<Target> targets = new LinkedList<>();
     private final List<Player> players = new LinkedList<>();
+    private String name;
+    public MapPart[][] mapParts;
     private Player player;
     private Player secondPlayer;
-    private final List<Target> targets = new LinkedList<>();
+
 
     public Map(String name, boolean multiplayer, int playerNumber, String playerName) {
         this.playerNumber = playerNumber;
@@ -57,6 +39,23 @@ public class Map {
     public Map(String name, boolean multiplayer, int playerNumber, String playerName, String secondPlayerName) {
         this(name, multiplayer, playerNumber, playerName);
         this.secondPlayer.setName(secondPlayerName);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public synchronized List<List<MapPart>> getMapParts() {
+        List<List<MapPart>> arrayListMapParts = new LinkedList<>();
+
+        for (int i = 0; i < mapParts.length; i++) {
+            List<MapPart> row = new LinkedList<>();
+            for (int column = 0; column < mapParts[i].length; column++) {
+                row.add(mapParts[i][column]);
+            }
+            arrayListMapParts.add(row);
+        }
+        return Collections.unmodifiableList(arrayListMapParts);
     }
 
     private void fillLists() {
@@ -130,19 +129,19 @@ public class Map {
             System.out.println("Neighbour is floor");
             switch (direction) {
                 case DOWN:
-                    mapParts[mapPart.getPosition().row + 1][mapPart.getPosition().column] = mapPart;
+                    mapParts[mapPart.getPosition().getRow() + 1][mapPart.getPosition().getColumn()] = mapPart;
                     break;
                 case UP:
-                    mapParts[mapPart.getPosition().row - 1][mapPart.getPosition().column] = mapPart;
+                    mapParts[mapPart.getPosition().getRow() - 1][mapPart.getPosition().getColumn()] = mapPart;
                     break;
                 case LEFT:
-                    mapParts[mapPart.getPosition().row][mapPart.getPosition().column - 1] = mapPart;
+                    mapParts[mapPart.getPosition().getRow()][mapPart.getPosition().getColumn() - 1] = mapPart;
                     break;
                 case RIGHT:
-                    mapParts[mapPart.getPosition().row][mapPart.getPosition().column + 1] = mapPart;
+                    mapParts[mapPart.getPosition().getRow()][mapPart.getPosition().getColumn() + 1] = mapPart;
                     break;
             }
-            mapParts[mapPart.getPosition().row][mapPart.getPosition().column] = neighbour;
+            mapParts[mapPart.getPosition().getRow()][mapPart.getPosition().getColumn()] = neighbour;
             switchPositions(mapPart, neighbour);
             if (neighbour instanceof Target) {
                 ((Target) neighbour).setCovered(mapPart);
@@ -153,11 +152,12 @@ public class Map {
                     target.setUncovered();
                     break;
                 }
+                else {
+                    throw new IllegalArgumentException("Object must be of type Position");
+                }
             }
-
         }
         loadNeighbours();
-
     }
 
     private void switchPositions(MapPart firstPart, MapPart secondPart) {
@@ -168,19 +168,16 @@ public class Map {
     }
 
     private void switchParts(MapPart firstPart, MapPart secondPart) {
-        mapParts[firstPart.getPosition().row][firstPart.getPosition().column] = secondPart;
-        mapParts[secondPart.getPosition().row][secondPart.getPosition().column] = firstPart;
+        mapParts[firstPart.getPosition().getRow()][firstPart.getPosition().getColumn()] = secondPart;
+        mapParts[secondPart.getPosition().getRow()][secondPart.getPosition().getColumn()] = firstPart;
         switchPositions(firstPart, secondPart);
-
     }
 
     private void loadNeighbours() {
         for (int rowNum = 0; rowNum < mapParts.length; rowNum++) {
             for (int column = 0; column < mapParts[rowNum].length; column++) {
-
                 if (rowNum != 0) {
                     mapParts[rowNum][column].setTop(mapParts[rowNum - 1][column]);
-
                 }
                 if (rowNum != mapParts.length - 1) {
                     mapParts[rowNum][column].setBottom(mapParts[rowNum + 1][column]);
@@ -193,7 +190,5 @@ public class Map {
                 }
             }
         }
-
     }
-
 }

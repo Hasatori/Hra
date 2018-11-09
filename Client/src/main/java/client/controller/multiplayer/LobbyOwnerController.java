@@ -6,7 +6,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import client.model.connection.InputReader;
-import client.model.connection.OutputWritter;
+import client.model.connection.OutputWriter;
 import client.model.protocol.lobby.LobbyProtocol;
 import client.model.protocol.lobby.LobbyProtocolIn;
 import client.util.ResourceLoader;
@@ -20,8 +20,7 @@ public class LobbyOwnerController extends ServerController {
     private String secondPlayerName;
     private boolean isFull = false;
 
-
-    public LobbyOwnerController(Stage stage, String lobbyName, String playerName, InputReader incommingMessageProccessor, OutputWritter outgoingMessageProccessor) {
+    public LobbyOwnerController(Stage stage, String playerName, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor) {
         super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
         try {
             this.view = new LobbyOwnerView(this, ResourceLoader.getMultiplayerMaps(), playerName);
@@ -29,11 +28,6 @@ public class LobbyOwnerController extends ServerController {
             e.printStackTrace();
         }
         this.protocol = new LobbyProtocol();
-    }
-
-    @Override
-    public void updateView() {
-
     }
 
     @Override
@@ -68,7 +62,7 @@ public class LobbyOwnerController extends ServerController {
                     isFull = false;
                 }
                 if (in.messageSent()) {
-                	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.messagePrefix + ":SENT MESSAGE-SECPLAYER", ""), false, true);
+                	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.MSG_PREFIX + ":SENT MESSAGE-SECPLAYER", ""), false, true);
                 }
                 if (in.lobbyDeleted()) {
                     Platform.runLater(() ->
@@ -81,7 +75,6 @@ public class LobbyOwnerController extends ServerController {
                 message = incommingMessageProccessor.getMessage();
             }
         }).start();
-
     }
 
     private void setSecondPlayerName(String name) {

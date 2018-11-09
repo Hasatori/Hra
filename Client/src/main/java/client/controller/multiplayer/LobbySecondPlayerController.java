@@ -6,7 +6,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import client.model.connection.InputReader;
-import client.model.connection.OutputWritter;
+import client.model.connection.OutputWriter;
 import client.model.protocol.lobby.LobbyProtocol;
 import client.model.protocol.lobby.LobbyProtocolIn;
 import client.util.ResourceLoader;
@@ -16,16 +16,14 @@ import client.view.LobbySecondPlayerView;
 @SuppressWarnings("restriction")
 public class LobbySecondPlayerController extends ServerController {
     private final LobbyProtocol protocol;
-    private final String ownerName;
     private final String secondPlayerName;
     private LobbySecondPlayerView view;
     private Stage stage;
     private String mapName;
 
-    public LobbySecondPlayerController(Stage stage, String lobbyName, String ownerName, String playerName, String selectedMap, InputReader incommingMessageProccessor, OutputWritter outgoingMessageProccessor) {
+    public LobbySecondPlayerController(Stage stage, String ownerName, String playerName, String selectedMap, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor) {
         super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
         this.stage = stage;
-        this.ownerName = ownerName;
         this.secondPlayerName = playerName;
         try {
             this.view = new LobbySecondPlayerView(this, ResourceLoader.getMultiplayerMaps());
@@ -37,11 +35,6 @@ public class LobbySecondPlayerController extends ServerController {
         view.setMap(selectedMap);
         view.setPlayerName(playerName);
         this.protocol = new LobbyProtocol();
-    }
-
-    @Override
-    public void updateView() {
-
     }
 
     @Override
@@ -68,16 +61,14 @@ public class LobbySecondPlayerController extends ServerController {
                     Platform.runLater(() -> view.setMap(in.getMap()));
                 }
                 if (in.messageSent()) {
-                	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.messagePrefix + ":SENT MESSAGE-OWNER", ""), true);
+                	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.MSG_PREFIX + ":SENT MESSAGE-OWNER", ""), true);
                 }
                 if (in.start()) {
                     Platform.runLater(() -> new MultiplayerMapController(stage, mapName, 1, playerName, secondPlayerName, this.incommingMessageProccessor, outgoingMessageProccessor).loadView());
                     break;
                 }
                 if (in.playerHasLeft()) {
-                    Platform.runLater(() -> {
-                        new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView();
-                    });
+                    Platform.runLater(() -> new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView());
                     break;
                 }
                 message = incommingMessageProccessor.getMessage();

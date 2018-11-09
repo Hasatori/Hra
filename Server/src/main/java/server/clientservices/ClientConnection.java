@@ -53,7 +53,6 @@ public class ClientConnection implements Runnable {
             this.reader = reader;
             this.writer = writer;
             String line = reader.readLine();
-            line.toString();
             getProcessor(line).processMessage(line);
             while ((line = reader.readLine()) != null) {
                 processMessage(line);
@@ -69,7 +68,6 @@ public class ClientConnection implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 

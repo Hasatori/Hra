@@ -8,9 +8,14 @@ import com.google.gson.reflect.TypeToken;
 
 public class GeneralProtocolIn {
 
+    private static final String LOBBY_FULL = "LOBBY IS FULL";
+    private static final String LOBBY_CONNECTED_TO = "CONNECTED TO ";
+    private static final String LOBBY_DUPLICATE_NAME = "DUPLICATE NAME";
+    private static final String LOBBY_DUPLICATE_LOBBY = "DUPLICATE LOBBY NAME";
+    private static final String LOBBY_CREATED = "LOBBY CREATED";
     private final String message;
 
-    GeneralProtocolIn(String message) {
+    public GeneralProtocolIn(String message) {
         this.message = message;
     }
 
@@ -25,23 +30,23 @@ public class GeneralProtocolIn {
     }
 
     public boolean lobbyFull() {
-        return message.equals("LOBBY IS FULL") ? true : false;
+        return message.equals(LOBBY_FULL);
     }
 
     public boolean connectedToLobby(){
-        return message.matches("CONNECTED TO \\w+ \\w+ \\w+");
+        return message.matches(LOBBY_CONNECTED_TO + "\\w+ \\w+ \\w+");
     }
     public String[] getLobbyCredentials() {
-        return message.replace("CONNECTED TO ", "").split(" ");
+        return message.replace(LOBBY_CONNECTED_TO, "").split(" ");
     }
 
     public boolean duplicateUserName() {
-        return message.equals("DUPLICATE NAME");
+        return message.equals(LOBBY_DUPLICATE_NAME);
     }
     public boolean duplicateLobbyName() {
-        return message.equals("DUPLICATE LOBBY NAME");
+        return message.equals(LOBBY_DUPLICATE_LOBBY);
     }
     public boolean lobbyCreated() {
-        return message.equals("LOBBY CREATED");
+        return message.equals(LOBBY_CREATED);
     }
 }

@@ -5,15 +5,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ClientManager {
-    private List<Client> clients = new LinkedList<>();
-
+    private static final String LOBBY_DELIM = "|";
     private static ClientManager INSTANCE = new ClientManager();
+    private List<Client> clients = new LinkedList<>();
 
     private ClientManager() {
     }
 
     public synchronized void add(Client client) {
-        System.out.println("Client " + client.IDENTIFIER + " came");
+        System.out.println("Client " + client.getIdentifier() + " came");
         clients.add(client);
         System.out.println(this.toString());
     }
@@ -25,15 +25,14 @@ public class ClientManager {
     }
 
     public synchronized List<String> getLobbies() {
-        List<String> lobbies = new LinkedList<String>();
+        List<String> lobbies = new LinkedList<>();
         clients.forEach(client -> {
         	Lobby lobby = client.getLobby();
             if (lobby != null) {
-                String lobbyInfo = lobby.getName() + "|" + lobby.getOwner().IDENTIFIER + "|" + lobby.getPlayerCount();
+                String lobbyInfo = lobby.getName() + LOBBY_DELIM + lobby.getOwner().getIdentifier() + LOBBY_DELIM + lobby.getPlayerCount();
                 if (!lobbies.contains(lobbyInfo)) {
                     lobbies.add(lobbyInfo);
                 }
-
             }
         });
         return lobbies;
@@ -41,7 +40,7 @@ public class ClientManager {
 
     public synchronized boolean isUserNameUnique(String name) {
         for (Client client : clients) {
-            if (client.IDENTIFIER.equals(name)) {
+            if (client.getIdentifier().equals(name)) {
                 return false;
             }
         }
@@ -99,12 +98,12 @@ public class ClientManager {
         if (clients.size() > 1) {
             clients.forEach(client -> {
                 try {
-                    if (client.IDENTIFIER.equals("OLDRICH")) {
+                    if (client.getIdentifier().equals("OLDRICH")) {
 
-                        client.CLIENT_CONNETION.sendMessage(message);
+                        client.getClientConnection().sendMessage(message);
 
                     } else {
-                        client.CLIENT_CONNETION.sendMessage("ok");
+                        client.getClientConnection().sendMessage("ok");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

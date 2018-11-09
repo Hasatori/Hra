@@ -21,6 +21,4 @@ public class Floor extends MapPart {
         }
         return null;
     }
-
-
 }

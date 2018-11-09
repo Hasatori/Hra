@@ -34,24 +34,24 @@ public class MapMessageProcessor extends MessageProcessor {
         }
         if (in.restartMapRequest()) {
             if (clientConnection.getClient() == owner) {
-                otherPlayer.CLIENT_CONNETION.sendMessage(protocol.send().restartMap());
+                otherPlayer.getClientConnection().sendMessage(protocol.send().restartMap());
             } else {
-                owner.CLIENT_CONNETION.sendMessage(protocol.send().restartMap());
+                owner.getClientConnection().sendMessage(protocol.send().restartMap());
             }
         }
         if (in.agreed()) {
-            otherPlayer.CLIENT_CONNETION.sendMessage(protocol.send().agreed());
-            owner.CLIENT_CONNETION.sendMessage(protocol.send().agreed());
+            otherPlayer.getClientConnection().sendMessage(protocol.send().agreed());
+            owner.getClientConnection().sendMessage(protocol.send().agreed());
         }
         if (in.disagreed()) {
-            otherPlayer.CLIENT_CONNETION.sendMessage(protocol.send().disagreed());
-            owner.CLIENT_CONNETION.sendMessage(protocol.send().disagreed());
+            otherPlayer.getClientConnection().sendMessage(protocol.send().disagreed());
+            owner.getClientConnection().sendMessage(protocol.send().disagreed());
         }
         if (in.quitMap()) {
             if (clientConnection.getClient() == owner) {
-                otherPlayer.CLIENT_CONNETION.sendMessage(protocol.send().playerHasLeft());
+                otherPlayer.getClientConnection().sendMessage(protocol.send().playerHasLeft());
             } else {
-                owner.CLIENT_CONNETION.sendMessage(protocol.send().playerHasLeft());
+                owner.getClientConnection().sendMessage(protocol.send().playerHasLeft());
             }
             otherPlayer.deleteLobby();
             owner.deleteLobby();

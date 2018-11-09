@@ -2,7 +2,7 @@ package client.model.protocol;
 
 public class Protocol {
 
-public static String PREFIX_DELIMITER;
+    private static final String PREFIX_DELIM = ":";
     private final String prefix;
 
     public Protocol(String prefix) {
@@ -10,12 +10,10 @@ public static String PREFIX_DELIMITER;
     }
 
     protected boolean isRightMessageType(String message) {
-        return message.split(":")[0].equals(this.prefix) ? true : false;
+        return message.split(PREFIX_DELIM)[0].equals(this.prefix);
     }
 
     protected String stripPrefix(String message) {
-        return message.split(":")[1];
+        return message.split(PREFIX_DELIM)[1];
     }
-
-
 }

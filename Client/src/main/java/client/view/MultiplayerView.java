@@ -49,9 +49,7 @@ public class MultiplayerView extends View {
 
         playerNameLabel.setText(playerName);
         back = (Button) this.lookup("#back");
-        back.setOnAction(a -> {
-            controller.back();
-        });
+        back.setOnAction(a -> controller.back());
 
         joinLobbyButton.setOnAction(a -> {
             ObservableList<CreatedLobby> selectedItems = openedLobbiesTable.getSelectionModel().getSelectedItems();
@@ -67,16 +65,13 @@ public class MultiplayerView extends View {
         fillLobbies(lobbies);
         createCustomLobbyButton.setOnAction(createLobbyHandler);
 
-        refreshButton.setOnAction((a) -> {
-            fillLobbies(controller.loadLobbies());
-        });
+        refreshButton.setOnAction((a) -> fillLobbies(controller.loadLobbies()));
     }
 
     private void fillLobbies(List<CreatedLobby> lobbies) {
     	ObservableList<CreatedLobby> lobbiesList = FXCollections.observableArrayList(lobbies);
     	openedLobbiesTable.setItems(lobbiesList);
     }
-
 
     private EventHandler<ActionEvent> createLobbyHandler = event -> {
         TextInputDialog dialog = DialogFactory.getTextInputDialog("", "Creating lobby", "Fill the lobby name please");
@@ -88,8 +83,6 @@ public class MultiplayerView extends View {
             }
         });
         Optional<String> result = dialog.showAndWait();
-        result.ifPresent(name -> {
-            this.controller.createLobby(name);
-        });
+        result.ifPresent(name -> this.controller.createLobby(name));
     };
 }

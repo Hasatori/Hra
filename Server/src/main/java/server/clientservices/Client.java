@@ -1,17 +1,13 @@
 package server.clientservices;
 
 public class Client {
-    public final String IDENTIFIER;
-    public final ClientConnection CLIENT_CONNETION;
+    private final String identifier;
+    private final ClientConnection clientConnection;
     private Lobby lobby = null;
 
     public Client(String identifier, ClientConnection clientConnection) {
-        IDENTIFIER = identifier;
-        CLIENT_CONNETION = clientConnection;
-    }
-    
-    public ClientConnection getClientConnection() {
-        return CLIENT_CONNETION;
+        this.identifier = identifier;
+        this.clientConnection = clientConnection;
     }
 
     public void createLobby(String name, String mapName) {
@@ -32,5 +28,13 @@ public class Client {
     
     public Lobby getLobby() {
         return this.lobby;
+    }
+
+    public ClientConnection getClientConnection() {
+        return clientConnection;
+    }
+
+    public String getIdentifier() {
+        return this.identifier;
     }
 }

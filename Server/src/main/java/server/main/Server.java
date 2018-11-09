@@ -15,17 +15,14 @@ public class Server {
             ServerSocket serverSocket = new ServerSocket(8002);
 
             while (true) {
-
                 System.out.println("Waiting for socket...");
                 final Socket socket;
                 socket = serverSocket.accept();
                 new Thread(new ClientConnection(socket)).start();
-
             }
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(0);
         }
     }
-
 }

@@ -7,19 +7,18 @@ public class GeneralProtocolOut {
     }
 
     public String greeting(String identifier) {
-        return GeneralProtocol.messagePrefix + ":" + "THIS IS " + identifier;
+        return GeneralProtocol.MSG_PREFIX + ":" + "THIS IS " + identifier;
     }
 
     public String createLobby(String lobbyName, String mapName) {
-        return GeneralProtocol.messagePrefix + ":" + "CREATE LOBBY " + lobbyName + "|" + mapName;
+        return GeneralProtocol.MSG_PREFIX + ":" + "CREATE LOBBY " + lobbyName + "|" + mapName;
     }
 
     public String getLobbies() {
-        return GeneralProtocol.messagePrefix + ":" + "GET LOBBIES";
+        return GeneralProtocol.MSG_PREFIX + ":" + "GET LOBBIES";
     }
 
     public String joinLobby(String lobbyName) {
-        return GeneralProtocol.messagePrefix + ":" + "JOIN LOBBY " + lobbyName;
+        return GeneralProtocol.MSG_PREFIX + ":" + "JOIN LOBBY " + lobbyName;
     }
-
 }

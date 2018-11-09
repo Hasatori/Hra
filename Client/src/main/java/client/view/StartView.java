@@ -16,12 +16,7 @@ public class StartView extends View {
         Button singlePlayer = (Button) this.lookup("#singleplayerButton");
         Button multiplayerButton = (Button) this.lookup("#multiplayerButton");
         this.controller = startController;
-        multiplayerButton.setOnAction((a)->{
-            startController.loadMultiplayer();
-        });
-        singlePlayer.setOnAction((a) -> {
-            startController.loadSingleplayer();
-        });
+        multiplayerButton.setOnAction(a -> startController.loadMultiplayer());
+        singlePlayer.setOnAction(a -> startController.loadSingleplayer());
     }
-
 }

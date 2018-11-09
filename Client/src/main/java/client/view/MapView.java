@@ -18,7 +18,6 @@ import java.util.List;
 
 public class MapView extends View {
     private MapController mapController;
-    private MultiplayerController multiplayerController;
     private GridPane gridPane;
     private static Pane pane;
     private List<List<MapPart>> mapParts;
@@ -34,20 +33,17 @@ public class MapView extends View {
         this.vBox = new VBox();
         vBox.getChildren().add(getMenu());
 
-        Label heading = (Label) FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/mapHeading.fxml"));
+        Label heading = FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/mapHeading.fxml"));
         heading.setText(mapName);
         vBox.getChildren().add(heading);
         vBox.getChildren().add(createMap(this.mapParts));
         pane.getChildren().add(vBox);
-
     }
-
 
     private GridPane createMap(List<List<MapPart>> mapParts) {
         gridPane = new GridPane();
         for (int row = 0; row < mapParts.size(); row++) {
             for (int column = 0; column < mapParts.get(row).size(); column++) {
-
                 try {
                     MapPart part = mapParts.get(row).get(column);
                     Node node = part.getSource();
@@ -71,22 +67,16 @@ public class MapView extends View {
         MenuBar menuBar = new MenuBar();
         Menu general = new Menu("General");
         MenuItem quit = new MenuItem("Quit");
-        quit.setOnAction(a -> {
-            mapController.quitMap();
-        });
+        quit.setOnAction(a -> mapController.quitMap());
         MenuItem restart = new MenuItem("Restart");
-        restart.setOnAction(a -> {
-            mapController.restartMap();
-        });
+        restart.setOnAction(a -> mapController.restartMap());
         general.getItems().addAll(quit, restart);
         menuBar.getMenus().addAll(general);
         return menuBar;
     }
 
-
     public void reload(List<List<MapPart>> mapParts) {
         vBox.getChildren().remove(gridPane);
         vBox.getChildren().add(createMap(mapParts));
-        
     }
 }

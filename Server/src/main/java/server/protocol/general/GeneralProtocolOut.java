@@ -1,6 +1,5 @@
 package server.protocol.general;
 
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -15,32 +14,32 @@ public class GeneralProtocolOut {
     }
 
     public String loginOk() {
-        return GeneralProtocol.messagePrefix + ":" + "CONNECTED";
+        return GeneralProtocol.MSG_PREFIX + ":" + "CONNECTED";
     }
 
     public String sendLobbies(List<String> lobbies) {
         Type type = new TypeToken<LinkedList<String>>() {
         }.getType();
-        return GeneralProtocol.messagePrefix + ":" + new Gson().toJson(lobbies, type);
+        return GeneralProtocol.MSG_PREFIX + ":" + new Gson().toJson(lobbies, type);
     }
 
     public String duplicateUserName() {
-        return GeneralProtocol.messagePrefix + ":DUPLICATE NAME";
+        return GeneralProtocol.MSG_PREFIX + ":DUPLICATE NAME";
     }
 
     public String lobbyIsFull() {
-        return GeneralProtocol.messagePrefix + ":LOBBY IS FULL";
+        return GeneralProtocol.MSG_PREFIX + ":LOBBY IS FULL";
     }
 
     public String duplicateLobbyName() {
-        return GeneralProtocol.messagePrefix + ":DUPLICATE LOBBY NAME";
+        return GeneralProtocol.MSG_PREFIX + ":DUPLICATE LOBBY NAME";
     }
 
     public String lobbyCreated() {
-        return GeneralProtocol.messagePrefix + ":LOBBY CREATED";
+        return GeneralProtocol.MSG_PREFIX + ":LOBBY CREATED";
     }
 
     public String connectedToLobby(String lobbyName, String ownerName, String mapName) {
-        return String.format("%s:CONNECTED TO %s %s %s", GeneralProtocol.messagePrefix, lobbyName, ownerName, mapName);
+        return String.format("%s:CONNECTED TO %s %s %s", GeneralProtocol.MSG_PREFIX, lobbyName, ownerName, mapName);
     }
 }

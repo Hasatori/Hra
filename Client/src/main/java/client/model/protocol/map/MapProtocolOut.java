@@ -9,23 +9,22 @@ public class MapProtocolOut {
     }
 
     public String moving(Direction direction) {
-        return MapProtocol.messagePrefix + ":MOVING " + direction;
+        return MapProtocol.MSG_PREFIX + ":MOVING " + direction;
     }
     public String won() {
-        return MapProtocol.messagePrefix + ":WON";
+        return MapProtocol.MSG_PREFIX + ":WON";
     }
     public String quitMap(){
-        return MapProtocol.messagePrefix+":QUIT MAP";
+        return MapProtocol.MSG_PREFIX + ":QUIT MAP";
     }
     public String restartMap(){
-        return MapProtocol.messagePrefix+":RESTART MAP";
+        return MapProtocol.MSG_PREFIX + ":RESTART MAP";
     }
 
     public String agreed(){
-        return MapProtocol.messagePrefix+":OK";
+        return MapProtocol.MSG_PREFIX + ":OK";
     }
     public String disagreed(){
-        return MapProtocol.messagePrefix+":NO";
+        return MapProtocol.MSG_PREFIX + ":NO";
     }
-
 }

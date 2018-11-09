@@ -23,7 +23,5 @@ public abstract class Controller {
         });
     }
 
-    public abstract void updateView();
-
     public abstract void loadView();
 }

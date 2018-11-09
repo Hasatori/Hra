@@ -1,8 +1,8 @@
 package client.model.map;
 
 public class Position {
-    public final int column;
-    public final int row;
+    private final int column;
+    private final int row;
 
     public Position(int row, int column) {
         this.column = column;
@@ -18,11 +18,16 @@ public class Position {
     public boolean equals(Object o) {
         if (o instanceof Position) {
             Position position = (Position) o;
-            if (this.column == position.column && this.row == position.row) {
-                return true;
-            }
-            return false;
+            return column == position.getColumn() && row == position.getRow();
         }
-        throw new IllegalArgumentException("Object must be of type Position");
+        return false;
+    }
+
+    public int getColumn(){
+        return column;
+    }
+
+    public int getRow(){
+        return row;
     }
 }

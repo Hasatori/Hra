@@ -36,7 +36,7 @@ public class ClientConnection implements Runnable {
         this.lobbyMessageProcessor = new LobbyMessageProcessor(this);
         this.mapMessageProcessor = new MapMessageProcessor(this);
     }
-    
+
     public void setClient(Client client) {
         this.client = client;
     }
@@ -53,7 +53,7 @@ public class ClientConnection implements Runnable {
             this.reader = reader;
             this.writer = writer;
             String line = reader.readLine();
-            getProcessor(line).processMessage(line);
+            processMessage(line);
             while ((line = reader.readLine()) != null) {
                 processMessage(line);
             }

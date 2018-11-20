@@ -152,9 +152,7 @@ public class Map {
                     target.setUncovered();
                     break;
                 }
-                else {
-                    throw new IllegalArgumentException("Object must be of type Position");
-                }
+
             }
         }
         loadNeighbours();

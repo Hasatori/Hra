@@ -5,7 +5,7 @@ public class LobbyProtocolIn {
     private static final String SENT_MESSAGE = "SENT MESSAGE";
     private static final String LOBBY_PLAYER_LEFT = "PLAYER HAS LEFT";
     private static final String LOBBY_KICKED = "YOU WERE KICKED OUT OF THE LOBBY";
-    private static final String LOBBY_SET_MAP = "SET MAP";
+    private static final String LOBBY_SET_MAP = "SET MAP ";
     private static final String LOBBY_START = "START";
     private static final String LOBBY_PLAYER_CONNECTED = "CONNECTED PLAYER ";
     private static final String LOBBY_DELETED = "LOBBY DELETED";

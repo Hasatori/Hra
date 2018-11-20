@@ -2,7 +2,7 @@ package server.protocol.general;
 
 public class GeneralProtocolIn {
 
-    private static final String THIS_IS = "THIS IS";
+    private static final String THIS_IS = "THIS IS ";
     private static final String GET_LOBBIES = "GET LOBBIES";
     private static final String CREATE_LOBBY = "CREATE LOBBY ";
     private static final String JOIN_LOBBY = "JOIN LOBBY ";
@@ -13,7 +13,7 @@ public class GeneralProtocolIn {
     }
 
     public boolean newUser() {
-        return message.matches( THIS_IS + "\\w+");
+        return message.matches( THIS_IS + "\\w*");
     }
 
     public String getNewUser() {

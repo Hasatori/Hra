@@ -10,6 +10,7 @@ import java.net.Socket;
 
 public class ServerConnection {
     private static final String ENCODING = "UTF-8";
+    private final int PORT;
     private final Logger LOGGER = LoggerFactory.getLogger(ServerConnection.class);
     private final String identifier;
     private Socket socket;
@@ -26,8 +27,9 @@ public class ServerConnection {
 
     private OutputWriter outgoingMessageProccessor;
 
-    public ServerConnection(String identifier) {
+    public ServerConnection(String identifier, int port) {
         this.identifier = identifier;
+        PORT = port;
         connect();
 
     }
@@ -35,7 +37,7 @@ public class ServerConnection {
     private void connect() {
         try {
             final InetAddress address = InetAddress.getLocalHost();
-            socket = new Socket(address, 8002);
+            socket = new Socket(address, PORT);
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), ENCODING), true);// Without autoFlush method flush has to be called after every write(printl)
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), ENCODING));
 
@@ -56,11 +58,7 @@ public class ServerConnection {
     }
 
     public void disconnect() {
-        try {
-            this.socket.close();
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
+          this.socket=null;
     }
 
 }

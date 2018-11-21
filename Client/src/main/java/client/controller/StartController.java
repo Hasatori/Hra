@@ -59,7 +59,7 @@ public class StartController extends Controller {
                 DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "Name must be filled").showAndWait();
             } else {
                 String filledName = dialog.getEditor().getText();
-                this.serverConnection = new ServerConnection(filledName);
+                this.serverConnection = new ServerConnection(filledName,8002);
                 if (!this.serverConnection.isConnected()) {
                     ae.consume(); //not valid
                     this.serverDisconnected();

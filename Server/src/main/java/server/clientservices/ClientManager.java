@@ -1,5 +1,7 @@
 package server.clientservices;
 
+import controller.MainController;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,15 +9,30 @@ import java.util.List;
 public class ClientManager {
     private static final String LOBBY_DELIM = "|";
     private static ClientManager INSTANCE = new ClientManager();
+
+    public MainController getController() {
+        return controller;
+    }
+
+    private MainController controller;
+
+    public List<Client> getClients() {
+        return clients;
+    }
+
     private List<Client> clients = new LinkedList<>();
 
     private ClientManager() {
     }
 
+    public void setController(MainController controller){
+        this.controller=controller;
+    }
     public synchronized void add(Client client) {
         System.out.println("Client " + client.getIdentifier() + " came");
         clients.add(client);
         System.out.println(this.toString());
+        controller.updateClients();
     }
 
     public synchronized void remove(Client client) {
@@ -23,7 +40,6 @@ public class ClientManager {
         clients.remove(client);
         System.out.println(this.toString());
     }
-
     public synchronized List<String> getLobbies() {
         List<String> lobbies = new LinkedList<>();
         clients.forEach(client -> {

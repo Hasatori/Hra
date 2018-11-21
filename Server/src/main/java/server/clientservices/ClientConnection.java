@@ -9,10 +9,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
+import controller.MainController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import server.main.Server;
+import server.Server;
 import server.processors.GeneralMessageProcessor;
 import server.processors.LobbyMessageProcessor;
 import server.processors.MapMessageProcessor;
@@ -73,6 +74,11 @@ public class ClientConnection implements Runnable {
 
     private void processMessage(String message) throws SocketException {
         LOGGER.info("Incoming message {}", message);
+        String prefix="";
+        if(client!=null){
+           prefix=client.getIdentifier()+" | ";
+        }
+        ClientManager.getInstance().getController().updateMessages(prefix+" Incoming message - "+message);
         try {
             getProcessor(message).processMessage(message);
         } catch (IOException e) {
@@ -82,6 +88,12 @@ public class ClientConnection implements Runnable {
 
     public void sendMessage(String message) throws IOException {
         LOGGER.info("Outgoing message {}", message);
+        String prefix="";
+        if(client!=null){
+            prefix=client.getIdentifier()+" | ";
+        }
+
+        ClientManager.getInstance().getController().updateMessages(prefix+" Outgoing message - "+message);
         writer.println(message);
     }
 

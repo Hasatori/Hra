@@ -110,11 +110,6 @@ public class LobbyOwnerView extends View {
     	String pre = prefix ? CHAT_DELIM : "";
     	Text lobbyMessage = new Text(pre + msg);
     	
-    	Platform.runLater(new Runnable(){
-			@Override
-			public void run() {
-				lobbyChat.getChildren().addAll(playerName, lobbyMessage);
-			}
-    	});
+    	Platform.runLater(() -> lobbyChat.getChildren().addAll(playerName, lobbyMessage));
     }
 }

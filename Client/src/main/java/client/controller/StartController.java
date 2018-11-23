@@ -57,6 +57,9 @@ public class StartController extends Controller {
             if (dialog.getEditor().getText().equals("")) {
                 ae.consume(); //not valid
                 DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "Name must be filled").showAndWait();
+            }else if (dialog.getEditor().getText().contains("|")){
+                ae.consume(); //not valid
+                DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "Name cannot contain |").showAndWait();
             } else {
                 String filledName = dialog.getEditor().getText();
                 this.serverConnection = new ServerConnection(filledName,8002);

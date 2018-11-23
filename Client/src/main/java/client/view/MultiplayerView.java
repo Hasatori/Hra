@@ -80,6 +80,9 @@ public class MultiplayerView extends View {
             if (dialog.getEditor().getText().equals("")) {
                 ae.consume(); //not valid
                 DialogFactory.getAlert(Alert.AlertType.WARNING, "Creating lobby", "Name must be filled");
+            }else if (dialog.getEditor().getText().contains("|")){
+                ae.consume(); //not valid
+                DialogFactory.getAlert(Alert.AlertType.WARNING, "Creating lobby", "Name cannot contain |").showAndWait();
             }
         });
         Optional<String> result = dialog.showAndWait();

@@ -35,12 +35,10 @@ public class GeneralMessageProcessor extends MessageProcessor {
                 ClientManager.getInstance().add(client);
                 clientConnection.sendMessage(protocol.send().loginOk());
             }
-        }else
-        if (in.wantLobbies()) {
+        } else if (in.wantLobbies()) {
             this.clientConnection.sendMessage(protocol.send().sendLobbies(ClientManager.getInstance().getLobbies()));
-        }else
-        if (in.wannaCreateLobby()) {
-        	String[] lobbyInfo = in.getLobbyAndMapName();
+        } else if (in.wannaCreateLobby()) {
+            String[] lobbyInfo = in.getLobbyAndMapName();
             String lobbyName = lobbyInfo[0];
             String mapName = lobbyInfo[1];
             if (ClientManager.getInstance().isLobbyNameUnique(lobbyName)) {
@@ -49,8 +47,7 @@ public class GeneralMessageProcessor extends MessageProcessor {
             } else {
                 clientConnection.sendMessage(protocol.send().duplicateLobbyName());
             }
-        }else
-        if (in.wannaJoinLobby()) {
+        } else if (in.wannaJoinLobby()) {
             String lobbyName = in.getLobbyName();
             LOGGER.debug("Lobby name:{}", lobbyName);
             if (ClientManager.getInstance().isLobbyFull(lobbyName)) {
@@ -61,8 +58,8 @@ public class GeneralMessageProcessor extends MessageProcessor {
                 clientConnection.sendMessage(protocol.send().connectedToLobby(lobbyName, lobby.getOwner().getIdentifier(), lobby.getMapName()));
                 lobby.getOwner().getClientConnection().sendMessage(new LobbyProtocol().send().connectedSecondPlayer(clientConnection.getClient().getIdentifier()));
             }
-        }else{
-
+        } else {
+            throw new IllegalStateException("Unsupported command");
         }
     }
 }

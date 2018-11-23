@@ -40,6 +40,6 @@ public class GeneralProtocolOut {
     }
 
     public String connectedToLobby(String lobbyName, String ownerName, String mapName) {
-        return String.format("%s:CONNECTED TO %s %s %s", GeneralProtocol.MSG_PREFIX, lobbyName, ownerName, mapName);
+        return String.format("%s:CONNECTED TO %s|%s|%s", GeneralProtocol.MSG_PREFIX, lobbyName, ownerName, mapName);
     }
 }

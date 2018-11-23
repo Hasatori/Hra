@@ -13,7 +13,7 @@ public class GeneralProtocolIn {
     }
 
     public boolean newUser() {
-        return message.matches( THIS_IS + "\\w*");
+        return message.matches( THIS_IS + ".+");
     }
 
     public String getNewUser() {
@@ -25,7 +25,7 @@ public class GeneralProtocolIn {
     }
 
     public boolean wannaCreateLobby() {
-        return message.matches(CREATE_LOBBY + "\\w+\\|\\w+");
+        return message.matches(CREATE_LOBBY + ".*\\|.*");
     }
 
     public boolean wannaJoinLobby() {

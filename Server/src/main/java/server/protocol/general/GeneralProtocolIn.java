@@ -29,7 +29,7 @@ public class GeneralProtocolIn {
     }
 
     public boolean wannaJoinLobby() {
-        return message.matches(JOIN_LOBBY + "\\w+");
+        return message.matches(JOIN_LOBBY + ".*");
     }
 
     public String getLobbyName() {

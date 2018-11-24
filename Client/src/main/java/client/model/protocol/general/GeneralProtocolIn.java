@@ -34,7 +34,7 @@ public class GeneralProtocolIn {
     }
 
     public boolean connectedToLobby(){
-        return message.matches(LOBBY_CONNECTED_TO + "\\w+|\\w+|\\w+");
+        return message.matches(LOBBY_CONNECTED_TO + ".*|.*|.*");
     }
     public String[] getLobbyCredentials() {
         return message.replace(LOBBY_CONNECTED_TO, "").split("\\|");

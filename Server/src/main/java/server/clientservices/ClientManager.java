@@ -25,9 +25,10 @@ public class ClientManager {
     private ClientManager() {
     }
 
-    public void setController(MainController controller){
-        this.controller=controller;
+    public void setController(MainController controller) {
+        this.controller = controller;
     }
+
     public synchronized void add(Client client) {
         System.out.println("Client " + client.getIdentifier() + " came");
         clients.add(client);
@@ -36,14 +37,18 @@ public class ClientManager {
     }
 
     public synchronized void remove(Client client) {
-    	client.getLobby().removeOtherPlayer();
+        Lobby lobby = client.getLobby();
+        if (lobby != null && lobby.isFull()) {
+            lobby.removeOtherPlayer();
+        }
         clients.remove(client);
         System.out.println(this.toString());
     }
+
     public synchronized List<String> getLobbies() {
         List<String> lobbies = new LinkedList<>();
         clients.forEach(client -> {
-        	Lobby lobby = client.getLobby();
+            Lobby lobby = client.getLobby();
             if (lobby != null) {
                 String lobbyInfo = lobby.getName() + LOBBY_DELIM + lobby.getOwner().getIdentifier() + LOBBY_DELIM + lobby.getPlayerCount();
                 if (!lobbies.contains(lobbyInfo)) {

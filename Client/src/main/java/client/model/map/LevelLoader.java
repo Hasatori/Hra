@@ -87,8 +87,6 @@ class LevelLoader {
                     e.printStackTrace();
                 }
                 ++numberOfTargets;
-            } else if (signs[i] == DOOR_SIGN) {
-                mapParts[rowNum][i] = new Door(position, this.levelName, this.toMap);
             }
         }
     }

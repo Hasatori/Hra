@@ -16,7 +16,7 @@ import client.view.LobbySecondPlayerView;
 @SuppressWarnings("restriction")
 public class LobbySecondPlayerController extends ServerController {
     private final LobbyProtocol protocol;
-    private final String secondPlayerName;
+    private final String ownerName;
     private LobbySecondPlayerView view;
     private Stage stage;
     private String mapName;
@@ -24,7 +24,7 @@ public class LobbySecondPlayerController extends ServerController {
     public LobbySecondPlayerController(Stage stage, String ownerName, String playerName, String selectedMap, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor) {
         super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
         this.stage = stage;
-        this.secondPlayerName = playerName;
+        this.ownerName=ownerName;
         try {
             this.view = new LobbySecondPlayerView(this, ResourceLoader.getMultiplayerMaps());
         } catch (IOException e) {
@@ -64,7 +64,7 @@ public class LobbySecondPlayerController extends ServerController {
                 	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.MSG_PREFIX + ":SENT MESSAGE-OWNER", ""), true);
                 }
                 if (in.start()) {
-                    Platform.runLater(() -> new MultiplayerMapController(stage, mapName, 1, playerName, secondPlayerName, this.incommingMessageProccessor, outgoingMessageProccessor).loadView());
+                    Platform.runLater(() -> new MultiplayerMapController(stage, mapName, 1, playerName, ownerName,0, this.incommingMessageProccessor, outgoingMessageProccessor,false).loadView());
                     break;
                 }
                 if (in.playerHasLeft()) {
@@ -85,6 +85,6 @@ public class LobbySecondPlayerController extends ServerController {
     }
     
     public String getPlayerName() {
-    	return secondPlayerName;
+    	return playerName;
     }
 }

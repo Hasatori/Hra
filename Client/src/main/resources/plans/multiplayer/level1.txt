@@ -1,8 +1,8 @@
-size=10x6
+size=20x6
 Level1
-xxxxxxxxxx
-x********x
-x**//++-*x
-x*+******x
-x******-*x
-xxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxx
+x********xx********x
+x**//++**xx**//++**x
+x*+******xx*+******x
+x******-*xx******-*x
+xxxxxxxxxxxxxxxxxxxx

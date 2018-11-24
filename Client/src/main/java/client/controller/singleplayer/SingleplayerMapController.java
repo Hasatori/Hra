@@ -34,7 +34,7 @@ public class SingleplayerMapController extends Controller implements MapControll
     }
 
     private void createMap() {
-        this.map = new Map(mapName, false, 0, playerName);
+        this.map = MapFactory.getInstance().getMap(mapName,playerName);
         try {
             this.view = new MapView(this, this.map.getMapParts(), this.map.getName());
         } catch (IOException e) {
@@ -52,7 +52,7 @@ public class SingleplayerMapController extends Controller implements MapControll
     public void movePlayer(KeyCode keyCode) {
         try {
             Direction direction = Direction.valueOf(keyCode.toString());
-            map.movePlayer(direction);
+            map.movePlayer(direction,playerName);
             stage.setScene(new MapView(this, map.getMapParts(), map.getName()));
             this.mapName = map.getName();
             if (map.checkWinCondition()) {

@@ -61,11 +61,20 @@ public class ClientConnection implements Runnable {
             socket.close();
             ClientManager.getInstance().remove(client);
         } catch (IOException e) {
+
             e.printStackTrace();
         } finally {
             try {
                 socket.close();
-                ClientManager.getInstance().remove(client);
+                String prefix = "";
+                if (client != null) {
+                    prefix = client.getIdentifier() + " | ";
+                    ClientManager.getInstance().getController().updateMessages(prefix + " has left");
+                    ClientManager.getInstance().remove(client);
+                    ClientManager.getInstance().getController().updateClients();
+                } else {
+                    ClientManager.getInstance().getController().updateMessages("Connection lost");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -74,11 +83,11 @@ public class ClientConnection implements Runnable {
 
     private void processMessage(String message) throws SocketException {
         LOGGER.info("Incoming message {}", message);
-        String prefix="";
-        if(client!=null){
-           prefix=client.getIdentifier()+" | ";
+        String prefix = "";
+        if (client != null) {
+            prefix = client.getIdentifier() + " | ";
         }
-        ClientManager.getInstance().getController().updateMessages(prefix+" Incoming message - "+message);
+        ClientManager.getInstance().getController().updateMessages(prefix + " Incoming message - " + message);
         try {
             getProcessor(message).processMessage(message);
         } catch (IOException e) {
@@ -88,12 +97,12 @@ public class ClientConnection implements Runnable {
 
     public void sendMessage(String message) throws IOException {
         LOGGER.info("Outgoing message {}", message);
-        String prefix="";
-        if(client!=null){
-            prefix=client.getIdentifier()+" | ";
+        String prefix = "";
+        if (client != null) {
+            prefix = client.getIdentifier() + " | ";
         }
 
-        ClientManager.getInstance().getController().updateMessages(prefix+" Outgoing message - "+message);
+        ClientManager.getInstance().getController().updateMessages(prefix + " Outgoing message - " + message);
         writer.println(message);
     }
 

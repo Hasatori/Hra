@@ -1,5 +1,7 @@
 package client.controller.multiplayer;
 
+import client.model.map.Map;
+import client.model.map.MapFactory;
 import com.sun.javafx.scene.traversal.Direction;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -10,7 +12,6 @@ import client.controller.MapController;
 import client.controller.StartController;
 import client.model.connection.InputReader;
 import client.model.connection.OutputWriter;
-import client.model.map.Map;
 import client.model.protocol.map.MapProtocol;
 import client.model.protocol.map.MapProtocolIn;
 import client.view.DialogFactory;
@@ -24,15 +25,17 @@ public class MultiplayerMapController extends ServerController implements MapCon
 
     private Map map;
     private final MapProtocol protocol;
-    private final String secondPlayerName;
-    private final int playerNumber;
+    private final String remotePlayerName;
+    private final int playerNumber, remotePlayerNumber;
     private final String mapName;
     private MapView view;
+    private boolean isOwner;
 
-    public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String secondPlayerName, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor) {
+    public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String remotePlayerName, int remotePlayerNumber, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor,boolean isOwner) {
         super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
-        this.secondPlayerName = secondPlayerName;
-        this.map = new Map(mapName, true, playerNumber, this.playerName, this.secondPlayerName);
+        this.remotePlayerName = remotePlayerName;
+        this.map = MapFactory.getInstance().getMap(mapName, playerNumber, remotePlayerNumber, playerName, remotePlayerName);
+        this.isOwner=isOwner;
         try {
             this.view = new MapView(this, map.getMapParts(), mapName);
         } catch (IOException e) {
@@ -41,6 +44,7 @@ public class MultiplayerMapController extends ServerController implements MapCon
         this.protocol = new MapProtocol();
         this.mapName = mapName;
         this.playerNumber = playerNumber;
+        this.remotePlayerNumber = remotePlayerNumber;
     }
 
     @Override
@@ -56,16 +60,20 @@ public class MultiplayerMapController extends ServerController implements MapCon
         try {
             Direction direction = Direction.valueOf(keyCode.toString());
             outgoingMessageProccessor.sendMessage(protocol.send().moving(direction));
-            map.movePlayer(direction);
+            map.movePlayer(direction, playerName);
             view.reload(map.getMapParts());
             if (map.checkWinCondition()) {
                 outgoingMessageProccessor.sendMessage(protocol.send().won());
                 DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();
-                new StartController(stage).loadView();
+                if (isOwner){
+                    new LobbyOwnerController(stage,playerName,incommingMessageProccessor,outgoingMessageProccessor).loadView();
+                }else{
+                    new LobbySecondPlayerController(stage,playerName,remotePlayerName,mapName,incommingMessageProccessor,outgoingMessageProccessor).loadView();
+
+                }
+
             }
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -89,16 +97,17 @@ public class MultiplayerMapController extends ServerController implements MapCon
                 if (in.youHaveLost()) {
                     Platform.runLater(() -> {
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", this.playerName + " has lost").showAndWait();
-                        try {
-                            new StartController(stage).loadView();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (isOwner){
+                            new LobbyOwnerController(stage,playerName,incommingMessageProccessor,outgoingMessageProccessor).loadView();
+                        }else{
+                            new LobbySecondPlayerController(stage,playerName,remotePlayerName,mapName,incommingMessageProccessor,outgoingMessageProccessor).loadView();
+
                         }
                     });
                     break;
                 }
                 if (in.moveNexPlayer()) {
-                    map.moverOtherPlayer(in.getDirectionToMoveOtherPlayer());
+                    map.movePlayer(in.getDirectionToMoveOtherPlayer(), remotePlayerName);
                     Platform.runLater(() -> view.reload(map.getMapParts()));
                 }
                 if (in.restartMapRequest()) {
@@ -112,7 +121,7 @@ public class MultiplayerMapController extends ServerController implements MapCon
                     });
                 }
                 if (in.agreed()) {
-                    this.map = new Map(mapName, true, playerNumber, this.playerName, this.secondPlayerName);
+                    this.map = MapFactory.getInstance().getMap(mapName, playerNumber, remotePlayerNumber, playerName, remotePlayerName);
                     Platform.runLater(() -> view.reload(map.getMapParts()));
                 }
                 if (in.disagreed()) {

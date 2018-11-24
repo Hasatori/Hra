@@ -8,39 +8,21 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Map {
+public abstract class Map {
     private final String mapPath;
-    private final int playerNumber;
-    private final String playerName;
     private final Logger LOGGER = LoggerFactory.getLogger(Map.class);
-    private final List<Target> targets = new LinkedList<>();
+    protected final List<Target> targets = new LinkedList<>();
     private final List<Player> players = new LinkedList<>();
     private String name;
     public MapPart[][] mapParts;
-    private Player player;
-    private Player secondPlayer;
 
-
-    public Map(String name, boolean multiplayer, int playerNumber, String playerName) {
-        this.playerNumber = playerNumber;
-        this.playerName = playerName;
-        if (multiplayer) {
-            this.mapPath = "plans/multiplayer/";
-        } else {
-            this.mapPath = "plans/singleplayer/";
-        }
+    public Map(String name, String mapPath) {
+        this.mapPath = mapPath;
         this.mapParts = new LevelLoader().load(mapPath + name + ".txt");
-        fillLists();
-        setPlayers(playerNumber, playerName);
-        this.name = name;
         loadNeighbours();
-    }
+        this.name = name;
 
-    public Map(String name, boolean multiplayer, int playerNumber, String playerName, String secondPlayerName) {
-        this(name, multiplayer, playerNumber, playerName);
-        this.secondPlayer.setName(secondPlayerName);
     }
-
     public String getName() {
         return name;
     }
@@ -58,75 +40,19 @@ public class Map {
         return Collections.unmodifiableList(arrayListMapParts);
     }
 
-    private void fillLists() {
-        for (int row = 0; row < mapParts.length; row++) {
-            for (int column = 0; column < mapParts[row].length; column++) {
-                if (mapParts[row][column] instanceof Player) {
-                    players.add((Player) mapParts[row][column]);
-                }
-                if (mapParts[row][column] instanceof Target) {
-                    targets.add((Target) mapParts[row][column]);
-                }
-            }
-        }
-    }
 
-    private void setPlayers(int index, String name) {
-        if (players.size() == 1) {
-            player = players.get(0);
-        } else if (index == 0) {
-            player = players.get(0);
-            secondPlayer = players.get(1);
-        } else {
-            player = players.get(1);
-            secondPlayer = players.get(0);
-        }
-        player.setName(name);
-    }
 
-    public synchronized void movePlayer(Direction direction) {
-        System.out.println("Moving to " + direction.toString());
-        player.setDirection(direction);
-        this.movePart(direction, player);
-    }
+    public abstract void movePlayer(Direction direction, String name);
 
-    public synchronized void moverOtherPlayer(Direction direction) {
-        System.out.println("Moving to " + direction.toString());
-        secondPlayer.setDirection(direction);
-        this.movePart(direction, secondPlayer);
-    }
+   public  abstract boolean checkWinCondition();
 
-    public synchronized boolean checkWinCondition() {
-        for (Target target : targets) {
-            if (!target.isCovered()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private synchronized void movePart(Direction direction, MapPart mapPart) {
+    protected void movePart(Direction direction, MapPart mapPart) {
         MapPart neighbour = mapPart.getNeighbour(direction);
-        if (neighbour instanceof Door) {
-            Door door = (Door) neighbour;
-            this.mapParts = new LevelLoader().load(mapPath + door.getToMapName() + ".txt");
-            players.clear();
-            targets.clear();
-            fillLists();
-
-            setPlayers(playerNumber, playerName);
-            this.name = door.getToMapName();
-            loadNeighbours();
-            return;
-        }
         if (neighbour instanceof Box && !(mapPart instanceof Box)) {
-            System.out.println("Neighbour is box");
             movePart(direction, neighbour);
         }
         neighbour = mapPart.getNeighbour(direction);
-
         if (neighbour instanceof Floor || neighbour instanceof Target) {
-            System.out.println("Neighbour is floor");
             switch (direction) {
                 case DOWN:
                     mapParts[mapPart.getPosition().getRow() + 1][mapPart.getPosition().getColumn()] = mapPart;

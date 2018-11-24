@@ -62,14 +62,14 @@ public class LobbyOwnerController extends ServerController {
                     isFull = false;
                 }
                 if (in.messageSent()) {
-                	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.MSG_PREFIX + ":SENT MESSAGE-SECPLAYER", ""), false, true);
+                    view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.MSG_PREFIX + ":SENT MESSAGE-SECPLAYER", ""), false, true);
                 }
                 if (in.lobbyDeleted()) {
                     Platform.runLater(() ->
                             new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView());
                     break;
                 }
-                if (in.start()){
+                if (in.start()) {
                     break;
                 }
                 message = incommingMessageProccessor.getMessage();
@@ -84,7 +84,7 @@ public class LobbyOwnerController extends ServerController {
     public void startGame(String mapName) {
         if (isFull) {
             outgoingMessageProccessor.sendMessage(protocol.send().startGame());
-            new MultiplayerMapController(stage, mapName, 0, playerName, secondPlayerName, incommingMessageProccessor, outgoingMessageProccessor).loadView();
+            new MultiplayerMapController(stage, mapName, 0, playerName, secondPlayerName, 1, incommingMessageProccessor, outgoingMessageProccessor,true).loadView();
         }
     }
 
@@ -97,7 +97,7 @@ public class LobbyOwnerController extends ServerController {
     public void deleteLobby() {
         outgoingMessageProccessor.sendMessage(protocol.send().destroyLobby());
     }
-    
+
     public void sendLobbyMessage(String msg) {
         outgoingMessageProccessor.sendMessage(protocol.send().sendLobbyMessage("-OWNER" + msg));
     }

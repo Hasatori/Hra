@@ -34,6 +34,9 @@ public class MainController extends Controller {
 
     public void stopServer() {
         Server.getInstance().stopServer();
+        ClientManager.getInstance().removeAllClients();
+        updateMessages("Server stopped");
+        updateClients();
     }
 
     public void updateClients() {

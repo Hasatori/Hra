@@ -1,5 +1,6 @@
 package client.controller.multiplayer;
 
+import client.model.connection.ServerConnection;
 import client.model.map.Map;
 import client.model.map.MapFactory;
 import com.sun.javafx.scene.traversal.Direction;
@@ -29,10 +30,10 @@ public class MultiplayerMapController extends ServerController implements MapCon
     private final int playerNumber, remotePlayerNumber;
     private final String mapName;
     private MapView view;
-    private boolean isOwner;
+    private final boolean isOwner;
 
-    public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String remotePlayerName, int remotePlayerNumber, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor,boolean isOwner) {
-        super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
+    public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String remotePlayerName, int remotePlayerNumber, ServerConnection serverConnection, boolean isOwner) {
+        super(stage, serverConnection, playerName);
         this.remotePlayerName = remotePlayerName;
         this.map = MapFactory.getInstance().getMap(mapName, playerNumber, remotePlayerNumber, playerName, remotePlayerName);
         this.isOwner=isOwner;
@@ -66,9 +67,9 @@ public class MultiplayerMapController extends ServerController implements MapCon
                 outgoingMessageProccessor.sendMessage(protocol.send().won());
                 DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();
                 if (isOwner){
-                    new LobbyOwnerController(stage,playerName,incommingMessageProccessor,outgoingMessageProccessor).loadView();
+                    new LobbyOwnerController(stage,playerName,serverConnection).loadView();
                 }else{
-                    new LobbySecondPlayerController(stage,playerName,remotePlayerName,mapName,incommingMessageProccessor,outgoingMessageProccessor).loadView();
+                    new LobbySecondPlayerController(stage,remotePlayerName,playerName,mapName,serverConnection).loadView();
 
                 }
 
@@ -98,9 +99,9 @@ public class MultiplayerMapController extends ServerController implements MapCon
                     Platform.runLater(() -> {
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", this.playerName + " has lost").showAndWait();
                         if (isOwner){
-                            new LobbyOwnerController(stage,playerName,incommingMessageProccessor,outgoingMessageProccessor).loadView();
+                            new LobbyOwnerController(stage,playerName,serverConnection).loadView();
                         }else{
-                            new LobbySecondPlayerController(stage,playerName,remotePlayerName,mapName,incommingMessageProccessor,outgoingMessageProccessor).loadView();
+                            new LobbySecondPlayerController(stage,playerName,remotePlayerName,mapName,serverConnection).loadView();
 
                         }
                     });
@@ -129,14 +130,14 @@ public class MultiplayerMapController extends ServerController implements MapCon
                 }
                 if (in.playerHasLeft()) {
                     Platform.runLater(() -> {
-                        new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView();
+                        new MultiplayerController(stage, serverConnection, playerName).loadView();
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Map", "Other player has left").showAndWait();
                     });
                     break;
                 }
                 if (in.youHaveLeft()) {
                     Platform.runLater(() -> {
-                        new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView();
+                        new MultiplayerController(stage,serverConnection, playerName).loadView();
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game info", "You have left the game").showAndWait();
                     });
                     break;

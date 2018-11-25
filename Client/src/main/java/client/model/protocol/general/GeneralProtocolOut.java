@@ -21,4 +21,9 @@ public class GeneralProtocolOut {
     public String joinLobby(String lobbyName) {
         return GeneralProtocol.MSG_PREFIX + ":" + "JOIN LOBBY " + lobbyName;
     }
+
+    public String disconnect() {
+        return GeneralProtocol.MSG_PREFIX + ":" + "DISCONNECT";
+    }
+
 }

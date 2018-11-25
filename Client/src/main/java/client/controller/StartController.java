@@ -81,7 +81,7 @@ public class StartController extends Controller {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
             LOGGER.info("Player name is:{}", name);
-            new MultiplayerController(this.stage, serverConnection.getIncommingMessageProccessor(), serverConnection.getOutgoingMessageProccessor(), name).loadView();
+            new MultiplayerController(this.stage, serverConnection, name).loadView();
         });
     }
 }

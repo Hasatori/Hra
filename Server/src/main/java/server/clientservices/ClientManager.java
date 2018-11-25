@@ -45,6 +45,10 @@ public class ClientManager {
         System.out.println(this.toString());
     }
 
+    public void removeAllClients() {
+        this.clients.clear();
+    }
+
     public synchronized List<String> getLobbies() {
         List<String> lobbies = new LinkedList<>();
         clients.forEach(client -> {

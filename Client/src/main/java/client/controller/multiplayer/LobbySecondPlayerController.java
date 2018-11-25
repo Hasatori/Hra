@@ -2,6 +2,7 @@ package client.controller.multiplayer;
 
 import java.io.IOException;
 
+import client.model.connection.ServerConnection;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
@@ -21,8 +22,8 @@ public class LobbySecondPlayerController extends ServerController {
     private Stage stage;
     private String mapName;
 
-    public LobbySecondPlayerController(Stage stage, String ownerName, String playerName, String selectedMap, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor) {
-        super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
+    public LobbySecondPlayerController(Stage stage, String ownerName, String playerName, String selectedMap, ServerConnection serverConnection) {
+        super(stage, serverConnection, playerName);
         this.stage = stage;
         this.ownerName=ownerName;
         try {
@@ -51,7 +52,7 @@ public class LobbySecondPlayerController extends ServerController {
                 LobbyProtocolIn in = protocol.get(message);
                 if (in.kicked()) {
                     Platform.runLater(() -> {
-                        new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView();
+                        new MultiplayerController(stage, serverConnection, playerName).loadView();
                         DialogFactory.getAlert(Alert.AlertType.WARNING, "Lobby", "You were kicked out of the lobby").showAndWait();
                     });
                     break;
@@ -64,11 +65,11 @@ public class LobbySecondPlayerController extends ServerController {
                 	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.MSG_PREFIX + ":SENT MESSAGE-OWNER", ""), true);
                 }
                 if (in.start()) {
-                    Platform.runLater(() -> new MultiplayerMapController(stage, mapName, 1, playerName, ownerName,0, this.incommingMessageProccessor, outgoingMessageProccessor,false).loadView());
+                    Platform.runLater(() -> new MultiplayerMapController(stage, mapName, 1, playerName, ownerName,0, serverConnection,false).loadView());
                     break;
                 }
                 if (in.playerHasLeft()) {
-                    Platform.runLater(() -> new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView());
+                    Platform.runLater(() -> new MultiplayerController(stage, serverConnection, playerName).loadView());
                     break;
                 }
                 message = incommingMessageProccessor.getMessage();

@@ -29,3 +29,6 @@
     -fx-text-alignment: center;
     -fx-font-weight: bold;
 }
+.myButton:hover{
+    -fx-cursor: hand;
+}

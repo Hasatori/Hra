@@ -2,6 +2,7 @@ package server;
 
 import controller.MainController;
 import server.clientservices.ClientConnection;
+import server.clientservices.ClientManager;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -45,10 +46,10 @@ public class Server implements Runnable {
             throw new IllegalStateException("Port is not set");
         } else {
             try {
-                System.out.println("Starting the server");
                 serverSocket = new ServerSocket(port);
+                ClientManager.getInstance().getController().updateMessages("Server started listening on port "+port);
                 while (!Thread.currentThread().isInterrupted()) {
-                    System.out.println("Waiting for socket...");
+                    ClientManager.getInstance().getController().updateMessages("Waiting for client");
                     final Socket socket;
                     socket = serverSocket.accept();
                     new Thread(new ClientConnection(socket)).start();

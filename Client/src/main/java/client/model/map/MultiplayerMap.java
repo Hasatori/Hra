@@ -13,7 +13,7 @@ class MultiplayerMap extends Map {
 
     public MultiplayerMap(String mapName, int currentPlayerNumber, int remotePlayerNumber, String currentPlayerName, String remotePlayerName) {
         super(mapName, "plans/multiplayer/");
-        setPlayerAndTargets(currentPlayerNumber, currentPlayerName, remotePlayerName);
+        setPlayerAndTargets(currentPlayerNumber,remotePlayerNumber, currentPlayerName, remotePlayerName);
         System.out.println("Current player number : " + currentPlayerNumber);
         System.out.println("Current player name : " + currentPlayerName + "=" + currentPlayer.getName());
         System.out.println("Remote player number : " + remotePlayerNumber);
@@ -24,8 +24,7 @@ class MultiplayerMap extends Map {
         });
     }
 
-    private void setPlayerAndTargets(int currentPlayerNumber, String currentPlayerName, String remotePlayerName) {
-        int targetCount = 0;
+    private void setPlayerAndTargets(int currentPlayerNumber,int remotePlayerNumber, String currentPlayerName, String remotePlayerName) {
         int playerCount = 0;
         for (int row = 0; row < mapParts.length; row++) {
             for (int column = 0; column < mapParts[row].length; column++) {
@@ -42,8 +41,8 @@ class MultiplayerMap extends Map {
                     playerCount++;
                 }
                 if (mapParts[row][column] instanceof Target) {
-                    ++targetCount;
-                    if (currentPlayerNumber == 1 &&column>(mapParts[row].length/2)) {
+
+                    if (currentPlayerNumber == 1 && column>(mapParts[row].length/2)) {
                         conditionTargets.add((Target) mapParts[row][column]);
                     }
                     if (currentPlayerNumber == 0 &&column<(mapParts[row].length/2)) {

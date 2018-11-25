@@ -47,7 +47,6 @@ public class MainView extends Scene {
         identifierColumn.prefWidthProperty().bind(clientsTable.widthProperty());
 
         start.setOnAction(a -> {
-
             start.setDisable(true);
             stop.setDisable(true);
 
@@ -69,7 +68,9 @@ public class MainView extends Scene {
         stop.setOnAction(a -> {
             mainController.stopServer();
             start.setDisable(false);
+            stop.setDisable(true);
         });
+        stop.setDisable(true);
 
     }
 

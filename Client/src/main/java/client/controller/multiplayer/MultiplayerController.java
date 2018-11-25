@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import client.model.connection.ServerConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,15 +27,16 @@ public class MultiplayerController extends ServerController {
     private final GeneralProtocol protocol;
     private View view;
 
-    public MultiplayerController(Stage stage, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor, String playerName) {
-        super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
+    public MultiplayerController(Stage stage, ServerConnection serverConnection, String playerName) {
+        super(stage, serverConnection, playerName);
         this.protocol = new GeneralProtocol();
+
     }
 
     @Override
     public void loadView() {
         try {
-            this.view = new MultiplayerView(this, loadLobbies(),playerName);
+            this.view = new MultiplayerView(this, loadLobbies(), playerName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,14 +49,16 @@ public class MultiplayerController extends ServerController {
         List<String> result = this.protocol.get(incommingMessageProccessor.getMessage()).getLobbies();
         List<CreatedLobby> lobbies = new ArrayList<>();
         for (String lobby : result) {
-        	String[] data = lobby.split(LOBBY_SPLIT_DELIM);
-        	lobbies.add(new CreatedLobby(data[0], data[1] , data[2]));
+            String[] data = lobby.split(LOBBY_SPLIT_DELIM);
+            lobbies.add(new CreatedLobby(data[0], data[1], data[2]));
         }
         return lobbies;
     }
 
     public void back() {
         try {
+
+            serverConnection.disconnect();
             new StartController(stage).loadView();
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,7 +75,7 @@ public class MultiplayerController extends ServerController {
         if (in.duplicateLobbyName()) {
             DialogFactory.getAlert(Alert.AlertType.WARNING, "Creating lobby", "Lobby with this name already exists.").showAndWait();
         } else if (in.lobbyCreated()) {
-            new LobbyOwnerController(stage, playerName, incommingMessageProccessor, outgoingMessageProccessor).loadView();
+            new LobbyOwnerController(stage, playerName, serverConnection).loadView();
         }
 
     }
@@ -83,7 +87,7 @@ public class MultiplayerController extends ServerController {
             DialogFactory.getAlert(Alert.AlertType.WARNING, "Connecting lobby", "Lobby is full.").showAndWait();
         } else if (in.connectedToLobby()) {
             String[] parts = in.getLobbyCredentials();
-            new LobbySecondPlayerController(stage, parts[1], playerName, parts[2], incommingMessageProccessor, outgoingMessageProccessor).loadView();
+            new LobbySecondPlayerController(stage, parts[1], playerName, parts[2], serverConnection).loadView();
         }
     }
 }

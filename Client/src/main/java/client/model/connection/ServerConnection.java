@@ -58,7 +58,13 @@ public class ServerConnection {
     }
 
     public void disconnect() {
-          this.socket=null;
+        try {
+
+            this.socket.close();
+            socket=null;
+        } catch (IOException e) {
+            LOGGER.error("Error while closing socket {}",e);
+        }
     }
 
 }

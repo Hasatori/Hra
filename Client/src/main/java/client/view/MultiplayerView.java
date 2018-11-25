@@ -20,11 +20,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import client.controller.multiplayer.MultiplayerController;
 import client.util.ResourceLoader;
 import client.model.map.CreatedLobby;
+import javafx.scene.image.ImageView;
 
 @SuppressWarnings("restriction")
 public class MultiplayerView extends View {
 
-    private Button joinLobbyButton, createCustomLobbyButton, back, refreshButton;
+    private Button joinLobbyButton, createCustomLobbyButton, back;
+    private ImageView refreshButton;
     private TableView<CreatedLobby> openedLobbiesTable;
     private TableColumn columnLobbyName, columnLobbyOwner ,columnLobbyCapacity;
     private MultiplayerController controller;
@@ -32,11 +34,12 @@ public class MultiplayerView extends View {
 
     public MultiplayerView(MultiplayerController controller, List<CreatedLobby> lobbies, String playerName) throws IOException {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/lobbies.fxml")));
+
         this.controller = controller;
         joinLobbyButton = (Button) this.lookup("#joinLobbyButton");
         createCustomLobbyButton = (Button) this.lookup("#createCustomLobbyButton");
         openedLobbiesTable = (TableView) this.lookup("#openedLobbiesTable");
-        refreshButton = (Button) this.lookup("#refreshButton");
+        refreshButton = (ImageView) this.lookup("#refreshButton");
         playerNameLabel = (Label) this.lookup("#playerNameLabel");
 
         columnLobbyName = new TableColumn("Lobby name");
@@ -65,7 +68,7 @@ public class MultiplayerView extends View {
         fillLobbies(lobbies);
         createCustomLobbyButton.setOnAction(createLobbyHandler);
 
-        refreshButton.setOnAction((a) -> fillLobbies(controller.loadLobbies()));
+        refreshButton.setOnMouseClicked((a) -> fillLobbies(controller.loadLobbies()));
     }
 
     private void fillLobbies(List<CreatedLobby> lobbies) {

@@ -7,22 +7,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ClientManager {
+
     private static final String LOBBY_DELIM = "|";
     private static ClientManager INSTANCE = new ClientManager();
+    private MainController controller;
+    private List<Client> clients = new LinkedList<>();
+
+    private ClientManager() {
+
+    }
 
     public MainController getController() {
         return controller;
     }
 
-    private MainController controller;
-
     public List<Client> getClients() {
         return clients;
-    }
-
-    private List<Client> clients = new LinkedList<>();
-
-    private ClientManager() {
     }
 
     public void setController(MainController controller) {
@@ -118,16 +118,10 @@ public class ClientManager {
     public void sendMessageToAll(String message) {
         if (clients.size() > 1) {
             clients.forEach(client -> {
-                try {
-                    if (client.getIdentifier().equals("OLDRICH")) {
-
-                        client.getClientConnection().sendMessage(message);
-
-                    } else {
-                        client.getClientConnection().sendMessage("ok");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (client.getIdentifier().equals("OLDRICH")) {
+                    client.getClientConnection().sendMessage(message);
+                } else {
+                    client.getClientConnection().sendMessage("ok");
                 }
             });
         }

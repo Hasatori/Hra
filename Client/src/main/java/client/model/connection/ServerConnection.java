@@ -31,7 +31,6 @@ public class ServerConnection {
         this.identifier = identifier;
         PORT = port;
         connect();
-
     }
 
     private void connect() {

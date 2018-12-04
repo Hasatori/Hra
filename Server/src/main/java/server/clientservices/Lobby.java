@@ -1,8 +1,7 @@
 package server.clientservices;
 
-import java.io.IOException;
-
 public class Lobby {
+
 	private int playerCount;
 	private String mapName;
 	private String name;
@@ -23,11 +22,7 @@ public class Lobby {
     public void setMapName(String mapName) {
         this.mapName = mapName;
         if (this.otherPlayer != null) {
-            try {
-                this.otherPlayer.getClientConnection().sendMessage("LOBBY:SETMAP " + mapName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            this.otherPlayer.getClientConnection().sendMessage("LOBBY:SETMAP " + mapName);
         }
     }
 
@@ -37,11 +32,7 @@ public class Lobby {
 
     public void start() {
         if (this.otherPlayer != null) {
-            try {
-                otherPlayer.getClientConnection().sendMessage("LOBBY:START " + mapName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            otherPlayer.getClientConnection().sendMessage("LOBBY:START " + mapName);
         }
     }
 
@@ -66,10 +57,7 @@ public class Lobby {
     }
 
     public boolean isFull() {
-        if (this.otherPlayer != null) {
-            return true;
-        }
-        return false;
+        return this.otherPlayer != null;
     }
 
     public synchronized void removeOtherPlayer() {

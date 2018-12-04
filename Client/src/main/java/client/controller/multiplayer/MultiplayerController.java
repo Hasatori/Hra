@@ -21,8 +21,8 @@ import client.view.View;
 import client.model.map.CreatedLobby;
 
 public class MultiplayerController extends ServerController {
-    private final static String LOBBY_SPLIT_DELIM = "\\|";
     private final Logger LOGGER = LoggerFactory.getLogger(MultiplayerController.class);
+    private final static String LOBBY_SPLIT_DELIM = "\\|";
     private final GeneralProtocol protocol;
     private View view;
 
@@ -36,15 +36,15 @@ public class MultiplayerController extends ServerController {
         try {
             this.view = new MultiplayerView(this, loadLobbies(),playerName);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to create MultiplayerView", e);
         }
         this.stage.setScene(view);
         stage.show();
     }
 
     public List<CreatedLobby> loadLobbies() {
-        outgoingMessageProccessor.sendMessage(protocol.send().getLobbies());
-        List<String> result = this.protocol.get(incommingMessageProccessor.getMessage()).getLobbies();
+        outgoingMessageProcessor.sendMessage(protocol.send().getLobbies());
+        List<String> result = this.protocol.get(incomingMessageProcessor.getMessage()).getLobbies();
         List<CreatedLobby> lobbies = new ArrayList<>();
         for (String lobby : result) {
         	String[] data = lobby.split(LOBBY_SPLIT_DELIM);
@@ -57,33 +57,33 @@ public class MultiplayerController extends ServerController {
         try {
             new StartController(stage).loadView();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to back to StartController", e);
         }
     }
 
     public void createLobby(String lobbyName) {
         try {
-            outgoingMessageProccessor.sendMessage(protocol.send().createLobby(lobbyName, ResourceLoader.getMultiplayerMaps().get(0)));
+            outgoingMessageProcessor.sendMessage(protocol.send().createLobby(lobbyName, ResourceLoader.getMultiplayerMaps().get(0)));
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
-        GeneralProtocolIn in = protocol.get(incommingMessageProccessor.getMessage());
+
+        GeneralProtocolIn in = protocol.get(incomingMessageProcessor.getMessage());
         if (in.duplicateLobbyName()) {
             DialogFactory.getAlert(Alert.AlertType.WARNING, "Creating lobby", "Lobby with this name already exists.").showAndWait();
         } else if (in.lobbyCreated()) {
-            new LobbyOwnerController(stage, playerName, incommingMessageProccessor, outgoingMessageProccessor).loadView();
+            new LobbyOwnerController(stage, playerName, incomingMessageProcessor, outgoingMessageProcessor).loadView();
         }
-
     }
 
     public void joinLobby(String name) {
-        outgoingMessageProccessor.sendMessage(protocol.send().joinLobby(name));
-        GeneralProtocolIn in = protocol.get(incommingMessageProccessor.getMessage());
+        outgoingMessageProcessor.sendMessage(protocol.send().joinLobby(name));
+        GeneralProtocolIn in = protocol.get(incomingMessageProcessor.getMessage());
         if (in.lobbyFull()) {
             DialogFactory.getAlert(Alert.AlertType.WARNING, "Connecting lobby", "Lobby is full.").showAndWait();
         } else if (in.connectedToLobby()) {
             String[] parts = in.getLobbyCredentials();
-            new LobbySecondPlayerController(stage, parts[1], playerName, parts[2], incommingMessageProccessor, outgoingMessageProccessor).loadView();
+            new LobbySecondPlayerController(stage, parts[1], playerName, parts[2], incomingMessageProcessor, outgoingMessageProcessor).loadView();
         }
     }
 }

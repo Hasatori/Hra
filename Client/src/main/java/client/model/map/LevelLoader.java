@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 class LevelLoader {
+
     private final Logger LOGGER = LoggerFactory.getLogger(LevelLoader.class);
     private int numberOfWalls, numberOfPlayers, numberOfBoxes, numberOfTargets, numberOFFloors = 0;
     private static final char WALL_SIGN = 'x';
@@ -49,7 +50,7 @@ class LevelLoader {
             }
             reader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to load map", e);
         }
         System.out.println(this.toString());
         return mapParts;

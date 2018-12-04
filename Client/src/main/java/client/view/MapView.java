@@ -8,15 +8,18 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import client.controller.*;
-import client.controller.multiplayer.MultiplayerController;
 import client.model.map.Player;
 import client.util.ResourceLoader;
 import client.model.map.MapPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
 
 public class MapView extends View {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(MapView.class);
     private MapController mapController;
     private GridPane gridPane;
     private static Pane pane;
@@ -55,7 +58,7 @@ public class MapView extends View {
                         System.out.println(((Label) node.lookup(".playerName")).getText());
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error("Failed to create map", e);
                 }
             }
         }

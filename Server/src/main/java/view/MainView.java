@@ -29,6 +29,7 @@ public class MainView extends Scene {
     private TableColumn identifierColumn;
     private TextFlow messagesTextFlow;
     private ScrollPane scrollPane;
+    private ProgressIndicator runCircle;
 
     public MainView(MainController mainController) throws IOException {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("main.fxml")));
@@ -37,8 +38,11 @@ public class MainView extends Scene {
         stop = (Button) this.lookup("#stopButton");
         port = (TextField) this.lookup("#portTextField");
         scrollPane = (ScrollPane) this.lookup("#textFlowScrollPane");
+        runCircle = (ProgressIndicator) this.lookup("#runCircle");
         messagesTextFlow = new TextFlow();
         scrollPane.setContent(messagesTextFlow);
+        stop.setDisable(true);
+        runCircle.setVisible(false);
 
         clientsTable = (TableView) this.lookup("#clientTable");
         identifierColumn = new TableColumn("IDENTIFIER");
@@ -50,6 +54,7 @@ public class MainView extends Scene {
 
             start.setDisable(true);
             stop.setDisable(true);
+            runCircle.setVisible(true);
 
             if (port.getText().equals("")) {
                 DialogFactory.getAlert(Alert.AlertType.ERROR, "Port", "Port must be filled").showAndWait();
@@ -59,7 +64,7 @@ public class MainView extends Scene {
                     Integer portNumber = Integer.valueOf(port.getText());
                     mainController.startServer(portNumber);
                 } catch (NumberFormatException e) {
-                    DialogFactory.getAlert(Alert.AlertType.ERROR, "Port", "Port must an integer").showAndWait();
+                    DialogFactory.getAlert(Alert.AlertType.ERROR, "Port", "Port must be an integer").showAndWait();
                     start.setDisable(false);
                 }
             }
@@ -69,8 +74,9 @@ public class MainView extends Scene {
         stop.setOnAction(a -> {
             mainController.stopServer();
             start.setDisable(false);
+            stop.setDisable(true);
+            runCircle.setVisible(false);
         });
-
     }
 
     public void fillClientsTable(List<Client> clients) {

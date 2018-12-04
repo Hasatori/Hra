@@ -12,20 +12,24 @@ import client.model.protocol.lobby.LobbyProtocolIn;
 import client.util.ResourceLoader;
 import client.view.DialogFactory;
 import client.view.LobbyOwnerView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("restriction")
 public class LobbyOwnerController extends ServerController {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(LobbyOwnerController.class);
     private final LobbyProtocol protocol;
     private LobbyOwnerView view;
     private String secondPlayerName;
     private boolean isFull = false;
 
-    public LobbyOwnerController(Stage stage, String playerName, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor) {
-        super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
+    public LobbyOwnerController(Stage stage, String playerName, InputReader incomingMessageProcessor, OutputWriter outgoingMessageProcessor) {
+        super(stage, incomingMessageProcessor, outgoingMessageProcessor, playerName);
         try {
             this.view = new LobbyOwnerView(this, ResourceLoader.getMultiplayerMaps(), playerName);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to create LobbyOwnerView", e);
         }
         this.protocol = new LobbyProtocol();
     }
@@ -38,25 +42,27 @@ public class LobbyOwnerController extends ServerController {
     }
 
     public void setMap(String mapName) {
-        outgoingMessageProccessor.sendMessage(protocol.send().setMap(mapName));
+        outgoingMessageProcessor.sendMessage(protocol.send().setMap(mapName));
     }
 
     private void waitForMessage() {
         new Thread(() -> {
-            String message = incommingMessageProccessor.getMessage();
+            String message = incomingMessageProcessor.getMessage();
             while (message != null) {
                 LobbyProtocolIn in = protocol.get(message);
                 if (in.playerConnected()) {
                     this.secondPlayerName = in.getSecondPlayerName();
                     Platform.runLater(() -> {
-                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Lobby", "Player " + in.getSecondPlayerName() + " has connected").showAndWait();
+                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Lobby",
+                                "Player " + in.getSecondPlayerName() + " has connected").showAndWait();
                         setSecondPlayerName(in.getSecondPlayerName());
                     });
                     isFull = true;
                 }
                 if (in.playerHasLeft()) {
                     Platform.runLater(() -> {
-                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Lobby", "Player " + in.getSecondPlayerName() + " has left").showAndWait();
+                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Lobby",
+                                "Player " + in.getSecondPlayerName() + " has left").showAndWait();
                         view.lobbyIsEmpty();
                     });
                     isFull = false;
@@ -66,13 +72,13 @@ public class LobbyOwnerController extends ServerController {
                 }
                 if (in.lobbyDeleted()) {
                     Platform.runLater(() ->
-                            new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView());
+                            new MultiplayerController(stage, incomingMessageProcessor, outgoingMessageProcessor, playerName).loadView());
                     break;
                 }
                 if (in.start()) {
                     break;
                 }
-                message = incommingMessageProccessor.getMessage();
+                message = incomingMessageProcessor.getMessage();
             }
         }).start();
     }
@@ -83,22 +89,23 @@ public class LobbyOwnerController extends ServerController {
 
     public void startGame(String mapName) {
         if (isFull) {
-            outgoingMessageProccessor.sendMessage(protocol.send().startGame());
-            new MultiplayerMapController(stage, mapName, 0, playerName, secondPlayerName, 1, incommingMessageProccessor, outgoingMessageProccessor,true).loadView();
+            outgoingMessageProcessor.sendMessage(protocol.send().startGame());
+            new MultiplayerMapController(stage, mapName, 0, playerName,
+                    secondPlayerName, 1, incomingMessageProcessor, outgoingMessageProcessor,true).loadView();
         }
     }
 
     public void kickOtherPlayer() {
-        outgoingMessageProccessor.sendMessage(protocol.send().kickOtherPlayer());
+        outgoingMessageProcessor.sendMessage(protocol.send().kickOtherPlayer());
         isFull = false;
         view.lobbyIsEmpty();
     }
 
     public void deleteLobby() {
-        outgoingMessageProccessor.sendMessage(protocol.send().destroyLobby());
+        outgoingMessageProcessor.sendMessage(protocol.send().destroyLobby());
     }
 
     public void sendLobbyMessage(String msg) {
-        outgoingMessageProccessor.sendMessage(protocol.send().sendLobbyMessage("-OWNER" + msg));
+        outgoingMessageProcessor.sendMessage(protocol.send().sendLobbyMessage("-OWNER" + msg));
     }
 }

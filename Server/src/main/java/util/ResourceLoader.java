@@ -13,7 +13,6 @@ import java.net.URL;
  * @version 1.0
  */
 public class ResourceLoader {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceLoader.class);
 
     /**
      * Private constructor since this is a library class.
@@ -37,6 +36,4 @@ public class ResourceLoader {
         System.out.println(ClassLoader.getSystemResourceAsStream(path).toString());
         return ClassLoader.getSystemResourceAsStream(path);
     }
-
-
 }

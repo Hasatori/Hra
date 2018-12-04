@@ -12,9 +12,13 @@ import client.model.protocol.lobby.LobbyProtocolIn;
 import client.util.ResourceLoader;
 import client.view.DialogFactory;
 import client.view.LobbySecondPlayerView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("restriction")
 public class LobbySecondPlayerController extends ServerController {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(LobbySecondPlayerController.class);
     private final LobbyProtocol protocol;
     private final String ownerName;
     private LobbySecondPlayerView view;
@@ -28,7 +32,7 @@ public class LobbySecondPlayerController extends ServerController {
         try {
             this.view = new LobbySecondPlayerView(this, ResourceLoader.getMultiplayerMaps());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to create LobbySecondPlayerView", e);
         }
         view.setOwnerName(ownerName);
         this.mapName = selectedMap;
@@ -46,12 +50,12 @@ public class LobbySecondPlayerController extends ServerController {
 
     private void waitForMessages() {
         new Thread(() -> {
-            String message = incommingMessageProccessor.getMessage();
+            String message = incomingMessageProcessor.getMessage();
             while (message != null) {
                 LobbyProtocolIn in = protocol.get(message);
                 if (in.kicked()) {
                     Platform.runLater(() -> {
-                        new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView();
+                        new MultiplayerController(stage, incomingMessageProcessor, outgoingMessageProcessor, playerName).loadView();
                         DialogFactory.getAlert(Alert.AlertType.WARNING, "Lobby", "You were kicked out of the lobby").showAndWait();
                     });
                     break;
@@ -64,24 +68,24 @@ public class LobbySecondPlayerController extends ServerController {
                 	view.receiveLobbyMessage(message.replaceFirst(LobbyProtocol.MSG_PREFIX + ":SENT MESSAGE-OWNER", ""), true);
                 }
                 if (in.start()) {
-                    Platform.runLater(() -> new MultiplayerMapController(stage, mapName, 1, playerName, ownerName,0, this.incommingMessageProccessor, outgoingMessageProccessor,false).loadView());
+                    Platform.runLater(() -> new MultiplayerMapController(stage, mapName, 1, playerName, ownerName,0, this.incomingMessageProcessor, outgoingMessageProcessor,false).loadView());
                     break;
                 }
                 if (in.playerHasLeft()) {
-                    Platform.runLater(() -> new MultiplayerController(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName).loadView());
+                    Platform.runLater(() -> new MultiplayerController(stage, incomingMessageProcessor, outgoingMessageProcessor, playerName).loadView());
                     break;
                 }
-                message = incommingMessageProccessor.getMessage();
+                message = incomingMessageProcessor.getMessage();
             }
         }).start();
     }
 
     public void leaveLobby() {
-        outgoingMessageProccessor.sendMessage(protocol.send().leaveLobby());
+        outgoingMessageProcessor.sendMessage(protocol.send().leaveLobby());
     }
     
     public void sendLobbyMessage(String msg) {
-        outgoingMessageProccessor.sendMessage(protocol.send().sendLobbyMessage("-SECPLAYER" + msg));
+        outgoingMessageProcessor.sendMessage(protocol.send().sendLobbyMessage("-SECPLAYER" + msg));
     }
     
     public String getPlayerName() {

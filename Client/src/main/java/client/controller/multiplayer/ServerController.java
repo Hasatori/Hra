@@ -6,14 +6,14 @@ import client.model.connection.InputReader;
 import client.model.connection.OutputWriter;
 
 public abstract class ServerController extends Controller {
-    protected final InputReader incommingMessageProccessor;
-    protected final OutputWriter outgoingMessageProccessor;
+    protected final InputReader incomingMessageProcessor;
+    protected final OutputWriter outgoingMessageProcessor;
     protected final String playerName;
 
     public ServerController(Stage stage, InputReader incomingMessageProcessor, OutputWriter outgoingMessageProcessor, String playerName) {
         super(stage);
-        this.incommingMessageProccessor = incomingMessageProcessor;
-        this.outgoingMessageProccessor = outgoingMessageProcessor;
+        this.incomingMessageProcessor = incomingMessageProcessor;
+        this.outgoingMessageProcessor = outgoingMessageProcessor;
         this.playerName = playerName;
     }
 

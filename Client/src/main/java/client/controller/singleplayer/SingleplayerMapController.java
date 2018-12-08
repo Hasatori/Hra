@@ -20,11 +20,11 @@ import java.util.Optional;
 
 public class SingleplayerMapController extends Controller implements MapController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(SingleplayerMapController.class);
     private Map map;
     private MapView view;
     private String mapName;
     private String playerName;
-    private final Logger LOGGER = LoggerFactory.getLogger(SingleplayerMapController.class);
 
     public SingleplayerMapController(Stage stage, String mapName, String playerName) {
         super(stage);
@@ -38,7 +38,7 @@ public class SingleplayerMapController extends Controller implements MapControll
         try {
             this.view = new MapView(this, this.map.getMapParts(), this.map.getName());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to create MapView", e);
         }
     }
 
@@ -60,11 +60,10 @@ public class SingleplayerMapController extends Controller implements MapControll
                 DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();
                 new StartController(stage).loadView();
             }
-
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -79,7 +78,7 @@ public class SingleplayerMapController extends Controller implements MapControll
             try {
                 new StartController(stage);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Failed to create StartController", e);
             }
         }
     }

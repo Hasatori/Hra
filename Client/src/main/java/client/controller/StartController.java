@@ -21,6 +21,7 @@ import client.view.StartView;
 
 @SuppressWarnings("restriction")
 public class StartController extends Controller {
+
     private final Logger LOGGER = LoggerFactory.getLogger(StartController.class);
     private final GeneralProtocol protocol;
     private StartView view;
@@ -73,7 +74,7 @@ public class StartController extends Controller {
                         serverConnection.disconnect();
                         DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "This name is already used by someone. Please try to fill a different name.").showAndWait();
                     } else if (protocol.get(message).wasLoginOk()) {
-                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Conneting", "Connection sucessfull").showAndWait();
+                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Connecting", "Connection successful").showAndWait();
                     }
                 }
             }

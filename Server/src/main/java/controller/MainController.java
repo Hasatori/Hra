@@ -2,6 +2,8 @@ package controller;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.clientservices.ClientManager;
 import server.Server;
 import view.MainView;
@@ -9,6 +11,8 @@ import view.MainView;
 import java.io.IOException;
 
 public class MainController extends Controller {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
     private MainView view;
 
     public MainController(Stage stage) {
@@ -16,7 +20,7 @@ public class MainController extends Controller {
         try {
             this.view = new MainView(this);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to create MainView", e);
         }
         ClientManager.getInstance().setController(this);
     }
@@ -43,6 +47,6 @@ public class MainController extends Controller {
         view.fillClientsTable(ClientManager.getInstance().getClients());
     }
     public void updateMessages(String message){
-       Platform.runLater(()-> view.message(message));
+        Platform.runLater(()-> view.message(message));
     }
 }

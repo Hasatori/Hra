@@ -3,10 +3,14 @@ package client.model.map;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import client.util.ResourceLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class Box extends MapPart {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(Box.class);
 
     public Box(Position position) {
         super(position);
@@ -17,7 +21,7 @@ public class Box extends MapPart {
         try {
             return FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/box.fxml"));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not load file", e);
         }
         return null;
     }

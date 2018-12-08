@@ -21,7 +21,7 @@ public class InputReader {
             LOGGER.info("Incoming message {}",message);
             return message;
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         System.out.println("null");
         return null;

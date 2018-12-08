@@ -9,10 +9,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Map {
+
     private final String mapPath;
-    private final Logger LOGGER = LoggerFactory.getLogger(Map.class);
     protected final List<Target> targets = new LinkedList<>();
-    private final List<Player> players = new LinkedList<>();
     private String name;
     public MapPart[][] mapParts;
 
@@ -21,8 +20,8 @@ public abstract class Map {
         this.mapParts = new LevelLoader().load(mapPath + name + ".txt");
         loadNeighbours();
         this.name = name;
-
     }
+
     public String getName() {
         return name;
     }
@@ -40,11 +39,9 @@ public abstract class Map {
         return Collections.unmodifiableList(arrayListMapParts);
     }
 
-
-
     public abstract void movePlayer(Direction direction, String name);
 
-   public  abstract boolean checkWinCondition();
+    public  abstract boolean checkWinCondition();
 
     protected void movePart(Direction direction, MapPart mapPart) {
         MapPart neighbour = mapPart.getNeighbour(direction);
@@ -53,18 +50,20 @@ public abstract class Map {
         }
         neighbour = mapPart.getNeighbour(direction);
         if (neighbour instanceof Floor || neighbour instanceof Target) {
+            Position position = mapPart.getPosition();
+
             switch (direction) {
                 case DOWN:
-                    mapParts[mapPart.getPosition().getRow() + 1][mapPart.getPosition().getColumn()] = mapPart;
+                    mapParts[position.getRow() + 1][position.getColumn()] = mapPart;
                     break;
                 case UP:
-                    mapParts[mapPart.getPosition().getRow() - 1][mapPart.getPosition().getColumn()] = mapPart;
+                    mapParts[position.getRow() - 1][position.getColumn()] = mapPart;
                     break;
                 case LEFT:
-                    mapParts[mapPart.getPosition().getRow()][mapPart.getPosition().getColumn() - 1] = mapPart;
+                    mapParts[position.getRow()][position.getColumn() - 1] = mapPart;
                     break;
                 case RIGHT:
-                    mapParts[mapPart.getPosition().getRow()][mapPart.getPosition().getColumn() + 1] = mapPart;
+                    mapParts[position.getRow()][position.getColumn() + 1] = mapPart;
                     break;
             }
             mapParts[mapPart.getPosition().getRow()][mapPart.getPosition().getColumn()] = neighbour;
@@ -78,7 +77,6 @@ public abstract class Map {
                     target.setUncovered();
                     break;
                 }
-
             }
         }
         loadNeighbours();

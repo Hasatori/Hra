@@ -3,9 +3,8 @@ package client.model.map;
 import com.sun.javafx.scene.traversal.Direction;
 
 class SingleplayerMap extends Map {
-    private String playerName;
-    private Player player;
 
+    private Player player;
 
     public SingleplayerMap(String name, String playerName) {
         super(name, "plans/singleplayer/");
@@ -42,5 +41,4 @@ class SingleplayerMap extends Map {
         }
         return true;
     }
-
 }

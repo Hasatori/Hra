@@ -23,6 +23,7 @@ import server.protocol.ProtocolType;
 
 
 public class ClientConnection implements Runnable {
+
     private final Logger LOGGER = LoggerFactory.getLogger(ClientConnection.class);
     private final MessageProcessor generalMessageProcessor, lobbyMessageProcessor, mapMessageProcessor;
 
@@ -46,7 +47,6 @@ public class ClientConnection implements Runnable {
         return client;
     }
 
-
     public void run() {
         try {
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), Server.ENCODING), true);// Without autoFlush method flush has to be called after every write(printl)
@@ -61,12 +61,11 @@ public class ClientConnection implements Runnable {
             socket.close();
             ClientManager.getInstance().remove(client);
         } catch (IOException e) {
-
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         } finally {
             try {
                 socket.close();
-                String prefix = "";
+                String prefix;
                 if (client != null) {
                     prefix = client.getIdentifier() + " | ";
                     ClientManager.getInstance().getController().updateMessages(prefix + " has left");
@@ -76,12 +75,12 @@ public class ClientConnection implements Runnable {
                     ClientManager.getInstance().getController().updateMessages("Connection lost");
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage());
             }
         }
     }
 
-    private void processMessage(String message) throws SocketException {
+    private void processMessage(String message) {
         LOGGER.info("Incoming message {}", message);
         String prefix = "";
         if (client != null) {
@@ -91,11 +90,11 @@ public class ClientConnection implements Runnable {
         try {
             getProcessor(message).processMessage(message);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to process message", e);
         }
     }
 
-    public void sendMessage(String message) throws IOException {
+    public void sendMessage(String message) {
         LOGGER.info("Outgoing message {}", message);
         String prefix = "";
         if (client != null) {

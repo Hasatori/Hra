@@ -25,7 +25,7 @@ public class LobbySecondPlayerView extends View {
     private String ownerName;
     private String secondPlayerName;
     @FXML
-    private Button leaveLobbyButton, startGameButton, lobbyChatSend;
+    private Button leaveLobbyButton, lobbyChatSend;
     private ComboBox<String> multiplayerMapsComboBox;
     private Label ownerNameLabel, secondPlayerNameLabel, mapLabel;
     private TextArea lobbyChatInput;
@@ -33,7 +33,7 @@ public class LobbySecondPlayerView extends View {
     private TextFlow lobbyChat;
 
     public LobbySecondPlayerView(LobbySecondPlayerController controller, List<String> maps) throws IOException {
-        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobby.fxml")));
+        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobbySecondPlayer.fxml")));
         this.controller = controller;
         this.secondPlayerName = controller.getPlayerName();
         this.multiplayerMapsComboBox = (ComboBox<String>) this.lookup("#multiplayerMapsComboBox");
@@ -50,7 +50,6 @@ public class LobbySecondPlayerView extends View {
         lobbyChatPane.setContent(lobbyChat);
         lobbyChatPane.vvalueProperty().bind(lobbyChat.heightProperty());
 
-        leaveLobbyButton.setText("Leave Lobby");
         Text playerName = new Text(secondPlayerName);
         playerName.setFill(Color.RED);
         Text lobbyMessage = new Text(" has joined the lobby.");
@@ -109,11 +108,6 @@ public class LobbySecondPlayerView extends View {
     	}
     	Text lobbyMessage = new Text(CHAT_DELIM + msg);
     	
-    	Platform.runLater(new Runnable(){
-			@Override
-			public void run() {
-				lobbyChat.getChildren().addAll(playerName, lobbyMessage);
-			}
-    	});
+    	Platform.runLater(() -> lobbyChat.getChildren().addAll(playerName, lobbyMessage));
     }
 }

@@ -3,6 +3,7 @@ package client.controller.multiplayer;
 import client.model.connection.ServerConnection;
 import client.model.map.Map;
 import client.model.map.MapFactory;
+import client.view.LobbyOwnerView;
 import com.sun.javafx.scene.traversal.Direction;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -66,13 +67,8 @@ public class MultiplayerMapController extends ServerController implements MapCon
             view.reload(map.getMapParts());
             if (map.checkWinCondition()) {
                 outgoingMessageProcessor.sendMessage(protocol.send().won());
+               won();
                 DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();
-                if (isOwner) {
-                    new LobbyOwnerController(stage, playerName, serverConnection).loadView();
-                } else {
-                    new LobbySecondPlayerController(stage, playerName, remotePlayerName, mapName,
-                            serverConnection).loadView();
-                }
 
             }
         } catch (IllegalArgumentException e) {
@@ -80,6 +76,16 @@ public class MultiplayerMapController extends ServerController implements MapCon
         }
     }
 
+    private void won(){
+        if (isOwner) {
+            LobbyOwnerController lobbyOwnerController = new LobbyOwnerController(stage, playerName, serverConnection);
+            lobbyOwnerController.loadView();
+            lobbyOwnerController.setSecondPlayerName(remotePlayerName);
+        } else {
+            new LobbySecondPlayerController(stage, playerName, remotePlayerName, mapName,
+                    serverConnection).loadView();
+        }
+    }
     @Override
     public void quitMap() {
         outgoingMessageProcessor.sendMessage(protocol.send().quitMap());
@@ -98,13 +104,8 @@ public class MultiplayerMapController extends ServerController implements MapCon
                 MapProtocolIn in = protocol.get(message);
                 if (in.youHaveLost()) {
                     Platform.runLater(() -> {
-                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", this.playerName + " has lost").showAndWait();
-                        if (isOwner) {
-                            new LobbyOwnerController(stage, playerName, serverConnection).loadView();
-                        } else {
-                            new LobbySecondPlayerController(stage, playerName, remotePlayerName, mapName,
-                                    serverConnection).loadView();
-                        }
+                       won();
+                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have lost").showAndWait();
                     });
                     break;
                 }

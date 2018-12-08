@@ -84,7 +84,7 @@ public class LobbyOwnerController extends ServerController {
         }).start();
     }
 
-    private void setSecondPlayerName(String name) {
+     void setSecondPlayerName(String name) {
         view.setSecondPlayerName(name);
     }
 

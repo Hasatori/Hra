@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 public class GeneralProtocolIn {
 
     private static final String LOBBY_FULL = "LOBBY IS FULL";
+    private static final String LOBBY_DOES_NOT_EXIST = "LOBBY DOES NOT EXIST";
     private static final String LOBBY_CONNECTED_TO = "CONNECTED TO ";
     private static final String LOBBY_DUPLICATE_NAME = "DUPLICATE NAME";
     private static final String LOBBY_DUPLICATE_LOBBY = "DUPLICATE LOBBY NAME";
@@ -20,7 +21,7 @@ public class GeneralProtocolIn {
     }
 
     public boolean wasLoginOk() {
-        return message.equals("CONNECTED") ;
+        return message.equals("CONNECTED");
     }
 
     public LinkedList<String> getLobbies() {
@@ -33,9 +34,10 @@ public class GeneralProtocolIn {
         return message.equals(LOBBY_FULL);
     }
 
-    public boolean connectedToLobby(){
+    public boolean connectedToLobby() {
         return message.matches(LOBBY_CONNECTED_TO + ".*|.*|.*");
     }
+
     public String[] getLobbyCredentials() {
         return message.replace(LOBBY_CONNECTED_TO, "").split("\\|");
     }
@@ -43,10 +45,16 @@ public class GeneralProtocolIn {
     public boolean duplicateUserName() {
         return message.equals(LOBBY_DUPLICATE_NAME);
     }
+
     public boolean duplicateLobbyName() {
         return message.equals(LOBBY_DUPLICATE_LOBBY);
     }
+
     public boolean lobbyCreated() {
         return message.equals(LOBBY_CREATED);
+    }
+
+    public boolean lobbyDoesNotExist() {
+        return message.equals(LOBBY_DOES_NOT_EXIST);
     }
 }

@@ -85,7 +85,10 @@ public class MultiplayerController extends ServerController {
         GeneralProtocolIn in = protocol.get(incomingMessageProcessor.getMessage());
         if (in.lobbyFull()) {
             DialogFactory.getAlert(Alert.AlertType.WARNING, "Connecting lobby", "Lobby is full.").showAndWait();
-        } else if (in.connectedToLobby()) {
+        } else if(in.lobbyDoesNotExist()){
+            DialogFactory.getAlert(Alert.AlertType.WARNING, "Connecting lobby", "Lobby is does not exist.").showAndWait();
+
+        }else if (in.connectedToLobby()) {
             String[] parts = in.getLobbyCredentials();
             new LobbySecondPlayerController(stage, parts[1], playerName, parts[2], serverConnection).loadView();
         }

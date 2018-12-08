@@ -25,7 +25,7 @@ public class LobbyOwnerView extends View {
     private final String ownerName;
     private String secondPlayerName;
     @FXML
-    private Button leaveLobbyButton, startGameButton, lobbyChatSend;
+    private Button deleteLobbyButton, startGameButton, lobbyChatSend;
     private ComboBox<String> multiplayerMapsComboBox;
     private Label ownerNameLabel, secondPlayerNameLabel;
     private TextArea lobbyChatInput;
@@ -33,12 +33,12 @@ public class LobbyOwnerView extends View {
     private TextFlow lobbyChat;
     
 	public LobbyOwnerView(LobbyOwnerController controller, List<String> maps, String ownerName) throws IOException {
-        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobby.fxml")));
+        super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobbyOwner.fxml")));
         this.controller = controller;
         this.ownerName = ownerName;
         this.multiplayerMapsComboBox = (ComboBox<String>) this.lookup("#multiplayerMapsComboBox");
         this.startGameButton = (Button) this.lookup("#startGameButton");
-        this.leaveLobbyButton = (Button) this.lookup("#leaveLobbyButton");
+        this.deleteLobbyButton = (Button) this.lookup("#deleteLobbyButton");
         this.ownerNameLabel = (Label) this.lookup("#ownerNameLabel");
         this.secondPlayerNameLabel = (Label) this.lookup("#secondPlayerNameLabel");
         this.lobbyChatPane = (ScrollPane) this.lookup("#lobbyChatPane");
@@ -58,7 +58,7 @@ public class LobbyOwnerView extends View {
         startGameButton.setDisable(true);
 
         startGameButton.setOnAction(a -> controller.startGame(multiplayerMapsComboBox.getSelectionModel().getSelectedItem()));
-        leaveLobbyButton.setOnAction(a -> controller.deleteLobby());
+        deleteLobbyButton.setOnAction(a -> controller.deleteLobby());
         lobbyChatInput.setOnKeyPressed(k -> {
         	if (k.getCode() == KeyCode.ENTER) {
         		k.consume();

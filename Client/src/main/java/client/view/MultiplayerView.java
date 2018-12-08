@@ -51,8 +51,8 @@ public class MultiplayerView extends View {
         openedLobbiesTable.getColumns().addAll(columnLobbyName, columnLobbyOwner, columnLobbyCapacity);
 
         playerNameLabel.setText(playerName);
-        back = (Button) this.lookup("#back");
-        back.setOnAction(a -> controller.back());
+        back = (Button) this.lookup("#disconnect");
+        back.setOnAction(a -> controller.disconnect());
 
         joinLobbyButton.setOnAction(a -> {
             ObservableList<CreatedLobby> selectedItems = openedLobbiesTable.getSelectionModel().getSelectedItems();

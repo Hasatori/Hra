@@ -2,6 +2,7 @@ package client.controller.multiplayer;
 
 import java.io.IOException;
 
+import client.model.connection.ServerConnection;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
@@ -24,8 +25,8 @@ public class LobbyOwnerController extends ServerController {
     private String secondPlayerName;
     private boolean isFull = false;
 
-    public LobbyOwnerController(Stage stage, String playerName, InputReader incomingMessageProcessor, OutputWriter outgoingMessageProcessor) {
-        super(stage, incomingMessageProcessor, outgoingMessageProcessor, playerName);
+    public LobbyOwnerController(Stage stage, String playerName, ServerConnection serverConnection) {
+        super(stage, serverConnection, playerName);
         try {
             this.view = new LobbyOwnerView(this, ResourceLoader.getMultiplayerMaps(), playerName);
         } catch (IOException e) {
@@ -72,7 +73,7 @@ public class LobbyOwnerController extends ServerController {
                 }
                 if (in.lobbyDeleted()) {
                     Platform.runLater(() ->
-                            new MultiplayerController(stage, incomingMessageProcessor, outgoingMessageProcessor, playerName).loadView());
+                            new MultiplayerController(stage, serverConnection, playerName).loadView());
                     break;
                 }
                 if (in.start()) {
@@ -91,7 +92,7 @@ public class LobbyOwnerController extends ServerController {
         if (isFull) {
             outgoingMessageProcessor.sendMessage(protocol.send().startGame());
             new MultiplayerMapController(stage, mapName, 0, playerName,
-                    secondPlayerName, 1, incomingMessageProcessor, outgoingMessageProcessor,true).loadView();
+                    secondPlayerName, 1,serverConnection,true).loadView();
         }
     }
 

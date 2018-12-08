@@ -1,5 +1,6 @@
 package client.controller.multiplayer;
 
+import client.model.connection.ServerConnection;
 import client.model.map.Map;
 import client.model.map.MapFactory;
 import com.sun.javafx.scene.traversal.Direction;
@@ -33,11 +34,11 @@ public class MultiplayerMapController extends ServerController implements MapCon
     private MapView view;
     private boolean isOwner;
 
-    public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String remotePlayerName, int remotePlayerNumber, InputReader incommingMessageProccessor, OutputWriter outgoingMessageProccessor,boolean isOwner) {
-        super(stage, incommingMessageProccessor, outgoingMessageProccessor, playerName);
+    public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String remotePlayerName, int remotePlayerNumber, ServerConnection serverConnection, boolean isOwner) {
+        super(stage, serverConnection, playerName);
         this.remotePlayerName = remotePlayerName;
         this.map = MapFactory.getInstance().getMap(mapName, playerNumber, remotePlayerNumber, playerName, remotePlayerName);
-        this.isOwner=isOwner;
+        this.isOwner = isOwner;
         try {
             this.view = new MapView(this, map.getMapParts(), mapName);
         } catch (IOException e) {
@@ -66,11 +67,11 @@ public class MultiplayerMapController extends ServerController implements MapCon
             if (map.checkWinCondition()) {
                 outgoingMessageProcessor.sendMessage(protocol.send().won());
                 DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();
-                if (isOwner){
-                    new LobbyOwnerController(stage, playerName, incomingMessageProcessor, outgoingMessageProcessor).loadView();
-                }else{
+                if (isOwner) {
+                    new LobbyOwnerController(stage, playerName, serverConnection).loadView();
+                } else {
                     new LobbySecondPlayerController(stage, playerName, remotePlayerName, mapName,
-                            incomingMessageProcessor, outgoingMessageProcessor).loadView();
+                            serverConnection).loadView();
                 }
 
             }
@@ -98,11 +99,11 @@ public class MultiplayerMapController extends ServerController implements MapCon
                 if (in.youHaveLost()) {
                     Platform.runLater(() -> {
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", this.playerName + " has lost").showAndWait();
-                        if (isOwner){
-                            new LobbyOwnerController(stage, playerName, incomingMessageProcessor, outgoingMessageProcessor).loadView();
-                        }else{
+                        if (isOwner) {
+                            new LobbyOwnerController(stage, playerName, serverConnection).loadView();
+                        } else {
                             new LobbySecondPlayerController(stage, playerName, remotePlayerName, mapName,
-                                    incomingMessageProcessor, outgoingMessageProcessor).loadView();
+                                    serverConnection).loadView();
                         }
                     });
                     break;
@@ -131,14 +132,14 @@ public class MultiplayerMapController extends ServerController implements MapCon
                 }
                 if (in.playerHasLeft()) {
                     Platform.runLater(() -> {
-                        new MultiplayerController(stage, incomingMessageProcessor, outgoingMessageProcessor, playerName).loadView();
+                        new MultiplayerController(stage, serverConnection, playerName).loadView();
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Map", "Other player has left").showAndWait();
                     });
                     break;
                 }
                 if (in.youHaveLeft()) {
                     Platform.runLater(() -> {
-                        new MultiplayerController(stage, incomingMessageProcessor, outgoingMessageProcessor, playerName).loadView();
+                        new MultiplayerController(stage, serverConnection, playerName).loadView();
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game info", "You have left the game").showAndWait();
                     });
                     break;

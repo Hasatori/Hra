@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * Handles input from GeneralProtocol messages.
+ */
 public class GeneralProtocolIn {
 
     private static final String LOBBY_FULL = "LOBBY IS FULL";

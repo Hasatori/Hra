@@ -8,10 +8,16 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * Map part class - Box
+ */
 public class Box extends MapPart {
 
     private final Logger LOGGER = LoggerFactory.getLogger(Box.class);
 
+    /**
+     * @param position position of box
+     */
     public Box(Position position) {
         super(position);
     }

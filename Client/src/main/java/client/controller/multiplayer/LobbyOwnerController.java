@@ -16,6 +16,9 @@ import client.view.LobbyOwnerView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Controller class for owner of lobby.
+ */
 @SuppressWarnings("restriction")
 public class LobbyOwnerController extends ServerController {
 
@@ -25,6 +28,11 @@ public class LobbyOwnerController extends ServerController {
     private String secondPlayerName;
     private boolean isFull = false;
 
+    /**
+     * @param stage stage
+     * @param playerName owner name
+     * @param serverConnection server connection
+     */
     public LobbyOwnerController(Stage stage, String playerName, ServerConnection serverConnection) {
         super(stage, serverConnection, playerName);
         try {
@@ -42,10 +50,17 @@ public class LobbyOwnerController extends ServerController {
         waitForMessage();
     }
 
+    /**
+     * Sets map of the game in lobby.
+     * @param mapName name of the map
+     */
     public void setMap(String mapName) {
         outgoingMessageProcessor.sendMessage(protocol.send().setMap(mapName));
     }
 
+    /**
+     * Method for waiting for messages.
+     */
     private void waitForMessage() {
         new Thread(() -> {
             String message = incomingMessageProcessor.getMessage();
@@ -84,10 +99,18 @@ public class LobbyOwnerController extends ServerController {
         }).start();
     }
 
-     void setSecondPlayerName(String name) {
+    /**
+     * Sets name of the second player.
+     * @param name second player name
+     */
+    void setSecondPlayerName(String name) {
         view.setSecondPlayerName(name);
     }
 
+    /**
+     * Starts the map game if lobby is full.
+     * @param mapName map name
+     */
     public void startGame(String mapName) {
         if (isFull) {
             outgoingMessageProcessor.sendMessage(protocol.send().startGame());
@@ -96,16 +119,26 @@ public class LobbyOwnerController extends ServerController {
         }
     }
 
+    /**
+     * Kicks second player out of the lobby.
+     */
     public void kickOtherPlayer() {
         outgoingMessageProcessor.sendMessage(protocol.send().kickOtherPlayer());
         isFull = false;
         view.lobbyIsEmpty();
     }
 
+    /**
+     * Deletes the lobby, thus kicking everyone out of it.
+     */
     public void deleteLobby() {
         outgoingMessageProcessor.sendMessage(protocol.send().destroyLobby());
     }
 
+    /**
+     * Sends lobby message to server.
+     * @param msg message to send
+     */
     public void sendLobbyMessage(String msg) {
         outgoingMessageProcessor.sendMessage(protocol.send().sendLobbyMessage("-OWNER" + msg));
     }

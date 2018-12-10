@@ -19,6 +19,10 @@ import client.model.protocol.general.GeneralProtocol;
 import client.view.DialogFactory;
 import client.view.StartView;
 
+/**
+ * Controller class for the start screen.
+ * Handles player's choices, either to play singleplayer or multiplayer games.
+ */
 @SuppressWarnings("restriction")
 public class StartController extends Controller {
 
@@ -27,16 +31,19 @@ public class StartController extends Controller {
     private StartView view;
     private ServerConnection serverConnection;
 
+    /**
+     * @param stage stage
+     * @throws IOException error in constructing StartController
+     */
     public StartController(Stage stage) throws IOException {
         super(stage);
         this.view = new StartView(this);
         this.protocol = new GeneralProtocol();
     }
 
-    public void loadMultiplayer() {
-        setNameAndTryToConnect();
-    }
-
+    /**
+     * Redirects player to offline mode games.
+     */
     public void loadSingleplayer() {
         new SingleplayerController(stage).loadView();
     }
@@ -47,18 +54,25 @@ public class StartController extends Controller {
         this.stage.show();
     }
 
+    /**
+     * Shows alert, that server is not available.
+     */
     private void serverDisconnected() {
         DialogFactory.getAlert(Alert.AlertType.ERROR, "Server connection", "Connection with the server can not be established. Please try it later.").showAndWait();
     }
 
-    private void setNameAndTryToConnect() {
+    /**
+     * Shows dialog for player to set their name.
+     * After setting the player's name, this method will try to connect to server on port 8002.
+     */
+    public void loadMultiplayer() {
         TextInputDialog dialog = DialogFactory.getTextInputDialog("", "Setting name", "Fill your name please");
         final Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         okButton.addEventFilter(ActionEvent.ACTION, ae -> {
             if (dialog.getEditor().getText().equals("")) {
                 ae.consume(); //not valid
                 DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "Name must be filled").showAndWait();
-            }else if (dialog.getEditor().getText().contains("|")){
+            } else if (dialog.getEditor().getText().contains("|")){
                 ae.consume(); //not valid
                 DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "Name cannot contain |").showAndWait();
             } else {
@@ -68,7 +82,7 @@ public class StartController extends Controller {
                     ae.consume(); //not valid
                     this.serverDisconnected();
                 } else {
-                    String message = serverConnection.getIncommingMessageProccessor().getMessage();
+                    String message = serverConnection.getIncomingMessageProcessor().getMessage();
                     if (protocol.get(message).duplicateUserName()) {
                         ae.consume(); //not valid
                         serverConnection.disconnect();

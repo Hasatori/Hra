@@ -18,7 +18,10 @@ import javafx.scene.text.TextFlow;
 import client.controller.multiplayer.LobbyOwnerController;
 import client.util.ResourceLoader;
 
-@SuppressWarnings("restriction")
+/**
+ * View class for a lobby owner window.
+ */
+@SuppressWarnings({"restriction", "Duplicates"})
 public class LobbyOwnerView extends View {
     private static final String CHAT_DELIM = ": ";
     private final LobbyOwnerController controller;
@@ -31,7 +34,13 @@ public class LobbyOwnerView extends View {
     private TextArea lobbyChatInput;
     private ScrollPane lobbyChatPane;
     private TextFlow lobbyChat;
-    
+
+    /**
+     * @param controller LobbyOwnerController
+     * @param maps maps to offer
+     * @param ownerName name of the owner
+     * @throws IOException error
+     */
 	public LobbyOwnerView(LobbyOwnerController controller, List<String> maps, String ownerName) throws IOException {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobbyOwner.fxml")));
         this.controller = controller;
@@ -48,8 +57,8 @@ public class LobbyOwnerView extends View {
         this.lobbyChat = new TextFlow();
         lobbyChatPane.setContent(lobbyChat);
         lobbyChatPane.vvalueProperty().bind(lobbyChat.heightProperty());
-        
-        fillComboBox(maps);
+
+        fillMapComboBox(maps);
         ownerNameLabel.setText(ownerName);
         Text playerName = new Text(ownerName);
         playerName.setFill(Color.BLUE);
@@ -68,26 +77,40 @@ public class LobbyOwnerView extends View {
         lobbyChatSend.setOnAction(a -> sendLobbyMessage());
     }
 
-    private void fillComboBox(List<String> maps) {
+    /**
+     * Fills map combobox with available multiplayer maps.
+     * @param maps multiplayer maps
+     */
+    private void fillMapComboBox(List<String> maps) {
         this.multiplayerMapsComboBox.getItems().clear();
         this.multiplayerMapsComboBox.getItems().addAll(maps);
         this.multiplayerMapsComboBox.getSelectionModel().select(0);
         this.multiplayerMapsComboBox.setOnAction((a) -> controller.setMap(multiplayerMapsComboBox.getSelectionModel().getSelectedItem()));
     }
 
+    /**
+     * Method called after second player leaving the lobby.
+     */
     public void lobbyIsEmpty() {
         this.secondPlayerNameLabel.setText("");
         this.startGameButton.setDisable(true);
         receiveLobbyMessage(" has left the lobby", false, false);
     }
 
-    public void setSecondPlayerName(String value) {
-    	secondPlayerName = value;
-        this.secondPlayerNameLabel.setText(value);
+    /**
+     * Sets second player name to label.
+     * @param secondPlayerName second player name
+     */
+    public void setSecondPlayerName(String secondPlayerName) {
+    	this.secondPlayerName = secondPlayerName;
+        this.secondPlayerNameLabel.setText(secondPlayerName);
         this.startGameButton.setDisable(false);
         receiveLobbyMessage(" has joined the lobby", false, false);
     }
-    
+
+    /**
+     * Sends lobby message. Lobby message consists of text input in chat.
+     */
     private void sendLobbyMessage () {
     	if (!lobbyChatInput.getText().trim().isEmpty()) {
     		String msg = lobbyChatInput.getText().trim();
@@ -96,7 +119,13 @@ public class LobbyOwnerView extends View {
         	lobbyChatInput.setText("");
         }
     }
-    
+
+    /**
+     * Receives lobby message based on ownership of the lobby.
+     * @param msg message to receive
+     * @param owner true=is owner
+     * @param prefix true=needs prefix to match (User1: Hello world!)
+     */
     public void receiveLobbyMessage(String msg, boolean owner, boolean prefix) {
     	Text playerName = new Text();
     	if (owner) {

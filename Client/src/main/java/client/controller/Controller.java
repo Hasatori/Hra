@@ -7,10 +7,16 @@ import client.view.DialogFactory;
 
 import java.util.Optional;
 
+/**
+ * Abstract controller class.
+ */
 public abstract class Controller {
 
     protected final Stage stage;
 
+    /**
+     * @param stage stage
+     */
     public Controller(Stage stage) {
         this.stage = stage;
         stage.setOnCloseRequest(a -> {
@@ -23,5 +29,8 @@ public abstract class Controller {
         });
     }
 
+    /**
+     * Method for loading a javafx view and starting a wait for messages.
+     */
     public abstract void loadView();
 }

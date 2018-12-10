@@ -16,6 +16,9 @@ import client.view.LobbySecondPlayerView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Controller class for second player in lobby.
+ */
 @SuppressWarnings("restriction")
 public class LobbySecondPlayerController extends ServerController {
 
@@ -26,6 +29,13 @@ public class LobbySecondPlayerController extends ServerController {
     private Stage stage;
     private String mapName;
 
+    /**
+     * @param stage stage
+     * @param ownerName name of the lobby owner
+     * @param playerName name of the second player
+     * @param selectedMap name of the selected map
+     * @param serverConnection server connection
+     */
     public LobbySecondPlayerController(Stage stage, String ownerName, String playerName, String selectedMap, ServerConnection serverConnection) {
         super(stage, serverConnection, playerName);
         this.stage = stage;
@@ -49,6 +59,9 @@ public class LobbySecondPlayerController extends ServerController {
         waitForMessages();
     }
 
+    /**
+     * Method for waiting for messages.
+     */
     private void waitForMessages() {
         new Thread(() -> {
             String message = incomingMessageProcessor.getMessage();
@@ -81,14 +94,25 @@ public class LobbySecondPlayerController extends ServerController {
         }).start();
     }
 
+    /**
+     * Leaves the lobby as second player.
+     */
     public void leaveLobby() {
         outgoingMessageProcessor.sendMessage(protocol.send().leaveLobby());
     }
-    
+
+    /**
+     * Sends lobby message to server.
+     * @param msg message to send
+     */
     public void sendLobbyMessage(String msg) {
         outgoingMessageProcessor.sendMessage(protocol.send().sendLobbyMessage("-SECPLAYER" + msg));
     }
-    
+
+    /**
+     * Getter for second player name.
+     * @return name of the player
+     */
     public String getPlayerName() {
     	return playerName;
     }

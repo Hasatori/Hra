@@ -1,5 +1,8 @@
 package client.model.protocol.lobby;
 
+/**
+ * Handles input from LobbyProtocol messages.
+ */
 public class LobbyProtocolIn {
     private final String message;
     private static final String SENT_MESSAGE = "SENT MESSAGE";

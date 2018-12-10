@@ -22,6 +22,9 @@ import client.util.ResourceLoader;
 import client.model.map.CreatedLobby;
 import javafx.scene.image.ImageView;
 
+/**
+ * View class for a multiplayer window (choosing lobbies).
+ */
 @SuppressWarnings("restriction")
 public class MultiplayerView extends View {
 
@@ -32,6 +35,12 @@ public class MultiplayerView extends View {
     private MultiplayerController controller;
     private Label playerNameLabel;
 
+    /**
+     * @param controller MultiplayerController
+     * @param lobbies list of lobbies
+     * @param playerName name of the player
+     * @throws IOException error
+     */
     public MultiplayerView(MultiplayerController controller, List<CreatedLobby> lobbies, String playerName) throws IOException {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/lobbies.fxml")));
 
@@ -71,6 +80,10 @@ public class MultiplayerView extends View {
         refreshButton.setOnMouseClicked((a) -> fillLobbies(controller.loadLobbies()));
     }
 
+    /**
+     * Fill table with existing lobbies that player can connect to.
+     * @param lobbies lobbies to list
+     */
     private void fillLobbies(List<CreatedLobby> lobbies) {
     	ObservableList<CreatedLobby> lobbiesList = FXCollections.observableArrayList(lobbies);
     	openedLobbiesTable.setItems(lobbiesList);

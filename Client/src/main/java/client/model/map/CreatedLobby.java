@@ -1,5 +1,8 @@
 package client.model.map;
 
+/**
+ * Class for already created and public lobby.
+ */
 public class CreatedLobby {
 	
 	private final static int CAPACITY = 2;
@@ -7,7 +10,12 @@ public class CreatedLobby {
 	private String name;
 	private String owner;
 	private String status;
-	
+
+	/**
+	 * @param name name of the lobby
+	 * @param owner name of the owner of the lobby
+	 * @param status status of the lobby (1/2, 2/2)
+	 */
 	public CreatedLobby(String name, String owner, String status) {
 		this.name = name;
 		this.owner = owner;

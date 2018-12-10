@@ -6,11 +6,21 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class for multiplayer map.
+ */
 class MultiplayerMap extends Map {
     private HashMap<String, Player> players = new HashMap<>();
     private List<Target> conditionTargets = new LinkedList<>();
     private Player currentPlayer, remotePlayer;
 
+    /**
+     * @param mapName name of the map
+     * @param currentPlayerNumber number of current player
+     * @param remotePlayerNumber number of remote player
+     * @param currentPlayerName name of current player
+     * @param remotePlayerName name of remote player
+     */
     public MultiplayerMap(String mapName, int currentPlayerNumber, int remotePlayerNumber, String currentPlayerName, String remotePlayerName) {
         super(mapName, "plans/multiplayer/");
         setPlayerAndTargets(currentPlayerNumber,remotePlayerNumber, currentPlayerName, remotePlayerName);
@@ -20,10 +30,17 @@ class MultiplayerMap extends Map {
         System.out.println("Remote player name : " + remotePlayer.getName());
 
         conditionTargets.forEach(target -> {
-            System.out.println("Contiditon target: " + target.getInitialPosition().toString());
+            System.out.println("Condition target: " + target.getInitialPosition().toString());
         });
     }
 
+    /**
+     * Sets players and targets for multiplayer map.
+     * @param currentPlayerNumber number of current player
+     * @param remotePlayerNumber number of remote player
+     * @param currentPlayerName name of current player
+     * @param remotePlayerName name of remote player
+     */
     private void setPlayerAndTargets(int currentPlayerNumber,int remotePlayerNumber, String currentPlayerName, String remotePlayerName) {
         int playerCount = 0;
         for (int row = 0; row < mapParts.length; row++) {
@@ -41,7 +58,6 @@ class MultiplayerMap extends Map {
                     playerCount++;
                 }
                 if (mapParts[row][column] instanceof Target) {
-
                     if (currentPlayerNumber == 1 && column>(mapParts[row].length/2)) {
                         conditionTargets.add((Target) mapParts[row][column]);
                     }
@@ -69,5 +85,4 @@ class MultiplayerMap extends Map {
         }
         return true;
     }
-
 }

@@ -8,10 +8,16 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * Map part class - Floor
+ */
 public class Floor extends MapPart {
 
     private final Logger LOGGER = LoggerFactory.getLogger(Floor.class);
 
+    /**
+     * @param position position of floor
+     */
     public Floor(Position position) {
         super(position);
     }

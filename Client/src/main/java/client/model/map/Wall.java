@@ -8,10 +8,16 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * Map part class - Wall
+ */
 public class Wall extends MapPart {
 
     private final Logger LOGGER = LoggerFactory.getLogger(Wall.class);
 
+    /**
+     * @param position position of wall
+     */
     public Wall(Position position) {
         super(position);
     }

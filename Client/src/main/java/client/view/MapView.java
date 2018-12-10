@@ -17,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * View class for a map window.
+ */
 public class MapView extends View {
 
     private final Logger LOGGER = LoggerFactory.getLogger(MapView.class);
@@ -26,6 +29,12 @@ public class MapView extends View {
     private List<List<MapPart>> mapParts;
     private VBox vBox;
 
+    /**
+     * @param mapController MapController
+     * @param mapParts map parts to be drawn
+     * @param mapName name of the map
+     * @throws IOException error
+     */
     public MapView(MapController mapController, List<List<MapPart>> mapParts, String mapName) throws IOException {
         super((pane = new Pane()));
         pane.getChildren().clear();
@@ -43,6 +52,11 @@ public class MapView extends View {
         pane.getChildren().add(vBox);
     }
 
+    /**
+     * Draw map from given map parts.
+     * @param mapParts map parts
+     * @return GridPane with complete map layout
+     */
     private GridPane createMap(List<List<MapPart>> mapParts) {
         gridPane = new GridPane();
         for (int row = 0; row < mapParts.size(); row++) {
@@ -66,6 +80,10 @@ public class MapView extends View {
         return gridPane;
     }
 
+    /**
+     * Create menubar and it's components.
+     * @return menubar
+     */
     private MenuBar getMenu() {
         MenuBar menuBar = new MenuBar();
         Menu general = new Menu("General");
@@ -78,6 +96,10 @@ public class MapView extends View {
         return menuBar;
     }
 
+    /**
+     * Reloads the entire map.
+     * @param mapParts new map parts
+     */
     public void reload(List<List<MapPart>> mapParts) {
         vBox.getChildren().remove(gridPane);
         vBox.getChildren().add(createMap(mapParts));

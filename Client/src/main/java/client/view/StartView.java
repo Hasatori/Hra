@@ -7,10 +7,17 @@ import javafx.scene.control.Button;
 import client.controller.StartController;
 import client.util.ResourceLoader;
 
+/**
+ * View class for a start window.
+ */
 @SuppressWarnings("restriction")
 public class StartView extends View {
     private StartController controller;
 
+    /**
+     * @param startController start controller
+     * @throws IOException error in constructing a StartController
+     */
     public StartView(StartController startController) throws IOException {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/start.fxml")));
         Button singlePlayer = (Button) this.lookup("#singleplayerButton");

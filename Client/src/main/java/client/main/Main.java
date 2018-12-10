@@ -15,6 +15,11 @@ public class Main extends Application {
         Platform.exit();
     }
 
+    /**
+     * Sets primary stage stats and starts the starting window
+     * @param primaryStage primary stage
+     * @throws Exception error
+     */
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setResizable(false);
         primaryStage.setX(WINDOW_WIDTH);

@@ -8,7 +8,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-class LevelLoader {
+/**
+ * Level loader class takes care of constructing the map.
+ */
+public class LevelLoader {
 
     private final Logger LOGGER = LoggerFactory.getLogger(LevelLoader.class);
     private int numberOfWalls, numberOfPlayers, numberOfBoxes, numberOfTargets, numberOFFloors = 0;
@@ -27,6 +30,11 @@ class LevelLoader {
 
     }
 
+    /**
+     * Loads map parts from a file and construct the map.
+     * @param path path to map
+     * @return 2D array of map parts
+     */
     MapPart[][] load(String path) {
         try {
             LOGGER.info("Loading map {}", path);
@@ -56,6 +64,11 @@ class LevelLoader {
         return mapParts;
     }
 
+    /**
+     * Returns true if map is multilevel
+     * @param line line
+     * @return true=is multilevel
+     */
     private boolean isMultilevel(String line) {
         return line.split("-").length == 2;
     }
@@ -64,6 +77,11 @@ class LevelLoader {
         return value.split("=")[1].toCharArray()[0];
     }
 
+    /**
+     * Creates matrices of map parts.
+     * @param line line
+     * @param rowNum row number
+     */
     private void createMatrices(String line, int rowNum) {
         char[] signs = line.toCharArray();
         for (int i = 0; i < signs.length; i++) {

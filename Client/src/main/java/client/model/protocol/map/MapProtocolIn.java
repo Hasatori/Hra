@@ -2,6 +2,9 @@ package client.model.protocol.map;
 
 import com.sun.javafx.scene.traversal.Direction;
 
+/**
+ * Handles input from MapProtocol messages.
+ */
 public class MapProtocolIn {
 
     private static final String MAP_YOU_LOST = "YOU HAVE LOST";
@@ -32,9 +35,11 @@ public class MapProtocolIn {
     public boolean playerHasLeft() {
         return message.matches(MAP_PLAYER_LEFT);
     }
-public boolean youHaveLeft(){
+
+    public boolean youHaveLeft(){
         return message.equals(MAP_YOU_LEFT);
-}
+    }
+
     public boolean restartMapRequest() {
         return message.matches(MAP_RESTART);
     }

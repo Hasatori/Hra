@@ -1,5 +1,8 @@
 package client.model.protocol.lobby;
 
+/**
+ * Handles output from LobbyProtocol messages.
+ */
 public class LobbyProtocolOut {
 
 	LobbyProtocolOut() {}	

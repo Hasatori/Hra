@@ -24,6 +24,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Controller class for multiplayer while playing a map.
+ */
 public class MultiplayerMapController extends ServerController implements MapController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(MultiplayerMapController.class);
@@ -35,6 +38,16 @@ public class MultiplayerMapController extends ServerController implements MapCon
     private MapView view;
     private boolean isOwner;
 
+    /**
+     * @param stage stage
+     * @param mapName name of the current map
+     * @param playerNumber number of a player
+     * @param playerName name of a player
+     * @param remotePlayerName name of a remote player
+     * @param remotePlayerNumber number of a remote player
+     * @param serverConnection server connection
+     * @param isOwner true=player is owner
+     */
     public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String remotePlayerName, int remotePlayerNumber, ServerConnection serverConnection, boolean isOwner) {
         super(stage, serverConnection, playerName);
         this.remotePlayerName = remotePlayerName;
@@ -76,6 +89,9 @@ public class MultiplayerMapController extends ServerController implements MapCon
         }
     }
 
+    /**
+     * Method for sending a win message.
+     */
     private void won(){
         if (isOwner) {
             LobbyOwnerController lobbyOwnerController = new LobbyOwnerController(stage, playerName, serverConnection);
@@ -96,6 +112,9 @@ public class MultiplayerMapController extends ServerController implements MapCon
         outgoingMessageProcessor.sendMessage(protocol.send().restartMap());
     }
 
+    /**
+     * Method for waiting for messages.
+     */
     public void waitForCommands() {
 
         new Thread(() -> {
@@ -104,7 +123,7 @@ public class MultiplayerMapController extends ServerController implements MapCon
                 MapProtocolIn in = protocol.get(message);
                 if (in.youHaveLost()) {
                     Platform.runLater(() -> {
-                       won();
+                        won();
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have lost").showAndWait();
                     });
                     break;

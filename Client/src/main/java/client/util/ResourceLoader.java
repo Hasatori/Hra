@@ -44,14 +44,30 @@ public class ResourceLoader {
         return ClassLoader.getSystemResourceAsStream(path);
     }
 
+    /**
+     * Fetches list of singleplayer maps from a file.
+     * @return list of singleplayer maps
+     * @throws IOException file not found error
+     */
     public static List<String> getSingleplayerMaps() throws IOException {
         return  getMaps("plans/singleplayer/maps.txt");
     }
 
+    /**
+     * Fetches list of multiplayer maps from a file.
+     * @return list of multiplayer maps
+     * @throws IOException file not found error
+     */
     public static List<String> getMultiplayerMaps() throws IOException {
         return getMaps("plans/multiplayer/maps.txt");
     }
 
+    /**
+     * Fetches all available maps.
+     * @param path path to file
+     * @return List of map names
+     * @throws IOException file not found error
+     */
     private static List<String> getMaps(String path) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(getResourceAsInputStream(path)));
         String name;

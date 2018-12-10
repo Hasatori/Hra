@@ -1,5 +1,8 @@
 package client.model.protocol.general;
 
+/**
+ * Handles output from GeneralProtocol messages.
+ */
 public class GeneralProtocolOut {
 
     GeneralProtocolOut() {
@@ -25,5 +28,4 @@ public class GeneralProtocolOut {
     public String disconnect() {
         return GeneralProtocol.MSG_PREFIX + ":" + "DISCONNECT";
     }
-
 }

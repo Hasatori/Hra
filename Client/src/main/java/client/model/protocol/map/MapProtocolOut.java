@@ -2,6 +2,9 @@ package client.model.protocol.map;
 
 import com.sun.javafx.scene.traversal.Direction;
 
+/**
+ * Handles output from MapProtocol messages.
+ */
 public class MapProtocolOut {
 
     MapProtocolOut() {
@@ -11,12 +14,15 @@ public class MapProtocolOut {
     public String moving(Direction direction) {
         return MapProtocol.MSG_PREFIX + ":MOVING " + direction;
     }
+
     public String won() {
         return MapProtocol.MSG_PREFIX + ":WON";
     }
+
     public String quitMap(){
         return MapProtocol.MSG_PREFIX + ":QUIT MAP";
     }
+
     public String restartMap(){
         return MapProtocol.MSG_PREFIX + ":RESTART MAP";
     }
@@ -24,6 +30,7 @@ public class MapProtocolOut {
     public String agreed(){
         return MapProtocol.MSG_PREFIX + ":OK";
     }
+
     public String disagreed(){
         return MapProtocol.MSG_PREFIX + ":NO";
     }

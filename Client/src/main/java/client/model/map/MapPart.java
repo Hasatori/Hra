@@ -5,11 +5,17 @@ import javafx.scene.Node;
 
 import java.io.IOException;
 
+/**
+ * Core class for map construction.
+ */
 public abstract class MapPart {
 
     private MapPart left, right, top, bottom = null;
     private Position position;
 
+    /**
+     * @param position of map part
+     */
     public MapPart(Position position) {
         this.position = position;
     }
@@ -38,6 +44,10 @@ public abstract class MapPart {
         return bottom;
     }
 
+    /**
+     * @return Node source
+     * @throws IOException error
+     */
     public abstract Node getSource() throws IOException;
 
     void setLeft(MapPart mapPart) {
@@ -56,6 +66,11 @@ public abstract class MapPart {
         this.bottom = mapPart;
     }
 
+    /**
+     * Returns neighbour map part based on the position
+     * @param direction direction in which we ask for the neighbour (UP, DOWN, LEFT, RIGHT)
+     * @return map part
+     */
     MapPart getNeighbour(Direction direction) {
         switch (direction) {
             case UP:

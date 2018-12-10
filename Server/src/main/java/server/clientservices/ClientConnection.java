@@ -21,7 +21,9 @@ import server.processors.MessageProcessor;
 import server.protocol.Protocol;
 import server.protocol.ProtocolType;
 
-
+/**
+ * This class manages client connection and sends/reads messages to/from client.
+ */
 public class ClientConnection implements Runnable {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ClientConnection.class);
@@ -30,8 +32,10 @@ public class ClientConnection implements Runnable {
     private Socket socket;
     private Client client;
     private PrintWriter writer;
-    private BufferedReader reader;
 
+    /**
+     * @param socket connection socket
+     */
     public ClientConnection(Socket socket) {
         this.socket = socket;
         this.generalMessageProcessor = new GeneralMessageProcessor(this);
@@ -39,19 +43,29 @@ public class ClientConnection implements Runnable {
         this.mapMessageProcessor = new MapMessageProcessor(this);
     }
 
+    /**
+     * Setter for client.
+     * @param client client to set
+     */
     public void setClient(Client client) {
         this.client = client;
     }
 
+    /**
+     * Gets entity of client bound to this.
+     * @return client
+     */
     public Client getClient() {
         return client;
     }
 
+    /**
+     * Runs client connection and starts listening to messages.
+     */
     public void run() {
         try {
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), Server.ENCODING), true);// Without autoFlush method flush has to be called after every write(printl)
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Server.ENCODING));
-            this.reader = reader;
             this.writer = writer;
             String line = reader.readLine();
             processMessage(line);
@@ -80,6 +94,10 @@ public class ClientConnection implements Runnable {
         }
     }
 
+    /**
+     * Reads and processes incoming message.
+     * @param message message to read
+     */
     private void processMessage(String message) {
         LOGGER.info("Incoming message {}", message);
         String prefix = "";
@@ -87,13 +105,13 @@ public class ClientConnection implements Runnable {
             prefix = client.getIdentifier() + " | ";
         }
         ClientManager.getInstance().getController().updateMessages(prefix + " Incoming message - " + message);
-        try {
-            getProcessor(message).processMessage(message);
-        } catch (IOException e) {
-            LOGGER.error("Failed to process message", e);
-        }
+        getProcessor(message).processMessage(message);
     }
 
+    /**
+     * Sends message to client bound to this connection.
+     * @param message message to send
+     */
     public void sendMessage(String message) {
         LOGGER.info("Outgoing message {}", message);
         String prefix = "";
@@ -105,6 +123,11 @@ public class ClientConnection implements Runnable {
         writer.println(message);
     }
 
+    /**
+     * Returns message processor based od type od the message.
+     * @param message incoming message
+     * @return message processor
+     */
     private MessageProcessor getProcessor(String message) {
         ProtocolType protocolType = Protocol.getProtocolType(message);
         switch (protocolType) {

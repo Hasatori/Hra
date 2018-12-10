@@ -1,23 +1,26 @@
 package server.processors;
 
-
 import server.clientservices.Client;
 import server.clientservices.ClientConnection;
 import server.protocol.map.MapProtocol;
 import server.protocol.map.MapProtocolIn;
 
-import java.io.IOException;
-
+/**
+ * Message processor of map messages.
+ */
 public class MapMessageProcessor extends MessageProcessor {
     private final MapProtocol protocol;
 
+    /**
+     * @param connection client connection
+     */
     public MapMessageProcessor(ClientConnection connection) {
         super(connection);
         this.protocol = new MapProtocol();
     }
 
     @Override
-    public void processMessage(String message) throws IOException {
+    public void processMessage(String message) {
         MapProtocolIn in = protocol.get(message);
         Client owner = clientConnection.getClient().getLobby().getOwner();
         Client otherPlayer = clientConnection.getClient().getLobby().getOtherPlayer();
@@ -27,7 +30,6 @@ public class MapMessageProcessor extends MessageProcessor {
             } else {
                 owner.getClientConnection().sendMessage(protocol.send().movePlayer(in.getDirectionToMove()));
             }
-
         }
         if (in.won()) {
             otherPlayer.getClientConnection().sendMessage(protocol.send().playerHasLost());

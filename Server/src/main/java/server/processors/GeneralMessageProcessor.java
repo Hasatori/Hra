@@ -1,8 +1,5 @@
 package server.processors;
 
-
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,17 +11,23 @@ import server.protocol.general.GeneralProtocol;
 import server.protocol.general.GeneralProtocolIn;
 import server.protocol.lobby.LobbyProtocol;
 
+/**
+ * Message processor of general messages.
+ */
 public class GeneralMessageProcessor extends MessageProcessor {
     private final GeneralProtocol protocol;
     private final Logger LOGGER = LoggerFactory.getLogger(GeneralMessageProcessor.class);
 
+    /**
+     * @param connection client connection
+     */
     public GeneralMessageProcessor(ClientConnection connection) {
         super(connection);
         this.protocol = new GeneralProtocol();
     }
 
     @Override
-    public void processMessage(String message) throws IOException {
+    public void processMessage(String message) {
         GeneralProtocolIn in = this.protocol.get(message);
         if (in.newUser()) {
             if (!ClientManager.getInstance().isUserNameUnique(in.getNewUser())) {

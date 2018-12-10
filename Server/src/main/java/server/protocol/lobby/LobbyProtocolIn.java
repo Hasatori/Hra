@@ -1,5 +1,8 @@
 package server.protocol.lobby;
 
+/**
+ * Handles input from LobbyProtocol messages.
+ */
 public class LobbyProtocolIn {
 
     private final String message;

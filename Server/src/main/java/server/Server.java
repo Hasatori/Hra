@@ -1,6 +1,5 @@
 package server;
 
-import controller.MainController;
 import server.clientservices.ClientConnection;
 import server.clientservices.ClientManager;
 
@@ -8,11 +7,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Singleton class of Server.
+ * This class is the core of server side.
+ */
 public class Server implements Runnable {
     public static final String ENCODING = "UTF-8";
     private static final Server INSTANCE = new Server();
     private ServerSocket serverSocket;
-    private MainController mainController;
     private Integer port;
 
     private Server() {
@@ -23,11 +25,17 @@ public class Server implements Runnable {
         return INSTANCE;
     }
 
+    /**
+     * Sets the port number for server to start on.
+     * @param port number
+     */
     public void setPort(Integer port) {
         this.port = port;
     }
 
-
+    /**
+     * Stops the server.
+     */
     public void stopServer() {
         try {
             this.serverSocket.close();

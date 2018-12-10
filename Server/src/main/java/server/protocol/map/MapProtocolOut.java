@@ -2,6 +2,9 @@ package server.protocol.map;
 
 import com.sun.javafx.scene.traversal.Direction;
 
+/**
+ * Handles output from MapProtocol messages.
+ */
 public class MapProtocolOut {
 
     MapProtocolOut() {

@@ -1,12 +1,8 @@
 package view;
 
-import com.sun.org.apache.bcel.internal.generic.FADD;
 import controller.MainController;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,6 +17,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * View class for a main window.
+ * This is the only view on a server side.
+ * Every configurable parameter from GUI side is managed through here.
+ */
 public class MainView extends Scene {
 
     private TextField port;
@@ -31,6 +32,10 @@ public class MainView extends Scene {
     private ScrollPane scrollPane;
     private ProgressIndicator runCircle;
 
+    /**
+     * @param mainController MainController
+     * @throws IOException error
+     */
     public MainView(MainController mainController) throws IOException {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("main.fxml")));
 
@@ -51,7 +56,6 @@ public class MainView extends Scene {
         identifierColumn.prefWidthProperty().bind(clientsTable.widthProperty());
 
         start.setOnAction(a -> {
-
             start.setDisable(true);
             stop.setDisable(true);
             runCircle.setVisible(true);
@@ -79,15 +83,23 @@ public class MainView extends Scene {
         });
     }
 
+    /**
+     * Fills table of clients with active clients.
+     * @param clients clients to add
+     */
     public void fillClientsTable(List<Client> clients) {
         clientsTable.getItems().clear();
         clientsTable.setItems(FXCollections.observableArrayList(clients));
     }
 
+    /**
+     * Adds message to textflow of messages emitted by server or client.
+     * @param message message to add
+     */
     public void message(String message) {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         Date date = new Date();
-        String prefix=dateFormat.format(date)+" - ";
-        messagesTextFlow.getChildren().addAll(new Text(prefix+message + "\n"));
+        String prefix = dateFormat.format(date) + " - ";
+        messagesTextFlow.getChildren().add(new Text(prefix + message + "\n"));
     }
 }

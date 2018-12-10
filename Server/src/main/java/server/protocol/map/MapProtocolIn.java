@@ -2,7 +2,11 @@ package server.protocol.map;
 
 import com.sun.javafx.scene.traversal.Direction;
 
+/**
+ * Handles input from MapProtocol messages.
+ */
 public class MapProtocolIn {
+
     private static final String VICTORY = "WON";
     private static final String MOVING = "MOVING ";
     private static final String RESTART_MAP = "RESTART MAP";
@@ -38,6 +42,7 @@ public class MapProtocolIn {
     public boolean disagreed() {
         return message.matches(NO);
     }
+
     public boolean quitMap(){
         return message.equals(QUIT_MAP);
     }

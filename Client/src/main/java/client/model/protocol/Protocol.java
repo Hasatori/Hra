@@ -17,7 +17,7 @@ public class Protocol {
 
     /**
      * Determines if message is of the right type.
-     * @param message
+     * @param message message
      * @return true=is right message type
      */
     protected boolean isRightMessageType(String message) {

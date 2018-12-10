@@ -7,6 +7,9 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Handles output from GeneralProtocol messages.
+ */
 public class GeneralProtocolOut {
 
     GeneralProtocolOut() {

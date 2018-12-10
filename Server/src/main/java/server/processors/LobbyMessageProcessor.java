@@ -1,24 +1,28 @@
 package server.processors;
 
-import java.io.IOException;
-
 import server.clientservices.Client;
 import server.clientservices.ClientConnection;
 import server.protocol.lobby.LobbyProtocol;
 import server.protocol.lobby.LobbyProtocolIn;
 
+/**
+ * Message processor of lobby messages.
+ */
 public class LobbyMessageProcessor extends MessageProcessor {
     private final LobbyProtocol protocol;
     private static final String OWNER_SENT_MESSAGE = "LOBBY:SENT MESSAGE-OWNER";
     private static final String SECPLAYER_SENT_MESSAGE = "LOBBY:SENT MESSAGE-SECPLAYER";
 
+    /**
+     * @param connection client connection
+     */
     public LobbyMessageProcessor(ClientConnection connection) {
         super(connection);
         this.protocol = new LobbyProtocol();
     }
 
     @Override
-    public void processMessage(String message) throws IOException {
+    public void processMessage(String message) {
         LobbyProtocolIn in = protocol.get(message);
         if (in.setMap()) {
             if (clientConnection.getClient().getLobby().isFull()) {

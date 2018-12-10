@@ -10,6 +10,9 @@ import view.MainView;
 
 import java.io.IOException;
 
+/**
+ * Controller class for main view for server.
+ */
 public class MainController extends Controller {
 
     private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
@@ -31,11 +34,18 @@ public class MainController extends Controller {
         stage.show();
     }
 
+    /**
+     * Starts server at given given port number.
+     * @param port port number
+     */
     public void startServer(Integer port) {
         Server.getInstance().setPort(port);
         new Thread(Server.getInstance()).start();
     }
 
+    /**
+     * Stops a running server.
+     */
     public void stopServer() {
         Server.getInstance().stopServer();
         ClientManager.getInstance().removeAllClients();
@@ -43,9 +53,17 @@ public class MainController extends Controller {
         updateClients();
     }
 
+    /**
+     * Updates list of active clients.
+     */
     public void updateClients() {
         view.fillClientsTable(ClientManager.getInstance().getClients());
     }
+
+    /**
+     * Updates a list of sent messages.
+     * @param message message to show
+     */
     public void updateMessages(String message){
         Platform.runLater(()-> view.message(message));
     }

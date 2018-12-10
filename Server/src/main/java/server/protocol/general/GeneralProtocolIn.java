@@ -1,5 +1,8 @@
 package server.protocol.general;
 
+/**
+ * Handles input from GeneralProtocol messages.
+ */
 public class GeneralProtocolIn {
 
     private static final String THIS_IS = "THIS IS ";

@@ -32,7 +32,12 @@ public class MapMessageProcessor extends MessageProcessor {
             }
         }
         if (in.won()) {
-            otherPlayer.getClientConnection().sendMessage(protocol.send().playerHasLost());
+            if (clientConnection.getClient() == owner) {
+                otherPlayer.getClientConnection().sendMessage(protocol.send().playerHasLost());
+            }else{
+                owner.getClientConnection().sendMessage(protocol.send().playerHasLost());
+            }
+
         }
         if (in.restartMapRequest()) {
             if (clientConnection.getClient() == owner) {

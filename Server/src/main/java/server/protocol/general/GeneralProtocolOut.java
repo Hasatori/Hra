@@ -45,4 +45,8 @@ public class GeneralProtocolOut {
     public String connectedToLobby(String lobbyName, String ownerName, String mapName) {
         return String.format("%s:CONNECTED TO %s|%s|%s", GeneralProtocol.MSG_PREFIX, lobbyName, ownerName, mapName);
     }
+
+    public String lobbyDoesNotExist(){
+        return GeneralProtocol.MSG_PREFIX + ":LOBBY DOES NOT EXIST";
+    }
 }

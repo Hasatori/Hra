@@ -1,7 +1,7 @@
 <configuration>
 
     <appender name="ERROR_FILE" class="ch.qos.logback.core.FileAppender">
-        <file>log/error.log</file>
+        <file>logOutput/error.log</file>
         <encoder>
             <pattern>[%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
@@ -10,7 +10,7 @@
         </filter>
     </appender>
     <appender name="DEBUG_FILE" class="ch.qos.logback.core.FileAppender">
-        <file>log/debug.log</file>
+        <file>logOutput/debug.log</file>
         <encoder>
             <pattern>[%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>

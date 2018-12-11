@@ -62,7 +62,7 @@ public class ServerConnection {
             outgoingMessageProcessor.sendMessage(new GeneralProtocol().send().greeting(this.identifier));
 
         } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e.fillInStackTrace());
+            LOGGER.error("Error while connecting {}",e);
         }
     }
 

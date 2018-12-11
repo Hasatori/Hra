@@ -53,7 +53,9 @@ public class GeneralMessageProcessor extends MessageProcessor {
         } else if (in.wannaJoinLobby()) {
             String lobbyName = in.getLobbyName();
             LOGGER.debug("Lobby name:{}", lobbyName);
-            if (ClientManager.getInstance().isLobbyFull(lobbyName)) {
+            if (ClientManager.getInstance().getLobby(lobbyName) == null) {
+                clientConnection.sendMessage(protocol.send().lobbyDoesNotExist());
+            } else if (ClientManager.getInstance().isLobbyFull(lobbyName)) {
                 clientConnection.sendMessage(protocol.send().lobbyIsFull());
             } else {
                 ClientManager.getInstance().addPlayerToLobby(lobbyName, clientConnection.getClient());

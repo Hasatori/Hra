@@ -68,7 +68,6 @@ public class LobbyOwnerController extends ServerController {
             while (message != null) {
                 LobbyProtocolIn in = protocol.get(message);
                 if (in.playerConnected()) {
-                    this.secondPlayerName = in.getSecondPlayerName();
                     Platform.runLater(() -> {
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Lobby",
                                 "Player " + in.getSecondPlayerName() + " has connected").showAndWait();
@@ -105,8 +104,9 @@ public class LobbyOwnerController extends ServerController {
      *
      * @param name second player name
      */
-    void setSecondPlayerName(String name) {
+    public void setSecondPlayerName(String name) {
         view.setSecondPlayerName(name);
+        secondPlayerName = name;
         isFull = true;
     }
 

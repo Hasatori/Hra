@@ -4,6 +4,7 @@ import controller.MainController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.lang.reflect.Field;
@@ -17,7 +18,7 @@ public class TestView extends Application {
         new Thread(() -> {
             Field f = null; //NoSuchFieldException
             try {
-                Thread.sleep(5000);
+              //  Thread.sleep(1000);
 
                 f = mainController.getClass().getDeclaredField("view");
                 f.setAccessible(true);
@@ -25,7 +26,13 @@ public class TestView extends Application {
                 Field f2 = view.getClass().getDeclaredField("start");
                 f2.setAccessible(true);
                 Button start = (Button) f2.get(view);
+
+                Field f3 = view.getClass().getDeclaredField("port");
+                f3.setAccessible(true);
+                TextField port = (TextField) f3.get(view);
+
                 Platform.runLater(() -> {
+                    port.setText("8002");
                     start.fire();
                 });
 
@@ -33,13 +40,9 @@ public class TestView extends Application {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
 
         }).start();
 
     }
-
-
 }

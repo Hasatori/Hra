@@ -14,6 +14,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import client.controller.multiplayer.LobbySecondPlayerController;
 import client.util.ResourceLoader;
@@ -37,7 +38,7 @@ public class LobbySecondPlayerView extends View {
 
     /**
      * @param controller LobbySecondPlayerController
-     * @param maps maps to fill
+     * @param maps       maps to fill
      * @throws IOException error
      */
     public LobbySecondPlayerView(LobbySecondPlayerController controller, List<String> maps) throws IOException {
@@ -53,7 +54,7 @@ public class LobbySecondPlayerView extends View {
         this.lobbyChatInput = (TextArea) this.lookup("#lobbyChatInput");
         this.lobbyChatSend = (Button) this.lookup("#lobbyChatSend");
         fillMapComboBox(maps);
-        
+
         this.lobbyChat = new TextFlow();
         lobbyChatPane.setContent(lobbyChat);
         lobbyChatPane.vvalueProperty().bind(lobbyChat.heightProperty());
@@ -63,19 +64,20 @@ public class LobbySecondPlayerView extends View {
         Text lobbyMessage = new Text(" has joined the lobby.");
         lobbyChat.getChildren().addAll(playerName, lobbyMessage);
         mapLabel.setText("Map");
-        
+
         leaveLobbyButton.setOnAction((a) -> controller.leaveLobby());
         lobbyChatInput.setOnKeyPressed((k) -> {
-        	if (k.getCode() == KeyCode.ENTER) {
-        		k.consume();
-        		sendLobbyMessage();
-        	}
+            if (k.getCode() == KeyCode.ENTER) {
+                k.consume();
+                sendLobbyMessage();
+            }
         });
         lobbyChatSend.setOnAction((a) -> sendLobbyMessage());
     }
 
     /**
      * Fills map combobox with available multiplayer maps.
+     *
      * @param maps multiplayer maps
      */
     private void fillMapComboBox(List<String> maps) {
@@ -87,15 +89,17 @@ public class LobbySecondPlayerView extends View {
 
     /**
      * Sets owner name to Label.
+     *
      * @param name owner name
      */
     public void setOwnerName(String name) {
-    	ownerName = name;
+        ownerName = name;
         ownerNameLabel.setText(name);
     }
 
     /**
      * Sets map in combobox.
+     *
      * @param name map name.
      */
     public void setMap(String name) {
@@ -104,42 +108,43 @@ public class LobbySecondPlayerView extends View {
 
     /**
      * Sets second player name and fills the label.
+     *
      * @param name second player name
      */
     public void setPlayerName(String name) {
-    	secondPlayerName = name;
+        secondPlayerName = name;
         secondPlayerNameLabel.setText(name);
     }
 
     /**
      * Sends lobby message. Lobby message consists of text input in chat.
      */
-    private void sendLobbyMessage () {
-    	if (!lobbyChatInput.getText().trim().isEmpty()) {
-    		String msg = lobbyChatInput.getText().trim();
-        	controller.sendLobbyMessage(msg);
-        	receiveLobbyMessage(msg, false);
-        	lobbyChatInput.setText("");
+    private void sendLobbyMessage() {
+        if (!lobbyChatInput.getText().trim().isEmpty()) {
+            String msg = lobbyChatInput.getText().trim();
+            controller.sendLobbyMessage(msg);
+            receiveLobbyMessage(msg, false);
+            lobbyChatInput.setText("");
         }
     }
 
     /**
      * Receives lobby message based on ownership of the lobby.
-     * @param msg message to receive
+     *
+     * @param msg   message to receive
      * @param owner true=is owner
      */
     public void receiveLobbyMessage(String msg, boolean owner) {
-    	Text playerName = new Text();
-    	if (owner) {
-    		playerName.setText("\n" + ownerName);
-    		playerName.setFill(Color.BLUE);
-    	}
-    	else {
-    		playerName.setText("\n" + secondPlayerName);
-    		playerName.setFill(Color.RED);
-    	}
-    	Text lobbyMessage = new Text(CHAT_DELIM + msg);
-    	
-    	Platform.runLater(() -> lobbyChat.getChildren().addAll(playerName, lobbyMessage));
+        Text playerName = new Text();
+        if (owner) {
+            playerName.setText("\n" + ownerName);
+            playerName.setFill(Color.BLUE);
+        } else {
+            playerName.setText("\n" + secondPlayerName);
+            playerName.setFill(Color.RED);
+        }
+        Text lobbyMessage = new Text(CHAT_DELIM + msg);
+        lobbyChat.setTextAlignment(TextAlignment.RIGHT);
+        Platform.runLater(() -> lobbyChat.getChildren().addAll(playerName, lobbyMessage));
     }
 }

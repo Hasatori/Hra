@@ -61,8 +61,9 @@ public class MainView extends Scene {
             runCircle.setVisible(true);
 
             if (port.getText().equals("")) {
-                DialogFactory.getAlert(Alert.AlertType.ERROR, "Port", "Port must be filled").showAndWait();
                 start.setDisable(false);
+                runCircle.setVisible(false);
+                DialogFactory.getAlert(Alert.AlertType.ERROR, "Port", "Port must be filled").showAndWait();
             } else {
                 try {
                     Integer portNumber = Integer.valueOf(port.getText());
@@ -85,6 +86,7 @@ public class MainView extends Scene {
 
     /**
      * Fills table of clients with active clients.
+     *
      * @param clients clients to add
      */
     public void fillClientsTable(List<Client> clients) {
@@ -94,6 +96,7 @@ public class MainView extends Scene {
 
     /**
      * Adds message to textflow of messages emitted by server or client.
+     *
      * @param message message to add
      */
     public void message(String message) {

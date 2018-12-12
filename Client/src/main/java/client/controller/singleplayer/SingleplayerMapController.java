@@ -58,7 +58,7 @@ public class SingleplayerMapController extends Controller implements MapControll
             if (map.checkWinCondition()) {
                 LOGGER.info("Game ended.{} has won", playerName);
                 DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();
-                new StartController(stage).loadView();
+                new SingleplayerController(stage).loadView();
             }
         } catch (IllegalArgumentException e) {
             LOGGER.error(e.getMessage());

@@ -37,8 +37,9 @@ public class SingleplayerView extends View {
         startSingleplayerButton.setOnAction(a -> {
             if (nameTextField.getText().equals("") || nameTextField.getText() == null) {
                 DialogFactory.getAlert(Alert.AlertType.WARNING, "Starting game", "Name must be filled").showAndWait();
+            } else {
+                controller.startGame(singleplayerMapsComboBox.getSelectionModel().getSelectedItem(), nameTextField.getText());
             }
-            controller.startGame(singleplayerMapsComboBox.getSelectionModel().getSelectedItem(), nameTextField.getText());
         });
 
         backButton.setOnAction((a) -> {

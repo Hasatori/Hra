@@ -34,10 +34,11 @@ public class MapMessageProcessor extends MessageProcessor {
         if (in.won()) {
             if (clientConnection.getClient() == owner) {
                 otherPlayer.getClientConnection().sendMessage(protocol.send().playerHasLost());
-            }else{
+                owner.getClientConnection().sendMessage(protocol.send().playerHasWon());
+            } else {
                 owner.getClientConnection().sendMessage(protocol.send().playerHasLost());
+                otherPlayer.getClientConnection().sendMessage(protocol.send().playerHasWon());
             }
-
         }
         if (in.restartMapRequest()) {
             if (clientConnection.getClient() == owner) {

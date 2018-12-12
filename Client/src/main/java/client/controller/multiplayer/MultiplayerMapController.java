@@ -3,17 +3,14 @@ package client.controller.multiplayer;
 import client.model.connection.ServerConnection;
 import client.model.map.Map;
 import client.model.map.MapFactory;
-import client.view.LobbyOwnerView;
 import com.sun.javafx.scene.traversal.Direction;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import client.controller.MapController;
-import client.controller.StartController;
-import client.model.connection.InputReader;
-import client.model.connection.OutputWriter;
 import client.model.protocol.map.MapProtocol;
 import client.model.protocol.map.MapProtocolIn;
 import client.view.DialogFactory;
@@ -37,16 +34,17 @@ public class MultiplayerMapController extends ServerController implements MapCon
     private final String mapName;
     private MapView view;
     private boolean isOwner;
+    private Thread waitingForCommandsThread;
 
     /**
-     * @param stage stage
-     * @param mapName name of the current map
-     * @param playerNumber number of a player
-     * @param playerName name of a player
-     * @param remotePlayerName name of a remote player
+     * @param stage              stage
+     * @param mapName            name of the current map
+     * @param playerNumber       number of a player
+     * @param playerName         name of a player
+     * @param remotePlayerName   name of a remote player
      * @param remotePlayerNumber number of a remote player
-     * @param serverConnection server connection
-     * @param isOwner true=player is owner
+     * @param serverConnection   server connection
+     * @param isOwner            true=player is owner
      */
     public MultiplayerMapController(Stage stage, String mapName, int playerNumber, String playerName, String remotePlayerName, int remotePlayerNumber, ServerConnection serverConnection, boolean isOwner) {
         super(stage, serverConnection, playerName);
@@ -80,9 +78,6 @@ public class MultiplayerMapController extends ServerController implements MapCon
             view.reload(map.getMapParts());
             if (map.checkWinCondition()) {
                 outgoingMessageProcessor.sendMessage(protocol.send().won());
-               won();
-                DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();
-
             }
         } catch (IllegalArgumentException e) {
             LOGGER.error("Moving player failed", e);
@@ -92,16 +87,17 @@ public class MultiplayerMapController extends ServerController implements MapCon
     /**
      * Method for sending a win message.
      */
-    private void won(){
+    private void won() {
         if (isOwner) {
             LobbyOwnerController lobbyOwnerController = new LobbyOwnerController(stage, playerName, serverConnection);
             lobbyOwnerController.loadView();
             lobbyOwnerController.setSecondPlayerName(remotePlayerName);
         } else {
-            new LobbySecondPlayerController(stage, playerName, remotePlayerName, mapName,
+            new LobbySecondPlayerController(stage, remotePlayerName, playerName, mapName,
                     serverConnection).loadView();
         }
     }
+
     @Override
     public void quitMap() {
         outgoingMessageProcessor.sendMessage(protocol.send().quitMap());
@@ -116,15 +112,21 @@ public class MultiplayerMapController extends ServerController implements MapCon
      * Method for waiting for messages.
      */
     public void waitForCommands() {
-
-        new Thread(() -> {
+        waitingForCommandsThread = new Thread(() -> {
             String message = incomingMessageProcessor.getMessage();
-            while (message != null) {
+            while (message != null || !Thread.currentThread().isInterrupted()) {
                 MapProtocolIn in = protocol.get(message);
                 if (in.youHaveLost()) {
                     Platform.runLater(() -> {
                         won();
                         DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have lost").showAndWait();
+                    });
+                    break;
+                }
+                if (in.youHaveWon()) {
+                    Platform.runLater(() -> {
+                        won();
+                        DialogFactory.getAlert(Alert.AlertType.INFORMATION, "Game ended", "You have won").showAndWait();
                     });
                     break;
                 }
@@ -166,6 +168,7 @@ public class MultiplayerMapController extends ServerController implements MapCon
                 }
                 message = incomingMessageProcessor.getMessage();
             }
-        }).start();
+        });
+        waitingForCommandsThread.start();
     }
 }

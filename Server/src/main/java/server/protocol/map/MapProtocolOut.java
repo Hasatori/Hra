@@ -15,6 +15,10 @@ public class MapProtocolOut {
         return MapProtocol.MSG_PREFIX + ":YOU HAVE LOST";
     }
 
+    public String playerHasWon() {
+        return MapProtocol.MSG_PREFIX + ":YOU HAVE WON";
+    }
+
     public String movePlayer(Direction direction) {
         return MapProtocol.MSG_PREFIX + ":MOVING " + direction.toString();
     }

@@ -8,6 +8,7 @@ import com.sun.javafx.scene.traversal.Direction;
 public class MapProtocolIn {
 
     private static final String MAP_YOU_LOST = "YOU HAVE LOST";
+    private static final String MAP_YOU_WON = "YOU HAVE WON";
     private static final String MAP_MOVING = "MOVING ";
     private static final String MAP_PLAYER_LEFT = "PLAYER HAS LEFT";
     private static final String MAP_YOU_LEFT = "YOU HAVE LEFT THE GAME";
@@ -24,6 +25,10 @@ public class MapProtocolIn {
         return message.equals(MAP_YOU_LOST);
     }
 
+    public boolean youHaveWon() {
+        return message.equals(MAP_YOU_WON);
+    }
+
     public boolean moveNexPlayer() {
         return message.matches(MAP_MOVING + "\\w+");
     }
@@ -36,7 +41,7 @@ public class MapProtocolIn {
         return message.matches(MAP_PLAYER_LEFT);
     }
 
-    public boolean youHaveLeft(){
+    public boolean youHaveLeft() {
         return message.equals(MAP_YOU_LEFT);
     }
 

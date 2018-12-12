@@ -17,32 +17,38 @@ import client.util.ResourceLoader;
  */
 public class SingleplayerView extends View {
     @FXML
-    private Button startSingleplayerButton;
+    private Button startSingleplayerButton, backButton;
     private TextField nameTextField;
     private ComboBox<String> singleplayerMapsComboBox;
 
     /**
      * @param controller SingleplayerController
-     * @param maps maps to show
+     * @param maps       maps to show
      * @throws IOException error
      */
     public SingleplayerView(SingleplayerController controller, List<String> maps) throws IOException {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/start/singleplayer.fxml")));
         this.startSingleplayerButton = (Button) this.lookup("#startSingleplayerButton");
+        this.backButton = (Button) this.lookup("#backButton");
         this.nameTextField = (TextField) this.lookup("#nameTextField");
         this.singleplayerMapsComboBox = (ComboBox<String>) this.lookup("#singleplayerMapsComboBox");
         fillMapComboBox(maps);
 
         startSingleplayerButton.setOnAction(a -> {
-            if (nameTextField.getText().equals("") || nameTextField.getText() == null){
+            if (nameTextField.getText().equals("") || nameTextField.getText() == null) {
                 DialogFactory.getAlert(Alert.AlertType.WARNING, "Starting game", "Name must be filled").showAndWait();
             }
             controller.startGame(singleplayerMapsComboBox.getSelectionModel().getSelectedItem(), nameTextField.getText());
+        });
+
+        backButton.setOnAction((a) -> {
+            controller.backToMenu();
         });
     }
 
     /**
      * Fills map combobox with available singleplayer maps.
+     *
      * @param maps singleplayer maps
      */
     private void fillMapComboBox(List<String> maps) {

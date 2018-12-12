@@ -1,5 +1,6 @@
 package client.controller.singleplayer;
 
+import client.controller.StartController;
 import javafx.stage.Stage;
 import client.controller.Controller;
 import client.util.ResourceLoader;
@@ -23,7 +24,7 @@ public class SingleplayerController extends Controller {
     @Override
     public void loadView() {
         try {
-            this.view = new SingleplayerView(this,ResourceLoader.getSingleplayerMaps());
+            this.view = new SingleplayerView(this, ResourceLoader.getSingleplayerMaps());
             stage.setScene(view);
             stage.show();
         } catch (IOException e) {
@@ -32,6 +33,14 @@ public class SingleplayerController extends Controller {
     }
 
     public void startGame(String mapName, String playerName) {
-            new SingleplayerMapController(stage, mapName, playerName).loadView();
+        new SingleplayerMapController(stage, mapName, playerName).loadView();
+    }
+
+    public void backToMenu() {
+        try {
+            new StartController(stage).loadView();
+        } catch (IOException e) {
+            LOGGER.error("Error while loading view {}", e);
+        }
     }
 }

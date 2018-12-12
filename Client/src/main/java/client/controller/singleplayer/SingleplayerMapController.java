@@ -34,7 +34,7 @@ public class SingleplayerMapController extends Controller implements MapControll
     }
 
     private void createMap() {
-        this.map = MapFactory.getInstance().getMap(mapName,playerName);
+        this.map = MapFactory.getInstance().getMap(mapName, playerName);
         try {
             this.view = new MapView(this, this.map.getMapParts(), this.map.getName());
         } catch (IOException e) {
@@ -52,7 +52,7 @@ public class SingleplayerMapController extends Controller implements MapControll
     public void movePlayer(KeyCode keyCode) {
         try {
             Direction direction = Direction.valueOf(keyCode.toString());
-            map.movePlayer(direction,playerName);
+            map.movePlayer(direction, playerName);
             stage.setScene(new MapView(this, map.getMapParts(), map.getName()));
             this.mapName = map.getName();
             if (map.checkWinCondition()) {
@@ -75,11 +75,7 @@ public class SingleplayerMapController extends Controller implements MapControll
     public void quitMap() {
         Optional<ButtonType> result = DialogFactory.getConfirmDialog("Quiting game", "Are you sure?", "You are about to quit the game.").showAndWait();
         if (result.get() == ButtonType.OK) {
-            try {
-                new StartController(stage);
-            } catch (IOException e) {
-                LOGGER.error("Failed to create StartController", e);
-            }
+                new SingleplayerController(stage).loadView();
         }
     }
 }

@@ -2,6 +2,7 @@ package client.controller.multiplayer;
 
 import java.io.IOException;
 
+import client.controller.StartController;
 import client.model.connection.ServerConnection;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -33,10 +34,10 @@ public class LobbyOwnerController extends ServerController {
      * @param playerName       owner name
      * @param serverConnection server connection
      */
-    public LobbyOwnerController(Stage stage, String playerName, ServerConnection serverConnection) {
+    public LobbyOwnerController(Stage stage, String playerName, ServerConnection serverConnection,String map) {
         super(stage, serverConnection, playerName);
         try {
-            this.view = new LobbyOwnerView(this, ResourceLoader.getMultiplayerMaps(), playerName);
+            this.view = new LobbyOwnerView(this, ResourceLoader.getMultiplayerMaps(),map, playerName);
         } catch (IOException e) {
             LOGGER.error("Failed to create LobbyOwnerView", e);
         }
@@ -66,6 +67,11 @@ public class LobbyOwnerController extends ServerController {
         new Thread(() -> {
             String message = incomingMessageProcessor.getMessage();
             while (message != null) {
+                if (protocol.disconnected(message)) {
+                    disconnected();
+                    break;
+                }
+
                 LobbyProtocolIn in = protocol.get(message);
                 if (in.playerConnected()) {
                     Platform.runLater(() -> {
@@ -94,6 +100,7 @@ public class LobbyOwnerController extends ServerController {
                 if (in.start()) {
                     break;
                 }
+
                 message = incomingMessageProcessor.getMessage();
             }
         }).start();

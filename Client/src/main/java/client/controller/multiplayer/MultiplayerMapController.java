@@ -89,8 +89,9 @@ public class MultiplayerMapController extends ServerController implements MapCon
      */
     private void won() {
         if (isOwner) {
-            LobbyOwnerController lobbyOwnerController = new LobbyOwnerController(stage, playerName, serverConnection);
+            LobbyOwnerController lobbyOwnerController = new LobbyOwnerController(stage, playerName, serverConnection, mapName);
             lobbyOwnerController.loadView();
+            lobbyOwnerController.setMap(mapName);
             lobbyOwnerController.setSecondPlayerName(remotePlayerName);
         } else {
             new LobbySecondPlayerController(stage, remotePlayerName, playerName, mapName,
@@ -115,6 +116,10 @@ public class MultiplayerMapController extends ServerController implements MapCon
         waitingForCommandsThread = new Thread(() -> {
             String message = incomingMessageProcessor.getMessage();
             while (message != null || !Thread.currentThread().isInterrupted()) {
+                if (protocol.disconnected(message)) {
+                    disconnected();
+                    break;
+                }
                 MapProtocolIn in = protocol.get(message);
                 if (in.youHaveLost()) {
                     Platform.runLater(() -> {
@@ -166,6 +171,7 @@ public class MultiplayerMapController extends ServerController implements MapCon
                     });
                     break;
                 }
+
                 message = incomingMessageProcessor.getMessage();
             }
         });

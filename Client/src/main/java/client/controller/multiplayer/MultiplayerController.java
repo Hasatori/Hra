@@ -31,12 +31,12 @@ public class MultiplayerController extends ServerController {
     private View view;
 
     /**
-     * @param stage stage
+     * @param stage            stage
      * @param serverConnection server connection
-     * @param playerName name of the player
+     * @param playerName       name of the player
      */
     public MultiplayerController(Stage stage, ServerConnection serverConnection, String playerName) {
-        super(stage,serverConnection, playerName);
+        super(stage, serverConnection, playerName);
         this.protocol = new GeneralProtocol();
 
     }
@@ -54,17 +54,25 @@ public class MultiplayerController extends ServerController {
 
     /**
      * Loads active lobbies and passes them.
+     *
      * @return List of entity CreatedLobbies
      */
     public List<CreatedLobby> loadLobbies() {
         outgoingMessageProcessor.sendMessage(protocol.send().getLobbies());
-        List<String> result = this.protocol.get(incomingMessageProcessor.getMessage()).getLobbies();
-        List<CreatedLobby> lobbies = new ArrayList<>();
-        for (String lobby : result) {
-            String[] data = lobby.split(LOBBY_SPLIT_DELIM);
-            lobbies.add(new CreatedLobby(data[0], data[1], data[2]));
+        String message = incomingMessageProcessor.getMessage();
+
+        if (protocol.disconnected(message)) {
+            disconnected();
+        } else {
+            List<String> result = this.protocol.get(message).getLobbies();
+            List<CreatedLobby> lobbies = new ArrayList<>();
+            for (String lobby : result) {
+                String[] data = lobby.split(LOBBY_SPLIT_DELIM);
+                lobbies.add(new CreatedLobby(data[0], data[1], data[2]));
+            }
+            return lobbies;
         }
-        return lobbies;
+        return null;
     }
 
     /**
@@ -81,37 +89,55 @@ public class MultiplayerController extends ServerController {
 
     /**
      * Method for creating a public lobby.
+     *
      * @param lobbyName name of the new lobby
      */
     public void createLobby(String lobbyName) {
+        lobbyName = lobbyName.trim();
         try {
             outgoingMessageProcessor.sendMessage(protocol.send().createLobby(lobbyName, ResourceLoader.getMultiplayerMaps().get(0)));
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
+        String message = incomingMessageProcessor.getMessage();
 
-        GeneralProtocolIn in = protocol.get(incomingMessageProcessor.getMessage());
+        if (protocol.disconnected(message)) {
+            disconnected();
+        }
+        GeneralProtocolIn in = protocol.get(message);
         if (in.duplicateLobbyName()) {
             DialogFactory.getAlert(Alert.AlertType.WARNING, "Creating lobby", "Lobby with this name already exists.").showAndWait();
         } else if (in.lobbyCreated()) {
-            new LobbyOwnerController(stage, playerName, serverConnection).loadView();
+            try {
+                new LobbyOwnerController(stage, playerName, serverConnection, ResourceLoader.getMultiplayerMaps().get(0)).loadView();
+            } catch (IOException e) {
+                LOGGER.error("Error while loading maps {}", e);
+            }
         }
     }
 
     /**
      * Method for joining an existing lobby
+     *
      * @param name name of the lobby to join
      */
     public void joinLobby(String name) {
         outgoingMessageProcessor.sendMessage(protocol.send().joinLobby(name));
-        GeneralProtocolIn in = protocol.get(incomingMessageProcessor.getMessage());
+        String message = incomingMessageProcessor.getMessage();
+
+        if (protocol.disconnected(message)) {
+            disconnected();
+        }
+        GeneralProtocolIn in = protocol.get(message);
         if (in.lobbyFull()) {
             DialogFactory.getAlert(Alert.AlertType.WARNING, "Connecting lobby", "Lobby is full.").showAndWait();
-        } else if(in.lobbyDoesNotExist()){
+        } else if (in.lobbyDoesNotExist()) {
             DialogFactory.getAlert(Alert.AlertType.WARNING, "Connecting lobby", "Lobby is does not exist.").showAndWait();
-        }else if (in.connectedToLobby()) {
+        } else if (in.connectedToLobby()) {
             String[] parts = in.getLobbyCredentials();
             new LobbySecondPlayerController(stage, parts[1], playerName, parts[2], serverConnection).loadView();
         }
     }
+
+
 }

@@ -33,7 +33,6 @@ public class InputReader {
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
-        System.out.println("null");
-        return null;
+        return "DISCONNECTED";
     }
 }

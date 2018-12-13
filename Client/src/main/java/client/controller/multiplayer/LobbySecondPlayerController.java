@@ -66,6 +66,10 @@ public class LobbySecondPlayerController extends ServerController {
         new Thread(() -> {
             String message = incomingMessageProcessor.getMessage();
             while (message != null) {
+                if (protocol.disconnected(message)) {
+                    disconnected();
+                    break;
+                }
                 LobbyProtocolIn in = protocol.get(message);
                 if (in.kicked()) {
                     Platform.runLater(() -> {
@@ -89,6 +93,7 @@ public class LobbySecondPlayerController extends ServerController {
                     Platform.runLater(() -> new MultiplayerController(stage, serverConnection, playerName).loadView());
                     break;
                 }
+
                 message = incomingMessageProcessor.getMessage();
             }
         }).start();

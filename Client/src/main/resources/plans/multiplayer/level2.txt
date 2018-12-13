@@ -1,0 +1,8 @@
+size=18x6
+Level2
+xxxxxxxxxxxxxxxxxx
+x*******xx*******x
+x**xxx+*xx**xxx+*x
+x**xx/+*xx**xx/+*x
+x-******xx-******x
+xxxxxxxxxxxxxxxxxx

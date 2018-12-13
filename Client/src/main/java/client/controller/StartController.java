@@ -57,7 +57,7 @@ public class StartController extends Controller {
     /**
      * Shows alert, that server is not available.
      */
-    private void serverDisconnected() {
+    private void connectionNotRunning() {
         DialogFactory.getAlert(Alert.AlertType.ERROR, "Server connection", "Connection with the server can not be established. Please try it later.").showAndWait();
     }
 
@@ -72,15 +72,15 @@ public class StartController extends Controller {
             if (dialog.getEditor().getText().equals("")) {
                 ae.consume(); //not valid
                 DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "Name must be filled").showAndWait();
-            } else if (dialog.getEditor().getText().contains("|")){
+            } else if (dialog.getEditor().getText().contains("|")) {
                 ae.consume(); //not valid
                 DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "Name cannot contain |").showAndWait();
             } else {
-                String filledName = dialog.getEditor().getText();
-                this.serverConnection = new ServerConnection(filledName,8002);
+                String filledName = dialog.getEditor().getText().trim();
+                this.serverConnection = new ServerConnection(filledName, 8002);
                 if (!this.serverConnection.isConnected()) {
                     ae.consume(); //not valid
-                    this.serverDisconnected();
+                    this.connectionNotRunning();
                 } else {
                     String message = serverConnection.getIncomingMessageProcessor().getMessage();
                     if (protocol.get(message).duplicateUserName()) {

@@ -24,7 +24,7 @@ import server.protocol.ProtocolType;
 /**
  * This class manages client connection and sends/reads messages to/from client.
  */
-public class ClientConnection implements Runnable {
+public class ClientConnection extends Thread {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ClientConnection.class);
     private final MessageProcessor generalMessageProcessor, lobbyMessageProcessor, mapMessageProcessor;
@@ -32,6 +32,7 @@ public class ClientConnection implements Runnable {
     private Socket socket;
     private Client client;
     private PrintWriter writer;
+    private boolean isRunning;
 
     /**
      * @param socket connection socket
@@ -45,6 +46,7 @@ public class ClientConnection implements Runnable {
 
     /**
      * Setter for client.
+     *
      * @param client client to set
      */
     public void setClient(Client client) {
@@ -53,6 +55,7 @@ public class ClientConnection implements Runnable {
 
     /**
      * Gets entity of client bound to this.
+     *
      * @return client
      */
     public Client getClient() {
@@ -64,12 +67,13 @@ public class ClientConnection implements Runnable {
      */
     public void run() {
         try {
+            isRunning = true;
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), Server.ENCODING), true);// Without autoFlush method flush has to be called after every write(printl)
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Server.ENCODING));
             this.writer = writer;
             String line = reader.readLine();
             processMessage(line);
-            while ((line = reader.readLine()) != null) {
+            while ((((line = reader.readLine())) != null) && !isInterrupted()) {
                 processMessage(line);
             }
             socket.close();
@@ -96,6 +100,7 @@ public class ClientConnection implements Runnable {
 
     /**
      * Reads and processes incoming message.
+     *
      * @param message message to read
      */
     private void processMessage(String message) {
@@ -110,6 +115,7 @@ public class ClientConnection implements Runnable {
 
     /**
      * Sends message to client bound to this connection.
+     *
      * @param message message to send
      */
     public void sendMessage(String message) {
@@ -125,6 +131,7 @@ public class ClientConnection implements Runnable {
 
     /**
      * Returns message processor based od type od the message.
+     *
      * @param message incoming message
      * @return message processor
      */
@@ -140,5 +147,10 @@ public class ClientConnection implements Runnable {
             default:
                 throw new IllegalArgumentException("Unknown message type");
         }
+    }
+
+
+    public void stopThread() {
+        isRunning = false;
     }
 }

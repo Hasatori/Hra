@@ -1,6 +1,7 @@
 package server.clientservices;
 
 import controller.MainController;
+import server.protocol.Protocol;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -22,6 +23,7 @@ public class ClientManager {
 
     /**
      * Getter for main controller.
+     *
      * @return MainController
      */
     public MainController getController() {
@@ -30,6 +32,7 @@ public class ClientManager {
 
     /**
      * Returns list of active clients
+     *
      * @return List of Client entities
      */
     public List<Client> getClients() {
@@ -38,6 +41,7 @@ public class ClientManager {
 
     /**
      * Sets main controller.
+     *
      * @param controller main controller
      */
     public void setController(MainController controller) {
@@ -46,6 +50,7 @@ public class ClientManager {
 
     /**
      * Adds a client to an existing list of active clients.
+     *
      * @param client new client
      */
     public synchronized void add(Client client) {
@@ -57,6 +62,7 @@ public class ClientManager {
 
     /**
      * Removes a client from an existing list of active clients.
+     *
      * @param client client to remove
      */
     public synchronized void remove(Client client) {
@@ -72,11 +78,16 @@ public class ClientManager {
      * Removes all active clients at once.
      */
     public void removeAllClients() {
+        clients.forEach(client -> {
+            client.getClientConnection().sendMessage(Protocol.DISCONNECTED);
+            client.getClientConnection().interrupt();
+        });
         this.clients.clear();
     }
 
     /**
      * Lists all the active lobbies.
+     *
      * @return List of lobby information
      */
     public synchronized List<String> getLobbies() {
@@ -95,6 +106,7 @@ public class ClientManager {
 
     /**
      * Checks if user has an unique name.
+     *
      * @param name user name to check
      * @return true=name does not exist yet
      */
@@ -109,6 +121,7 @@ public class ClientManager {
 
     /**
      * Checks if lobby name is unique.
+     *
      * @param lobbyName lobby name to check
      * @return true=name does not exist yet
      */
@@ -123,6 +136,7 @@ public class ClientManager {
 
     /**
      * Checks whether lobby is full.
+     *
      * @param lobbyName lobby name
      * @return true=lobby is full
      */
@@ -138,6 +152,7 @@ public class ClientManager {
 
     /**
      * Get lobby by name of the lobby.
+     *
      * @param lobbyName lobby name
      * @return found lobby
      */
@@ -153,7 +168,8 @@ public class ClientManager {
 
     /**
      * Adds player to an existing lobby if lobby is not full.
-     * @param name lobby name
+     *
+     * @param name   lobby name
      * @param client client to add to lobby
      */
     public synchronized void addPlayerToLobby(String name, Client client) {
@@ -176,6 +192,7 @@ public class ClientManager {
 
     /**
      * Sends message to all clients.
+     *
      * @param message message to send
      */
     public void sendMessageToAll(String message) {

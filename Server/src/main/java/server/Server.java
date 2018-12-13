@@ -27,6 +27,7 @@ public class Server implements Runnable {
 
     /**
      * Sets the port number for server to start on.
+     *
      * @param port number
      */
     public void setPort(Integer port) {
@@ -50,17 +51,17 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-        if (this.port == null ) {
+        if (this.port == null) {
             throw new IllegalStateException("Port is not set");
         } else {
             try {
                 serverSocket = new ServerSocket(port);
-                ClientManager.getInstance().getController().updateMessages("Server started listening on port "+port);
+                ClientManager.getInstance().getController().updateMessages("Server started listening on port " + port);
                 while (!Thread.currentThread().isInterrupted()) {
                     ClientManager.getInstance().getController().updateMessages("Waiting for client");
                     final Socket socket;
                     socket = serverSocket.accept();
-                    new Thread(new ClientConnection(socket)).start();
+                    new ClientConnection(socket).start();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

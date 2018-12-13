@@ -25,6 +25,7 @@ public class LobbyMessageProcessor extends MessageProcessor {
     public void processMessage(String message) {
         LobbyProtocolIn in = protocol.get(message);
         if (in.setMap()) {
+            clientConnection.getClient().getLobby().setMapName(in.getMapName());
             if (clientConnection.getClient().getLobby().isFull()) {
                 clientConnection.getClient().getLobby().getOtherPlayer().getClientConnection().sendMessage(protocol.send().setMap(in.getMapName()));
             }
@@ -49,12 +50,11 @@ public class LobbyMessageProcessor extends MessageProcessor {
             clientConnection.sendMessage(protocol.send().startGame());
         }
         if (in.sendLobbyMessage()) {
-        	if (message.startsWith(OWNER_SENT_MESSAGE)) {
-        		clientConnection.getClient().getLobby().getOtherPlayer().getClientConnection().sendMessage(protocol.send().sendLobbyMessage(message));
-        	}
-        	else if (message.startsWith(SECPLAYER_SENT_MESSAGE)) {
-        		clientConnection.getClient().getLobby().getOwner().getClientConnection().sendMessage(protocol.send().sendLobbyMessage(message));
-        	}
+            if (message.startsWith(OWNER_SENT_MESSAGE)) {
+                clientConnection.getClient().getLobby().getOtherPlayer().getClientConnection().sendMessage(protocol.send().sendLobbyMessage(message));
+            } else if (message.startsWith(SECPLAYER_SENT_MESSAGE)) {
+                clientConnection.getClient().getLobby().getOwner().getClientConnection().sendMessage(protocol.send().sendLobbyMessage(message));
+            }
         }
     }
 }

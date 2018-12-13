@@ -37,9 +37,6 @@ public class Lobby {
      */
     public void setMapName(String mapName) {
         this.mapName = mapName;
-        if (this.otherPlayer != null) {
-            this.otherPlayer.getClientConnection().sendMessage("LOBBY:SETMAP " + mapName);
-        }
     }
 
     /**

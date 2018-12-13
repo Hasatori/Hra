@@ -144,7 +144,6 @@ public class LobbySecondPlayerView extends View {
             playerName.setFill(Color.RED);
         }
         Text lobbyMessage = new Text(CHAT_DELIM + msg);
-        lobbyChat.setTextAlignment(TextAlignment.RIGHT);
         Platform.runLater(() -> lobbyChat.getChildren().addAll(playerName, lobbyMessage));
     }
 }

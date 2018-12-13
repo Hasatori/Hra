@@ -7,6 +7,7 @@ public class Protocol {
 
     private static final String PREFIX_DELIM = ":";
     private final String prefix;
+    public static final String DISCONNECTED = "DISCONNECTED";
 
     /**
      * @param prefix prefix of a protocol
@@ -17,6 +18,7 @@ public class Protocol {
 
     /**
      * Determines if message is of the right type.
+     *
      * @param message message
      * @return true=is right message type
      */
@@ -26,6 +28,7 @@ public class Protocol {
 
     /**
      * Strips message of prefix and returns the prefix.
+     *
      * @param message message
      * @return prefix
      */
@@ -35,6 +38,7 @@ public class Protocol {
 
     /**
      * Returns a protocol type according to type of the message.
+     *
      * @param message message
      * @return protocol type
      */
@@ -51,4 +55,5 @@ public class Protocol {
                 throw new IllegalArgumentException("Unknown message type");
         }
     }
+
 }

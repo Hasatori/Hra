@@ -1,12 +1,9 @@
 package view;
 
-import client.controller.StartController;
 import client.controller.multiplayer.LobbyOwnerController;
 import client.controller.multiplayer.LobbySecondPlayerController;
-import client.controller.multiplayer.MultiplayerController;
 import client.model.connection.OutputWriter;
 import client.model.connection.ServerConnection;
-import client.model.protocol.Protocol;
 import client.model.protocol.general.GeneralProtocol;
 import client.model.protocol.lobby.LobbyProtocol;
 import client.util.ResourceLoader;
@@ -14,7 +11,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 public class TestView extends Application {
     @Override
@@ -52,7 +48,7 @@ public class TestView extends Application {
         LobbyProtocol lobbyProtocol = new LobbyProtocol();
         String mapName = "level1";
         new LobbySecondPlayerController(secondaryStage, name1, name2, mapName, serverConnection2).loadView();
-        LobbyOwnerController lobbyOwnerController = new LobbyOwnerController(primaryStage, name1, serverConnection1);
+        LobbyOwnerController lobbyOwnerController = new LobbyOwnerController(primaryStage, name1, serverConnection1, mapName);
         lobbyOwnerController.loadView();
         lobbyOwnerController.setSecondPlayerName(name2);
         lobbyOwnerController.startGame(mapName);

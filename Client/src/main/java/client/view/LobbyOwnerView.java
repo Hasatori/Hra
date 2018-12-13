@@ -37,11 +37,11 @@ public class LobbyOwnerView extends View {
 
     /**
      * @param controller LobbyOwnerController
-     * @param maps maps to offer
-     * @param ownerName name of the owner
+     * @param maps       maps to offer
+     * @param ownerName  name of the owner
      * @throws IOException error
      */
-	public LobbyOwnerView(LobbyOwnerController controller, List<String> maps, String ownerName) throws IOException {
+    public LobbyOwnerView(LobbyOwnerController controller, List<String> maps, String map, String ownerName) throws IOException {
         super(FXMLLoader.load(ResourceLoader.gerResourceURL("fxml/parts/lobbyOwner.fxml")));
         this.controller = controller;
         this.ownerName = ownerName;
@@ -53,12 +53,12 @@ public class LobbyOwnerView extends View {
         this.lobbyChatPane = (ScrollPane) this.lookup("#lobbyChatPane");
         this.lobbyChatInput = (TextArea) this.lookup("#lobbyChatInput");
         this.lobbyChatSend = (Button) this.lookup("#lobbyChatSend");
-        
+
         this.lobbyChat = new TextFlow();
         lobbyChatPane.setContent(lobbyChat);
         lobbyChatPane.vvalueProperty().bind(lobbyChat.heightProperty());
 
-        fillMapComboBox(maps);
+        fillMapComboBox(maps, map);
         ownerNameLabel.setText(ownerName);
         Text playerName = new Text(ownerName);
         playerName.setFill(Color.BLUE);
@@ -69,22 +69,23 @@ public class LobbyOwnerView extends View {
         startGameButton.setOnAction(a -> controller.startGame(multiplayerMapsComboBox.getSelectionModel().getSelectedItem()));
         deleteLobbyButton.setOnAction(a -> controller.deleteLobby());
         lobbyChatInput.setOnKeyPressed(k -> {
-        	if (k.getCode() == KeyCode.ENTER) {
-        		k.consume();
-        		sendLobbyMessage();
-        	}
+            if (k.getCode() == KeyCode.ENTER) {
+                k.consume();
+                sendLobbyMessage();
+            }
         });
         lobbyChatSend.setOnAction(a -> sendLobbyMessage());
     }
 
     /**
-     * Fills map combobox with available multiplayer maps.
+     * Fills map combobox with available multiplayer maps and selects given map.
+     *
      * @param maps multiplayer maps
      */
-    private void fillMapComboBox(List<String> maps) {
+    private void fillMapComboBox(List<String> maps, String map) {
         this.multiplayerMapsComboBox.getItems().clear();
         this.multiplayerMapsComboBox.getItems().addAll(maps);
-        this.multiplayerMapsComboBox.getSelectionModel().select(0);
+        this.multiplayerMapsComboBox.getSelectionModel().select(map);
         this.multiplayerMapsComboBox.setOnAction((a) -> controller.setMap(multiplayerMapsComboBox.getSelectionModel().getSelectedItem()));
     }
 
@@ -99,10 +100,11 @@ public class LobbyOwnerView extends View {
 
     /**
      * Sets second player name to label.
+     *
      * @param secondPlayerName second player name
      */
     public void setSecondPlayerName(String secondPlayerName) {
-    	this.secondPlayerName = secondPlayerName;
+        this.secondPlayerName = secondPlayerName;
         this.secondPlayerNameLabel.setText(secondPlayerName);
         this.startGameButton.setDisable(false);
         receiveLobbyMessage(" has joined the lobby", false, false);
@@ -111,34 +113,34 @@ public class LobbyOwnerView extends View {
     /**
      * Sends lobby message. Lobby message consists of text input in chat.
      */
-    private void sendLobbyMessage () {
-    	if (!lobbyChatInput.getText().trim().isEmpty()) {
-    		String msg = lobbyChatInput.getText().trim();
-        	controller.sendLobbyMessage(msg);
-        	receiveLobbyMessage(msg, true, true);
-        	lobbyChatInput.setText("");
+    private void sendLobbyMessage() {
+        if (!lobbyChatInput.getText().trim().isEmpty()) {
+            String msg = lobbyChatInput.getText().trim();
+            controller.sendLobbyMessage(msg);
+            receiveLobbyMessage(msg, true, true);
+            lobbyChatInput.setText("");
         }
     }
 
     /**
      * Receives lobby message based on ownership of the lobby.
-     * @param msg message to receive
-     * @param owner true=is owner
+     *
+     * @param msg    message to receive
+     * @param owner  true=is owner
      * @param prefix true=needs prefix to match (User1: Hello world!)
      */
     public void receiveLobbyMessage(String msg, boolean owner, boolean prefix) {
-    	Text playerName = new Text();
-    	if (owner) {
-    		playerName.setText("\n" + ownerName);
-    		playerName.setFill(Color.BLUE);
-    	}
-    	else {
-    		playerName.setText("\n" + secondPlayerName);
-    		playerName.setFill(Color.RED);
-    	}
-    	String pre = prefix ? CHAT_DELIM : "";
-    	Text lobbyMessage = new Text(pre + msg);
-    	
-    	Platform.runLater(() -> lobbyChat.getChildren().addAll(playerName, lobbyMessage));
+        Text playerName = new Text();
+        if (owner) {
+            playerName.setText("\n" + ownerName);
+            playerName.setFill(Color.BLUE);
+        } else {
+            playerName.setText("\n" + secondPlayerName);
+            playerName.setFill(Color.RED);
+        }
+        String pre = prefix ? CHAT_DELIM : "";
+        Text lobbyMessage = new Text(pre + msg);
+
+        Platform.runLater(() -> lobbyChat.getChildren().addAll(playerName, lobbyMessage));
     }
 }

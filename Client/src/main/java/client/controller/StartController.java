@@ -3,14 +3,15 @@ package client.controller;
 import java.io.IOException;
 import java.util.Optional;
 
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import client.controller.multiplayer.MultiplayerController;
 import client.controller.singleplayer.SingleplayerController;
@@ -66,18 +67,55 @@ public class StartController extends Controller {
      * After setting the player's name, this method will try to connect to server on port 8002.
      */
     public void loadMultiplayer() {
-        TextInputDialog dialog = DialogFactory.getTextInputDialog("", "Setting name", "Fill your name please");
-        final Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Server connection");
+
+        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField name = new TextField();
+        name.setPromptText("Name");
+        TextField port = new TextField();
+        port.setPromptText("Port");
+
+        gridPane.add(new Label("Name:"), 0, 0);
+        gridPane.add(name, 1, 0);
+        gridPane.add(new Label(" Server port:"), 2, 0);
+        gridPane.add(port, 3, 0);
+
+        dialog.getDialogPane().setContent(gridPane);
+        Platform.runLater(() -> name.requestFocus());
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(name.getText(), port.getText());
+            }
+            return null;
+        });
+
+        final Button okButton = (Button) dialog.getDialogPane().lookupButton(loginButtonType);
         okButton.addEventFilter(ActionEvent.ACTION, ae -> {
-            if (dialog.getEditor().getText().equals("")) {
+            //ae.consume();
+            Pair<String, String> pair = dialog.getResultConverter().call(loginButtonType);
+            String filledName = pair.getKey().trim();
+            String filledPort = pair.getValue().trim();
+            if (filledName.equals("") || filledPort.equals("")) {
                 ae.consume(); //not valid
-                DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "Name must be filled").showAndWait();
-            } else if (dialog.getEditor().getText().contains("|")) {
+                DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting up server connection", "Mandatory data must be filled").showAndWait();
+            } else if (filledName.contains("|")) {
                 ae.consume(); //not valid
-                DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting name", "Name cannot contain |").showAndWait();
+                DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting up server connection", "Name cannot contain |").showAndWait();
+            } else if (!filledPort.matches("\\d{4,5}")) {
+                ae.consume(); //not valid
+                DialogFactory.getAlert(Alert.AlertType.WARNING, "Setting up server connection", "Port must be a number of length 4 or 5").showAndWait();
             } else {
-                String filledName = dialog.getEditor().getText().trim();
-                this.serverConnection = new ServerConnection(filledName, 8002);
+                this.serverConnection = new ServerConnection(filledName, Integer.valueOf(filledPort));
                 if (!this.serverConnection.isConnected()) {
                     ae.consume(); //not valid
                     this.connectionNotRunning();
@@ -93,10 +131,12 @@ public class StartController extends Controller {
                 }
             }
         });
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(name -> {
-            LOGGER.info("Player name is:{}", name);
-            new MultiplayerController(this.stage, serverConnection, name).loadView();
+
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+        result.ifPresent(pair -> {
+            String playerName = pair.getKey();
+            LOGGER.info("Player name is:{}", playerName);
+            new MultiplayerController(this.stage, serverConnection, playerName).loadView();
         });
     }
 }
